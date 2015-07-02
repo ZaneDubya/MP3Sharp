@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BF3B29F8-DA04-4973-93DB-144A5BBE2472}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MP3Sharp</RootNamespace>
+    <AssemblyName>MP3Sharp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Decode\BackStream.cs" />
+    <Compile Include="Decode\BitReserve.cs" />
+    <Compile Include="Decode\Bitstream.cs" />
+    <Compile Include="Decode\BitstreamErrors.cs" />
+    <Compile Include="Decode\BitstreamException.cs" />
+    <Compile Include="Decode\Control.cs" />
+    <Compile Include="Decode\Crc16.cs" />
+    <Compile Include="Decode\Decoder.cs" />
+    <Compile Include="Decode\DecoderErrors.cs" />
+    <Compile Include="Decode\DecoderException.cs" />
+    <Compile Include="Decode\Equalizer.cs" />
+    <Compile Include="Decode\Header.cs" />
+    <Compile Include="Decode\huffcodetab.cs" />
+    <Compile Include="Decode\IFrameDecoder.cs" />
+    <Compile Include="Decode\InputStreamSource.cs" />
+    <Compile Include="Decode\JavaLayerError.cs" />
+    <Compile Include="Decode\JavaLayerErrors.cs" />
+    <Compile Include="Decode\JavaLayerException.cs" />
+    <Compile Include="Decode\JavaLayerHook.cs" />
+    <Compile Include="Decode\JavaLayerUtils.cs" />
+    <Compile Include="Decode\LayerIDecoder.cs" />
+    <Compile Include="Decode\LayerIIDecoder.cs" />
+    <Compile Include="Decode\LayerIIIDecoder.cs" />
+    <Compile Include="Decode\Manager.cs" />
+    <Compile Include="Decode\Obuffer.cs" />
+    <Compile Include="Decode\OutputChannels.cs" />
+    <Compile Include="Decode\SampleBuffer.cs" />
+    <Compile Include="Decode\Source.cs" />
+    <Compile Include="Support\SupportClass.cs" />
+    <Compile Include="Decode\SynthesisFilter.cs" />
+    <Compile Include="Mp3Stream.cs" />
+    <Compile Include="Convert\RiffFile.cs" />
+    <Compile Include="Convert\WaveFile.cs" />
+    <Compile Include="Convert\WaveFileObuffer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sample.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
