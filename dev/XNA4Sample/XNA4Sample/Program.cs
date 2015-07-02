@@ -12,7 +12,10 @@ namespace XNA4Sample
         static void Main(string[] args)
         {
             Console.WriteLine("Begin read...");
-            ReadAllTheWayThroughMp3File();
+            for (int i = 0; i < 10; i++)
+            {
+                ReadAllTheWayThroughMp3File();
+            }
             Console.WriteLine("... end!");
             Console.ReadKey();
 
@@ -38,6 +41,9 @@ namespace XNA4Sample
                 totalBytes += bytesReturned;
             }
             Console.WriteLine("Read a total of " + totalBytes + " bytes.");
+
+            stream.Close();
+            stream = null;
         }
     }
 #endif
