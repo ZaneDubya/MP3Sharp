@@ -1,19 +1,19 @@
-/***************************************************************************
- *   $FILENAME$.cs
- *   Copyright (c) 2015 Zane Wagner, Robert Burke,
- *   the JavaZoom team, and others.
- * 
- *   All rights reserved. This program and the accompanying materials
- *   are made available under the terms of the GNU Lesser General Public License
- *   (LGPL) version 2.1 which accompanies this distribution, and is available at
- *   http://www.gnu.org/licenses/lgpl-2.1.html
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- *   Lesser General Public License for more details.
- *
- ***************************************************************************/
+// /***************************************************************************
+//  *   SynthesisFilter.cs.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
 namespace javazoom.jl.decoder
 {
 	using System;
@@ -23,39 +23,198 @@ namespace javazoom.jl.decoder
 	/// </summary>
 	class SynthesisFilter
 	{
-		private void  InitBlock()
-		{
-			_tmpOut = new float[32];
-		}
-		public virtual float[] EQ
-		{
-			set
-			{
-				this.eq = value;
-				
-				if (eq == null)
-				{
-					eq = new float[32];
-					for (int i = 0; i < 32; i++)
-						eq[i] = 1.0f;
-				}
-				if (eq.Length < 32)
-				{
-					throw new System.ArgumentException("eq0");
-				}
-			}
-			
-		}
-		private float[] v1;
-		private float[] v2;
-		private float[] actual_v; // v1 or v2
-		private int actual_write_pos; // 0-15
-		private float[] samples; // 32 new subband samples
-		private int channel;
-		private float scalefactor;
-		private float[] eq;
+	    private const double MY_PI = 3.14159265358979323846;
+	    private static readonly float cos1_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI / 64.0)));
+	    private static readonly float cos3_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 64.0)));
+	    private static readonly float cos5_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 5.0 / 64.0)));
+	    private static readonly float cos7_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 7.0 / 64.0)));
+	    private static readonly float cos9_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 9.0 / 64.0)));
+	    private static readonly float cos11_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 11.0 / 64.0)));
+	    private static readonly float cos13_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 13.0 / 64.0)));
+	    private static readonly float cos15_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 15.0 / 64.0)));
+	    private static readonly float cos17_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 17.0 / 64.0)));
+	    private static readonly float cos19_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 19.0 / 64.0)));
+	    private static readonly float cos21_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 21.0 / 64.0)));
+	    private static readonly float cos23_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 23.0 / 64.0)));
+	    private static readonly float cos25_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 25.0 / 64.0)));
+	    private static readonly float cos27_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 27.0 / 64.0)));
+	    private static readonly float cos29_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 29.0 / 64.0)));
+	    private static readonly float cos31_64 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 31.0 / 64.0)));
+	    private static readonly float cos1_32 = (float) (1.0 / (2.0 * Math.Cos(MY_PI / 32.0)));
+	    private static readonly float cos3_32 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 32.0)));
+	    private static readonly float cos5_32 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 5.0 / 32.0)));
+	    private static readonly float cos7_32 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 7.0 / 32.0)));
+	    private static readonly float cos9_32 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 9.0 / 32.0)));
+	    private static readonly float cos11_32 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 11.0 / 32.0)));
+	    private static readonly float cos13_32 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 13.0 / 32.0)));
+	    private static readonly float cos15_32 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 15.0 / 32.0)));
+	    private static readonly float cos1_16 = (float) (1.0 / (2.0 * Math.Cos(MY_PI / 16.0)));
+	    private static readonly float cos3_16 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 16.0)));
+	    private static readonly float cos5_16 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 5.0 / 16.0)));
+	    private static readonly float cos7_16 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 7.0 / 16.0)));
+	    private static readonly float cos1_8 = (float) (1.0 / (2.0 * Math.Cos(MY_PI / 8.0)));
+	    private static readonly float cos3_8 = (float) (1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 8.0)));
+	    private static readonly float cos1_4 = (float) (1.0 / (2.0 * Math.Cos(MY_PI / 4.0)));
+	    // Note: These values are not in the same order
+	    // as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
+	    // private float d[] = {0.000000000, -4.000442505};
+
+	    private static float[] d = null;
+
+		/// d[] split into subarrays of length 16. This provides for
+		/// more faster access by allowing a block of 16 to be addressed
+		/// with constant offset. 
+		private static float[][] d16 = null;
+
+	    // The original data for d[]. This data (was) loaded from a file
+	    // to reduce the overall package size and to improve performance. 
+	    static readonly float[] d_data = {
+		0.000000000f, -0.000442505f,  0.003250122f, -0.007003784f,
+		0.031082153f, -0.078628540f,  0.100311279f, -0.572036743f,
+		1.144989014f,  0.572036743f,  0.100311279f,  0.078628540f,
+		0.031082153f,  0.007003784f,  0.003250122f,  0.000442505f,
+		-0.000015259f, -0.000473022f,  0.003326416f, -0.007919312f,
+		0.030517578f, -0.084182739f,  0.090927124f, -0.600219727f,
+		1.144287109f,  0.543823242f,  0.108856201f,  0.073059082f,
+		0.031478882f,  0.006118774f,  0.003173828f,  0.000396729f,
+		-0.000015259f, -0.000534058f,  0.003387451f, -0.008865356f,
+		0.029785156f, -0.089706421f,  0.080688477f, -0.628295898f,
+		1.142211914f,  0.515609741f,  0.116577148f,  0.067520142f,
+		0.031738281f,  0.005294800f,  0.003082275f,  0.000366211f,
+		-0.000015259f, -0.000579834f,  0.003433228f, -0.009841919f,
+		0.028884888f, -0.095169067f,  0.069595337f, -0.656219482f,
+		1.138763428f,  0.487472534f,  0.123474121f,  0.061996460f,
+		0.031845093f,  0.004486084f,  0.002990723f,  0.000320435f,
+		-0.000015259f, -0.000625610f,  0.003463745f, -0.010848999f,
+		0.027801514f, -0.100540161f,  0.057617188f, -0.683914185f,
+		1.133926392f,  0.459472656f,  0.129577637f,  0.056533813f,
+		0.031814575f,  0.003723145f,  0.002899170f,  0.000289917f,
+		-0.000015259f, -0.000686646f,  0.003479004f, -0.011886597f,
+		0.026535034f, -0.105819702f,  0.044784546f, -0.711318970f,
+		1.127746582f,  0.431655884f,  0.134887695f,  0.051132202f,
+		0.031661987f,  0.003005981f,  0.002792358f,  0.000259399f,
+		-0.000015259f, -0.000747681f,  0.003479004f, -0.012939453f,
+		0.025085449f, -0.110946655f,  0.031082153f, -0.738372803f,
+		1.120223999f,  0.404083252f,  0.139450073f,  0.045837402f,
+		0.031387329f,  0.002334595f,  0.002685547f,  0.000244141f,
+		-0.000030518f, -0.000808716f,  0.003463745f, -0.014022827f,
+		0.023422241f, -0.115921021f,  0.016510010f, -0.765029907f,
+		1.111373901f,  0.376800537f,  0.143264771f,  0.040634155f,
+		0.031005859f,  0.001693726f,  0.002578735f,  0.000213623f,
+		-0.000030518f, -0.000885010f,  0.003417969f, -0.015121460f,
+		0.021575928f, -0.120697021f,  0.001068115f, -0.791213989f,
+		1.101211548f,  0.349868774f,  0.146362305f,  0.035552979f,
+		0.030532837f,  0.001098633f,  0.002456665f,  0.000198364f,
+		-0.000030518f, -0.000961304f,  0.003372192f, -0.016235352f,
+		0.019531250f, -0.125259399f, -0.015228271f, -0.816864014f,
+		1.089782715f,  0.323318481f,  0.148773193f,  0.030609131f,
+		0.029937744f,  0.000549316f,  0.002349854f,  0.000167847f,
+		-0.000030518f, -0.001037598f,  0.003280640f, -0.017349243f,
+		0.017257690f, -0.129562378f, -0.032379150f, -0.841949463f,
+		1.077117920f,  0.297210693f,  0.150497437f,  0.025817871f,
+		0.029281616f,  0.000030518f,  0.002243042f,  0.000152588f,
+		-0.000045776f, -0.001113892f,  0.003173828f, -0.018463135f,
+		0.014801025f, -0.133590698f, -0.050354004f, -0.866363525f,
+		1.063217163f,  0.271591187f,  0.151596069f,  0.021179199f,
+		0.028533936f, -0.000442505f,  0.002120972f,  0.000137329f,
+		-0.000045776f, -0.001205444f,  0.003051758f, -0.019577026f,
+		0.012115479f, -0.137298584f, -0.069168091f, -0.890090942f,
+		1.048156738f,  0.246505737f,  0.152069092f,  0.016708374f,
+		0.027725220f, -0.000869751f,  0.002014160f,  0.000122070f,
+		-0.000061035f, -0.001296997f,  0.002883911f, -0.020690918f,
+		0.009231567f, -0.140670776f, -0.088775635f, -0.913055420f,
+		1.031936646f,  0.221984863f,  0.151962280f,  0.012420654f,
+		0.026840210f, -0.001266479f,  0.001907349f,  0.000106812f,
+		-0.000061035f, -0.001388550f,  0.002700806f, -0.021789551f,
+		0.006134033f, -0.143676758f, -0.109161377f, -0.935195923f,
+		1.014617920f,  0.198059082f,  0.151306152f,  0.008316040f,
+		0.025909424f, -0.001617432f,  0.001785278f,  0.000106812f,
+		-0.000076294f, -0.001480103f,  0.002487183f, -0.022857666f,
+		0.002822876f, -0.146255493f, -0.130310059f, -0.956481934f,
+		0.996246338f,  0.174789429f,  0.150115967f,  0.004394531f,
+		0.024932861f, -0.001937866f,  0.001693726f,  0.000091553f,
+		-0.000076294f, -0.001586914f,  0.002227783f, -0.023910522f,
+		-0.000686646f, -0.148422241f, -0.152206421f, -0.976852417f,
+		0.976852417f,  0.152206421f,  0.148422241f,  0.000686646f,
+		0.023910522f, -0.002227783f,  0.001586914f,  0.000076294f,
+		-0.000091553f, -0.001693726f,  0.001937866f, -0.024932861f,
+		-0.004394531f, -0.150115967f, -0.174789429f, -0.996246338f,
+		0.956481934f,  0.130310059f,  0.146255493f, -0.002822876f,
+		0.022857666f, -0.002487183f,  0.001480103f,  0.000076294f,
+		-0.000106812f, -0.001785278f,  0.001617432f, -0.025909424f,
+		-0.008316040f, -0.151306152f, -0.198059082f, -1.014617920f,
+		0.935195923f,  0.109161377f,  0.143676758f, -0.006134033f,
+		0.021789551f, -0.002700806f,  0.001388550f,  0.000061035f,
+		-0.000106812f, -0.001907349f,  0.001266479f, -0.026840210f,
+		-0.012420654f, -0.151962280f, -0.221984863f, -1.031936646f,
+		0.913055420f,  0.088775635f,  0.140670776f, -0.009231567f,
+		0.020690918f, -0.002883911f,  0.001296997f,  0.000061035f,
+		-0.000122070f, -0.002014160f,  0.000869751f, -0.027725220f,
+		-0.016708374f, -0.152069092f, -0.246505737f, -1.048156738f,
+		0.890090942f,  0.069168091f,  0.137298584f, -0.012115479f,
+		0.019577026f, -0.003051758f,  0.001205444f,  0.000045776f,
+		-0.000137329f, -0.002120972f,  0.000442505f, -0.028533936f,
+		-0.021179199f, -0.151596069f, -0.271591187f, -1.063217163f,
+		0.866363525f,  0.050354004f,  0.133590698f, -0.014801025f,
+		0.018463135f, -0.003173828f,  0.001113892f,  0.000045776f,
+		-0.000152588f, -0.002243042f, -0.000030518f, -0.029281616f,
+		-0.025817871f, -0.150497437f, -0.297210693f, -1.077117920f,
+		0.841949463f,  0.032379150f,  0.129562378f, -0.017257690f,
+		0.017349243f, -0.003280640f,  0.001037598f,  0.000030518f,
+		-0.000167847f, -0.002349854f, -0.000549316f, -0.029937744f,
+		-0.030609131f, -0.148773193f, -0.323318481f, -1.089782715f,
+		0.816864014f,  0.015228271f,  0.125259399f, -0.019531250f,
+		0.016235352f, -0.003372192f,  0.000961304f,  0.000030518f,
+		-0.000198364f, -0.002456665f, -0.001098633f, -0.030532837f,
+		-0.035552979f, -0.146362305f, -0.349868774f, -1.101211548f,
+		0.791213989f, -0.001068115f,  0.120697021f, -0.021575928f,
+		0.015121460f, -0.003417969f,  0.000885010f,  0.000030518f,
+		-0.000213623f, -0.002578735f, -0.001693726f, -0.031005859f,
+		-0.040634155f, -0.143264771f, -0.376800537f, -1.111373901f,
+		0.765029907f, -0.016510010f,  0.115921021f, -0.023422241f,
+		0.014022827f, -0.003463745f,  0.000808716f,  0.000030518f,
+		-0.000244141f, -0.002685547f, -0.002334595f, -0.031387329f,
+		-0.045837402f, -0.139450073f, -0.404083252f, -1.120223999f,
+		0.738372803f, -0.031082153f,  0.110946655f, -0.025085449f,
+		0.012939453f, -0.003479004f,  0.000747681f,  0.000015259f,
+		-0.000259399f, -0.002792358f, -0.003005981f, -0.031661987f,
+		-0.051132202f, -0.134887695f, -0.431655884f, -1.127746582f,
+		0.711318970f, -0.044784546f,  0.105819702f, -0.026535034f,
+		0.011886597f, -0.003479004f,  0.000686646f,  0.000015259f,
+		-0.000289917f, -0.002899170f, -0.003723145f, -0.031814575f,
+		-0.056533813f, -0.129577637f, -0.459472656f, -1.133926392f,
+		0.683914185f, -0.057617188f,  0.100540161f, -0.027801514f,
+		0.010848999f, -0.003463745f,  0.000625610f,  0.000015259f,
+		-0.000320435f, -0.002990723f, -0.004486084f, -0.031845093f,
+		-0.061996460f, -0.123474121f, -0.487472534f, -1.138763428f,
+		0.656219482f, -0.069595337f,  0.095169067f, -0.028884888f,
+		0.009841919f, -0.003433228f,  0.000579834f,  0.000015259f,
+		-0.000366211f, -0.003082275f, -0.005294800f, -0.031738281f,
+		-0.067520142f, -0.116577148f, -0.515609741f, -1.142211914f,
+		0.628295898f, -0.080688477f,  0.089706421f, -0.029785156f,
+		0.008865356f, -0.003387451f,  0.000534058f,  0.000015259f,
+		-0.000396729f, -0.003173828f, -0.006118774f, -0.031478882f,
+		-0.073059082f, -0.108856201f, -0.543823242f, -1.144287109f,
+		0.600219727f, -0.090927124f,  0.084182739f, -0.030517578f,
+		0.007919312f, -0.003326416f,  0.000473022f,  0.000015259f
+		};
+
+	    private readonly int channel;
+	    private readonly float[] samples; // 32 new subband samples
+	    private readonly float scalefactor;
+	    private readonly float[] v1;
+	    private readonly float[] v2;
+
+	    /// <summary> Compute PCM Samples.
+		/// </summary>
 		
-		/// <summary> Quality value for controlling CPU usage/quality tradeoff. 
+		private float[] _tmpOut;
+
+	    private float[] actual_v; // v1 or v2
+	    private int actual_write_pos; // 0-15
+	    private float[] eq;
+
+	    /// <summary> Quality value for controlling CPU usage/quality tradeoff. 
 		/// </summary>
 		/*
 		private int				quality;
@@ -92,9 +251,33 @@ namespace javazoom.jl.decoder
 			
 			reset();
 		}
-		
-		
-		/*
+
+	    public virtual float[] EQ
+		{
+			set
+			{
+				eq = value;
+				
+				if (eq == null)
+				{
+					eq = new float[32];
+					for (int i = 0; i < 32; i++)
+						eq[i] = 1.0f;
+				}
+				if (eq.Length < 32)
+				{
+					throw new ArgumentException("eq0");
+				}
+			}
+			
+		}
+
+	    private void  InitBlock()
+		{
+			_tmpOut = new float[32];
+		}
+
+	    /*
 		private void setQuality(int quality0)
 		{
 		switch (quality0)
@@ -115,8 +298,8 @@ namespace javazoom.jl.decoder
 		return quality;	
 		}
 		*/
-		
-		/// <summary> Reset the synthesis filter.
+
+	    /// <summary> Reset the synthesis filter.
 		/// </summary>
 		public void  reset()
 		{
@@ -138,24 +321,23 @@ namespace javazoom.jl.decoder
 			actual_v = v1;
 			actual_write_pos = 15;
 		}
-		
-		
-		/// <summary> Inject Sample.
+
+	    /// <summary> Inject Sample.
 		/// </summary>
 		public void  input_sample(float sample, int subbandnumber)
 		{
 			samples[subbandnumber] = eq[subbandnumber] * sample;
 		}
-		
-		public void  input_samples(float[] s)
+
+	    public void  input_samples(float[] s)
 		{
 			for (int i = 31; i >= 0; i--)
 			{
 				samples[i] = s[i] * eq[i];
 			}
 		}
-		
-		/// <summary> Compute new values via a fast cosine transform.
+
+	    /// <summary> Compute new values via a fast cosine transform.
 		/// </summary>
 		private void  compute_new_v()
 		{
@@ -550,8 +732,8 @@ namespace javazoom.jl.decoder
 			v1[496 + actual_write_pos] = new_v16;	
 			}*/
 		}
-		
-		/// <summary> Compute new values via a fast cosine transform.
+
+	    /// <summary> Compute new values via a fast cosine transform.
 		/// </summary>
 		private void  compute_new_v_old()
 		{
@@ -826,14 +1008,8 @@ namespace javazoom.jl.decoder
 			
 			// insert V[32] (== -new_v[0]) into other v:
 		}
-		
-		/// <summary> Compute PCM Samples.
-		/// </summary>
-		
-		private float[] _tmpOut;
-		
-		
-		private void  compute_pcm_samples0(Obuffer buffer)
+
+	    private void  compute_pcm_samples0(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			//int inc = v_inc;
@@ -853,8 +1029,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples1(Obuffer buffer)
+
+	    private void  compute_pcm_samples1(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			//int inc = v_inc;
@@ -875,7 +1051,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		private void  compute_pcm_samples2(Obuffer buffer)
+
+	    private void  compute_pcm_samples2(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -897,8 +1074,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples3(Obuffer buffer)
+
+	    private void  compute_pcm_samples3(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -921,8 +1098,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples4(Obuffer buffer)
+
+	    private void  compute_pcm_samples4(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -944,8 +1121,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples5(Obuffer buffer)
+
+	    private void  compute_pcm_samples5(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -967,8 +1144,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples6(Obuffer buffer)
+
+	    private void  compute_pcm_samples6(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			//int inc = v_inc;
@@ -989,8 +1166,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples7(Obuffer buffer)
+
+	    private void  compute_pcm_samples7(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -1012,7 +1189,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		private void  compute_pcm_samples8(Obuffer buffer)
+
+	    private void  compute_pcm_samples8(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -1034,8 +1212,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples9(Obuffer buffer)
+
+	    private void  compute_pcm_samples9(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -1057,8 +1235,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples10(Obuffer buffer)
+
+	    private void  compute_pcm_samples10(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			//int inc = v_inc;
@@ -1079,7 +1257,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		private void  compute_pcm_samples11(Obuffer buffer)
+
+	    private void  compute_pcm_samples11(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -1101,7 +1280,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		private void  compute_pcm_samples12(Obuffer buffer)
+
+	    private void  compute_pcm_samples12(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			//int inc = v_inc;
@@ -1122,7 +1302,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		private void  compute_pcm_samples13(Obuffer buffer)
+
+	    private void  compute_pcm_samples13(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -1144,7 +1325,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		private void  compute_pcm_samples14(Obuffer buffer)
+
+	    private void  compute_pcm_samples14(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -1166,7 +1348,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		private void  compute_pcm_samples15(Obuffer buffer)
+
+	    private void  compute_pcm_samples15(Obuffer buffer)
 		{
 			float[] vp = actual_v;
 			
@@ -1186,8 +1369,8 @@ namespace javazoom.jl.decoder
 			}
 			// for
 		}
-		
-		private void  compute_pcm_samples(Obuffer buffer)
+
+	    private void  compute_pcm_samples(Obuffer buffer)
 		{
 			
 			switch (actual_write_pos)
@@ -1291,8 +1474,8 @@ namespace javazoom.jl.decoder
 			
 			}*/
 		}
-		
-		/// <summary> Calculate 32 PCM samples and put the into the Obuffer-object.
+
+	    /// <summary> Calculate 32 PCM samples and put the into the Obuffer-object.
 		/// </summary>
 		
 		public void  calculate_pcm_samples(Obuffer buffer)
@@ -1312,56 +1495,8 @@ namespace javazoom.jl.decoder
 			for (int p = 0; p < 32; p++)
 				samples[p] = 0.0f;
 		}
-		
-		
-		private const double MY_PI = 3.14159265358979323846;
-		private static readonly float cos1_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 64.0)));
-		private static readonly float cos3_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 3.0 / 64.0)));
-		private static readonly float cos5_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 5.0 / 64.0)));
-		private static readonly float cos7_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 7.0 / 64.0)));
-		private static readonly float cos9_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 9.0 / 64.0)));
-		private static readonly float cos11_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 11.0 / 64.0)));
-		private static readonly float cos13_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 13.0 / 64.0)));
-		private static readonly float cos15_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 15.0 / 64.0)));
-		private static readonly float cos17_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 17.0 / 64.0)));
-		private static readonly float cos19_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 19.0 / 64.0)));
-		private static readonly float cos21_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 21.0 / 64.0)));
-		private static readonly float cos23_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 23.0 / 64.0)));
-		private static readonly float cos25_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 25.0 / 64.0)));
-		private static readonly float cos27_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 27.0 / 64.0)));
-		private static readonly float cos29_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 29.0 / 64.0)));
-		private static readonly float cos31_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 31.0 / 64.0)));
-		private static readonly float cos1_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 32.0)));
-		private static readonly float cos3_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 3.0 / 32.0)));
-		private static readonly float cos5_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 5.0 / 32.0)));
-		private static readonly float cos7_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 7.0 / 32.0)));
-		private static readonly float cos9_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 9.0 / 32.0)));
-		private static readonly float cos11_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 11.0 / 32.0)));
-		private static readonly float cos13_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 13.0 / 32.0)));
-		private static readonly float cos15_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 15.0 / 32.0)));
-		private static readonly float cos1_16 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 16.0)));
-		private static readonly float cos3_16 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 3.0 / 16.0)));
-		private static readonly float cos5_16 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 5.0 / 16.0)));
-		private static readonly float cos7_16 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 7.0 / 16.0)));
-		private static readonly float cos1_8 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 8.0)));
-		private static readonly float cos3_8 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 3.0 / 8.0)));
-		private static readonly float cos1_4 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 4.0)));
-		
-		// Note: These values are not in the same order
-		// as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
-		// private float d[] = {0.000000000, -4.000442505};
-		
-		private static float[] d = null;
-		
-		/// 
-		/// <summary> d[] split into subarrays of length 16. This provides for
-		/// more faster access by allowing a block of 16 to be addressed
-		/// with constant offset. 
-		/// *
-		/// </summary>
-		private static float[][] d16 = null;
-		
-		/// <summary> Loads the data for the d[] from the resource SFd.ser. 
+
+	    /// <summary> Loads the data for the d[] from the resource SFd.ser. 
 		/// </summary>
 		/// <returns> the loaded values for d[].
 		/// 
@@ -1371,8 +1506,8 @@ namespace javazoom.jl.decoder
 			// As we can't use the Java serialized resource, we use the copy graciously provided to us below.
 			return null;
 		}
-		
-		/// <summary> Converts a 1D array into a number of smaller arrays. This is used
+
+	    /// <summary> Converts a 1D array into a number of smaller arrays. This is used
 		/// to achieve offset + constant indexing into an array. Each sub-array
 		/// represents a block of values of the original array. 
 		/// </summary>
@@ -1398,8 +1533,8 @@ namespace javazoom.jl.decoder
 			}
 			return split;
 		}
-		
-		/// <summary> Returns a subarray of an existing array.
+
+	    /// <summary> Returns a subarray of an existing array.
 		/// 
 		/// </summary>
 		/// <param name="array	The">array to retrieve a subarra from.
@@ -1430,138 +1565,5 @@ namespace javazoom.jl.decoder
 			
 			return subarray;
 		}
-		
-		// The original data for d[]. This data (was) loaded from a file
-		// to reduce the overall package size and to improve performance. 
-		static float[] d_data = {
-		0.000000000f, -0.000442505f,  0.003250122f, -0.007003784f,
-		0.031082153f, -0.078628540f,  0.100311279f, -0.572036743f,
-		1.144989014f,  0.572036743f,  0.100311279f,  0.078628540f,
-		0.031082153f,  0.007003784f,  0.003250122f,  0.000442505f,
-		-0.000015259f, -0.000473022f,  0.003326416f, -0.007919312f,
-		0.030517578f, -0.084182739f,  0.090927124f, -0.600219727f,
-		1.144287109f,  0.543823242f,  0.108856201f,  0.073059082f,
-		0.031478882f,  0.006118774f,  0.003173828f,  0.000396729f,
-		-0.000015259f, -0.000534058f,  0.003387451f, -0.008865356f,
-		0.029785156f, -0.089706421f,  0.080688477f, -0.628295898f,
-		1.142211914f,  0.515609741f,  0.116577148f,  0.067520142f,
-		0.031738281f,  0.005294800f,  0.003082275f,  0.000366211f,
-		-0.000015259f, -0.000579834f,  0.003433228f, -0.009841919f,
-		0.028884888f, -0.095169067f,  0.069595337f, -0.656219482f,
-		1.138763428f,  0.487472534f,  0.123474121f,  0.061996460f,
-		0.031845093f,  0.004486084f,  0.002990723f,  0.000320435f,
-		-0.000015259f, -0.000625610f,  0.003463745f, -0.010848999f,
-		0.027801514f, -0.100540161f,  0.057617188f, -0.683914185f,
-		1.133926392f,  0.459472656f,  0.129577637f,  0.056533813f,
-		0.031814575f,  0.003723145f,  0.002899170f,  0.000289917f,
-		-0.000015259f, -0.000686646f,  0.003479004f, -0.011886597f,
-		0.026535034f, -0.105819702f,  0.044784546f, -0.711318970f,
-		1.127746582f,  0.431655884f,  0.134887695f,  0.051132202f,
-		0.031661987f,  0.003005981f,  0.002792358f,  0.000259399f,
-		-0.000015259f, -0.000747681f,  0.003479004f, -0.012939453f,
-		0.025085449f, -0.110946655f,  0.031082153f, -0.738372803f,
-		1.120223999f,  0.404083252f,  0.139450073f,  0.045837402f,
-		0.031387329f,  0.002334595f,  0.002685547f,  0.000244141f,
-		-0.000030518f, -0.000808716f,  0.003463745f, -0.014022827f,
-		0.023422241f, -0.115921021f,  0.016510010f, -0.765029907f,
-		1.111373901f,  0.376800537f,  0.143264771f,  0.040634155f,
-		0.031005859f,  0.001693726f,  0.002578735f,  0.000213623f,
-		-0.000030518f, -0.000885010f,  0.003417969f, -0.015121460f,
-		0.021575928f, -0.120697021f,  0.001068115f, -0.791213989f,
-		1.101211548f,  0.349868774f,  0.146362305f,  0.035552979f,
-		0.030532837f,  0.001098633f,  0.002456665f,  0.000198364f,
-		-0.000030518f, -0.000961304f,  0.003372192f, -0.016235352f,
-		0.019531250f, -0.125259399f, -0.015228271f, -0.816864014f,
-		1.089782715f,  0.323318481f,  0.148773193f,  0.030609131f,
-		0.029937744f,  0.000549316f,  0.002349854f,  0.000167847f,
-		-0.000030518f, -0.001037598f,  0.003280640f, -0.017349243f,
-		0.017257690f, -0.129562378f, -0.032379150f, -0.841949463f,
-		1.077117920f,  0.297210693f,  0.150497437f,  0.025817871f,
-		0.029281616f,  0.000030518f,  0.002243042f,  0.000152588f,
-		-0.000045776f, -0.001113892f,  0.003173828f, -0.018463135f,
-		0.014801025f, -0.133590698f, -0.050354004f, -0.866363525f,
-		1.063217163f,  0.271591187f,  0.151596069f,  0.021179199f,
-		0.028533936f, -0.000442505f,  0.002120972f,  0.000137329f,
-		-0.000045776f, -0.001205444f,  0.003051758f, -0.019577026f,
-		0.012115479f, -0.137298584f, -0.069168091f, -0.890090942f,
-		1.048156738f,  0.246505737f,  0.152069092f,  0.016708374f,
-		0.027725220f, -0.000869751f,  0.002014160f,  0.000122070f,
-		-0.000061035f, -0.001296997f,  0.002883911f, -0.020690918f,
-		0.009231567f, -0.140670776f, -0.088775635f, -0.913055420f,
-		1.031936646f,  0.221984863f,  0.151962280f,  0.012420654f,
-		0.026840210f, -0.001266479f,  0.001907349f,  0.000106812f,
-		-0.000061035f, -0.001388550f,  0.002700806f, -0.021789551f,
-		0.006134033f, -0.143676758f, -0.109161377f, -0.935195923f,
-		1.014617920f,  0.198059082f,  0.151306152f,  0.008316040f,
-		0.025909424f, -0.001617432f,  0.001785278f,  0.000106812f,
-		-0.000076294f, -0.001480103f,  0.002487183f, -0.022857666f,
-		0.002822876f, -0.146255493f, -0.130310059f, -0.956481934f,
-		0.996246338f,  0.174789429f,  0.150115967f,  0.004394531f,
-		0.024932861f, -0.001937866f,  0.001693726f,  0.000091553f,
-		-0.000076294f, -0.001586914f,  0.002227783f, -0.023910522f,
-		-0.000686646f, -0.148422241f, -0.152206421f, -0.976852417f,
-		0.976852417f,  0.152206421f,  0.148422241f,  0.000686646f,
-		0.023910522f, -0.002227783f,  0.001586914f,  0.000076294f,
-		-0.000091553f, -0.001693726f,  0.001937866f, -0.024932861f,
-		-0.004394531f, -0.150115967f, -0.174789429f, -0.996246338f,
-		0.956481934f,  0.130310059f,  0.146255493f, -0.002822876f,
-		0.022857666f, -0.002487183f,  0.001480103f,  0.000076294f,
-		-0.000106812f, -0.001785278f,  0.001617432f, -0.025909424f,
-		-0.008316040f, -0.151306152f, -0.198059082f, -1.014617920f,
-		0.935195923f,  0.109161377f,  0.143676758f, -0.006134033f,
-		0.021789551f, -0.002700806f,  0.001388550f,  0.000061035f,
-		-0.000106812f, -0.001907349f,  0.001266479f, -0.026840210f,
-		-0.012420654f, -0.151962280f, -0.221984863f, -1.031936646f,
-		0.913055420f,  0.088775635f,  0.140670776f, -0.009231567f,
-		0.020690918f, -0.002883911f,  0.001296997f,  0.000061035f,
-		-0.000122070f, -0.002014160f,  0.000869751f, -0.027725220f,
-		-0.016708374f, -0.152069092f, -0.246505737f, -1.048156738f,
-		0.890090942f,  0.069168091f,  0.137298584f, -0.012115479f,
-		0.019577026f, -0.003051758f,  0.001205444f,  0.000045776f,
-		-0.000137329f, -0.002120972f,  0.000442505f, -0.028533936f,
-		-0.021179199f, -0.151596069f, -0.271591187f, -1.063217163f,
-		0.866363525f,  0.050354004f,  0.133590698f, -0.014801025f,
-		0.018463135f, -0.003173828f,  0.001113892f,  0.000045776f,
-		-0.000152588f, -0.002243042f, -0.000030518f, -0.029281616f,
-		-0.025817871f, -0.150497437f, -0.297210693f, -1.077117920f,
-		0.841949463f,  0.032379150f,  0.129562378f, -0.017257690f,
-		0.017349243f, -0.003280640f,  0.001037598f,  0.000030518f,
-		-0.000167847f, -0.002349854f, -0.000549316f, -0.029937744f,
-		-0.030609131f, -0.148773193f, -0.323318481f, -1.089782715f,
-		0.816864014f,  0.015228271f,  0.125259399f, -0.019531250f,
-		0.016235352f, -0.003372192f,  0.000961304f,  0.000030518f,
-		-0.000198364f, -0.002456665f, -0.001098633f, -0.030532837f,
-		-0.035552979f, -0.146362305f, -0.349868774f, -1.101211548f,
-		0.791213989f, -0.001068115f,  0.120697021f, -0.021575928f,
-		0.015121460f, -0.003417969f,  0.000885010f,  0.000030518f,
-		-0.000213623f, -0.002578735f, -0.001693726f, -0.031005859f,
-		-0.040634155f, -0.143264771f, -0.376800537f, -1.111373901f,
-		0.765029907f, -0.016510010f,  0.115921021f, -0.023422241f,
-		0.014022827f, -0.003463745f,  0.000808716f,  0.000030518f,
-		-0.000244141f, -0.002685547f, -0.002334595f, -0.031387329f,
-		-0.045837402f, -0.139450073f, -0.404083252f, -1.120223999f,
-		0.738372803f, -0.031082153f,  0.110946655f, -0.025085449f,
-		0.012939453f, -0.003479004f,  0.000747681f,  0.000015259f,
-		-0.000259399f, -0.002792358f, -0.003005981f, -0.031661987f,
-		-0.051132202f, -0.134887695f, -0.431655884f, -1.127746582f,
-		0.711318970f, -0.044784546f,  0.105819702f, -0.026535034f,
-		0.011886597f, -0.003479004f,  0.000686646f,  0.000015259f,
-		-0.000289917f, -0.002899170f, -0.003723145f, -0.031814575f,
-		-0.056533813f, -0.129577637f, -0.459472656f, -1.133926392f,
-		0.683914185f, -0.057617188f,  0.100540161f, -0.027801514f,
-		0.010848999f, -0.003463745f,  0.000625610f,  0.000015259f,
-		-0.000320435f, -0.002990723f, -0.004486084f, -0.031845093f,
-		-0.061996460f, -0.123474121f, -0.487472534f, -1.138763428f,
-		0.656219482f, -0.069595337f,  0.095169067f, -0.028884888f,
-		0.009841919f, -0.003433228f,  0.000579834f,  0.000015259f,
-		-0.000366211f, -0.003082275f, -0.005294800f, -0.031738281f,
-		-0.067520142f, -0.116577148f, -0.515609741f, -1.142211914f,
-		0.628295898f, -0.080688477f,  0.089706421f, -0.029785156f,
-		0.008865356f, -0.003387451f,  0.000534058f,  0.000015259f,
-		-0.000396729f, -0.003173828f, -0.006118774f, -0.031478882f,
-		-0.073059082f, -0.108856201f, -0.543823242f, -1.144287109f,
-		0.600219727f, -0.090927124f,  0.084182739f, -0.030517578f,
-		0.007919312f, -0.003326416f,  0.000473022f,  0.000015259f
-		};
 	}
 }
