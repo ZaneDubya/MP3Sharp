@@ -1,38 +1,22 @@
-// $Id: Mp3Stream.cs,v 1.3 2004/08/03 16:20:37 tekhedd Exp $
-//
-// Fri Jul 30 20:39:30 EDT 2004
-// Rewrote the buffer object to hold one frame at a time for 
-// efficiency. Commented out some functions rather than taking
-// the time to port them. --t/DD
-
-// Rob, Sept 1:
-// - Changed access for all classes in this project except Mp3Sharp and the Exceptions to internal 
-// - Removed commenting from DecodeFrame method of Mp3Stream
-// - Added GPL license to Mp3Sharp.cs
-// - Changed version number to 1.4
-
-/*
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*----------------------------------------------------------------------
-*/
-
-
+// /***************************************************************************
+//  *   Mp3Stream.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Collections;
 
 namespace MP3Sharp
 {
@@ -43,25 +27,44 @@ namespace MP3Sharp
 	/// </summary>
 	public class Mp3Stream : Stream
 	{
-		/// <summary>
+	    /// <summary>
+		/// Used to interface with javaZoom.
+		/// </summary>
+		private readonly Decode.Bitstream JZBitStream;
+
+	    /// <summary>
+		/// Used to interface with javaZoom.
+		/// </summary>
+		private readonly Decode.Decoder JZDecoder = new Decode.Decoder(Decode.Decoder.DefaultParams);
+
+	    private readonly OBuffer16BitStereo QueueOBuffer;
+	    private readonly Stream SourceStream;
+	    private int BackStreamByteCountRep;
+	    private short ChannelCountRep = -1;
+	    protected SoundFormat FormatRep = SoundFormat.Pcm16BitStereo;
+	    private int FrequencyRep = -1;
+
+	    /// <summary>
 		/// Creates a new stream instance using the provided filename, and the default chunk size of 4096 bytes.
 		/// </summary>
 		public Mp3Stream(string fileName)
 			:this(new FileStream(fileName, FileMode.Open))
 		{ }
-		/// <summary>
+
+	    /// <summary>
 		/// Creates a new stream instance using the provided filename and chunk size.
 		/// </summary>
 		public Mp3Stream(string fileName, int chunkSize)
 			:this(new FileStream(fileName, FileMode.Open), chunkSize)
 		{ }
-		/// <summary>
+
+	    /// <summary>
 		/// Creates a new stream instance using the provided stream as a source, and the default chunk size of 4096 bytes.
 		/// </summary>
 		public Mp3Stream(Stream sourceStream)
 			: this(sourceStream, 4096) {}
 
-		/// <summary>
+	    /// <summary>
 		/// Creates a new stream instance using the provided stream as a source.
 		///
 		/// TODO: allow selecting stereo or mono in the constructor (note that
@@ -71,35 +74,19 @@ namespace MP3Sharp
 		{
 			FormatRep = SoundFormat.Pcm16BitStereo;
 			SourceStream = sourceStream;
-			JZBitStream = new MP3Sharp.Decode.Bitstream(new MP3Sharp.Decode.BackStream(SourceStream, chunkSize));
+			JZBitStream = new Decode.Bitstream(new Decode.BackStream(SourceStream, chunkSize));
 			QueueOBuffer = new OBuffer16BitStereo();
                    
 			JZDecoder.OutputBuffer = QueueOBuffer;
 		}
 
-		public int ChunkSize { get { return BackStreamByteCountRep; } }
-		private int BackStreamByteCountRep;
+	    public int ChunkSize { get { return BackStreamByteCountRep; } }
+	    public override bool CanRead { get { return SourceStream.CanRead; } }
+	    public override bool CanSeek { get { return SourceStream.CanSeek; } }
+	    public override bool CanWrite { get { return SourceStream.CanWrite; } }
+	    public override long Length { get { return SourceStream.Length; } }
 
-		/// <summary>
-		/// Used to interface with javaZoom.
-		/// </summary>
-		private MP3Sharp.Decode.Decoder JZDecoder = new MP3Sharp.Decode.Decoder(MP3Sharp.Decode.Decoder.DefaultParams);
-		/// <summary>
-		/// Used to interface with javaZoom.
-		/// </summary>
-		private MP3Sharp.Decode.Bitstream JZBitStream;
-
-
-		private Stream SourceStream;
-
-		public override bool CanRead { get { return SourceStream.CanRead; } }
-		public override bool CanSeek { get { return SourceStream.CanSeek; } }
-		public override bool CanWrite { get { return SourceStream.CanWrite; } }
-		public override long Length { get { return SourceStream.Length; } }
-
-		public override void Flush() { SourceStream.Flush(); }
-
-		/// <summary>
+	    /// <summary>
 		/// Gets or sets the position of the source stream.  This is relative to the number of bytes in the MP3 file, rather than
 		/// the total number of PCM bytes (typically signicantly greater) contained in the Mp3Stream's output.
 		/// </summary>
@@ -108,47 +95,24 @@ namespace MP3Sharp
 			get { return SourceStream.Position; }
 			set { SourceStream.Position = value; }
 		}
-		/// <summary>
-		/// Sets the position of the source stream.
-		/// </summary>
-		public override long Seek(long pos, SeekOrigin origin)
-		{
-			return SourceStream.Seek(pos, origin);
-		}
-		/// <summary>
-		/// This method is not valid for an Mp3Stream.
-		/// </summary>
-		public override void SetLength(long len)
-		{
-			throw new InvalidOperationException();
-		}
-		/// <summary>
-		/// This method is not valid for an Mp3Stream.
-		/// </summary>
-		public override void Write(byte[] buf, int ofs, int count)
-		{
-			throw new InvalidOperationException();
-		}
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the frequency of the audio being decoded.  
 		/// Initially set to -1.  Initialized during the first call to either of the Read and DecodeFrames methods,
 		/// and updated during every subsequent call to one of those methods to reflect the most recent header information
 		/// from the MP3 stream.
 		/// </summary>
 		public int Frequency { get { return FrequencyRep; } }
-		private int FrequencyRep = -1;
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the number of channels available in the audio being decoded.
 		/// Initially set to -1.  Initialized during the first call to either of the Read and DecodeFrames methods,
 		/// and updated during every subsequent call to one of those methods to reflect the most recent header information
 		/// from the MP3 stream.
 		/// </summary>
 		public short ChannelCount { get { return ChannelCountRep;  } }
-		private short ChannelCountRep = -1;
 
-		/// <summary>
+	    /// <summary>
 		/// Gets or sets the PCM output format of this stream.
 		/// </summary>
 		public SoundFormat Format
@@ -160,9 +124,34 @@ namespace MP3Sharp
 			// let's just not, OK?
 			// set { FormatRep = value; } 
 		}
-		protected SoundFormat FormatRep = SoundFormat.Pcm16BitStereo;
 
-		/// <summary>
+	    public override void Flush() { SourceStream.Flush(); }
+
+	    /// <summary>
+		/// Sets the position of the source stream.
+		/// </summary>
+		public override long Seek(long pos, SeekOrigin origin)
+		{
+			return SourceStream.Seek(pos, origin);
+		}
+
+	    /// <summary>
+		/// This method is not valid for an Mp3Stream.
+		/// </summary>
+		public override void SetLength(long len)
+		{
+			throw new InvalidOperationException();
+		}
+
+	    /// <summary>
+		/// This method is not valid for an Mp3Stream.
+		/// </summary>
+		public override void Write(byte[] buf, int ofs, int count)
+		{
+			throw new InvalidOperationException();
+		}
+
+	    /// <summary>
 		/// Decodes the requested number of frames from the MP3 stream 
 		/// and caches their PCM-encoded bytes.  These can subsequently be obtained using the Read method.
 		/// Returns the number of frames that were successfully decoded.
@@ -179,7 +168,7 @@ namespace MP3Sharp
 		 	return framesDecoded;
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Reads the MP3 stream as PCM-encoded bytes.  Decodes a portion of the stream if necessary.
 		/// Returns the number of bytes read.
 		/// </summary>
@@ -206,29 +195,28 @@ namespace MP3Sharp
 			}
 			return bytesRead;
 		}
-                      
-                   
-		// 			bool aFrameWasRead = true;
-		// 			while (QueueOBuffer.QueuedByteCount < count && aFrameWasRead)
-		// 			{
-		// 				aFrameWasRead = ReadFrame();
-		// 			}
-		// 			int bytesToReturn = Math.Min(QueueOBuffer.QueuedByteCount, count);
-		// 			int bytesRead = 0;
-		// 			switch(Format)
-		// 			{
-		// 				case SoundFormat.Pcm16BitMono:
-		// 					bytesRead = QueueOBuffer.DequeueAs16BitPcmMono(buffer, offset, bytesToReturn);
-		// 					break;
-		// 				case SoundFormat.Pcm16BitStereo:
-		// 					bytesRead = QueueOBuffer.DequeueAs16BitPcmStereo(buffer, offset, bytesToReturn);
-		// 					break;
-		// 				default:
-		// 					throw new ApplicationException("Unknown sound format in Mp3Stream Read call: " + Format);
-		// 			}
-		// 			return bytesRead;
 
-		/// <summary>
+	    // 			bool aFrameWasRead = true;
+	    // 			while (QueueOBuffer.QueuedByteCount < count && aFrameWasRead)
+	    // 			{
+	    // 				aFrameWasRead = ReadFrame();
+	    // 			}
+	    // 			int bytesToReturn = Math.Min(QueueOBuffer.QueuedByteCount, count);
+	    // 			int bytesRead = 0;
+	    // 			switch(Format)
+	    // 			{
+	    // 				case SoundFormat.Pcm16BitMono:
+	    // 					bytesRead = QueueOBuffer.DequeueAs16BitPcmMono(buffer, offset, bytesToReturn);
+	    // 					break;
+	    // 				case SoundFormat.Pcm16BitStereo:
+	    // 					bytesRead = QueueOBuffer.DequeueAs16BitPcmStereo(buffer, offset, bytesToReturn);
+	    // 					break;
+	    // 				default:
+	    // 					throw new ApplicationException("Unknown sound format in Mp3Stream Read call: " + Format);
+	    // 			}
+	    // 			return bytesRead;
+
+	    /// <summary>
 		/// Reads a single byte of the PCM-encoded stream.
 		/// </summary>
 		// 		public override int ReadByte()
@@ -248,23 +236,21 @@ namespace MP3Sharp
 			// SourceStream.Close();
 		}
 
-		private OBuffer16BitStereo QueueOBuffer;
-
-		/// <summary>
+	    /// <summary>
 		/// Reads a frame from the MP3 stream.  Returns whether the operation was successful.  If it wasn't, 
 		/// the source stream is probably at its end.
 		/// </summary>
 		private bool ReadFrame()
 		{
 			// Read a frame from the bitstream.
-			MP3Sharp.Decode.Header header = JZBitStream.readFrame();
+			Decode.Header header = JZBitStream.readFrame();
 			if (header == null) 
 				return false;
                    
 			try
 			{
 				// Set the channel count and frequency values for the stream.
-				if (header.mode() == MP3Sharp.Decode.Header.SINGLE_CHANNEL)
+				if (header.mode() == Decode.Header.SINGLE_CHANNEL)
 					ChannelCountRep = (short)1;
 				else
 					ChannelCountRep = (short)2;
@@ -272,13 +258,13 @@ namespace MP3Sharp
 				FrequencyRep = header.frequency();
                       
 				// Decode the frame.
-				MP3Sharp.Decode.Obuffer decoderOutput = JZDecoder.decodeFrame(header, JZBitStream);
+				Decode.Obuffer decoderOutput = JZDecoder.decodeFrame(header, JZBitStream);
                       
 				// Apparently, the way JavaZoom sets the output buffer 
 				// on the decoder is a bit dodgy. Even though
 				// this exception should never happen, we test to be sure.
 				if (decoderOutput != QueueOBuffer)
-					throw new System.ApplicationException("Output buffers are different.");
+					throw new ApplicationException("Output buffers are different.");
                       
 				// And we're done.
 			}
@@ -289,7 +275,6 @@ namespace MP3Sharp
 			}
 			return true;
 		}
-
 	}
 
 	/// <summary>
@@ -317,29 +302,26 @@ namespace MP3Sharp
 	/// This class handles stereo 16-bit data! Switch it out if you want mono or something.
 	/// </summary>
 	internal class OBuffer16BitStereo 
-		: MP3Sharp.Decode.Obuffer
+		: Decode.Obuffer
 	{
-		// This is stereo!
-		static readonly int CHANNELS = 2;
+	    // This is stereo!
+	    static readonly int CHANNELS = 2;
+	    // Write offset used in append_bytes
+	    readonly byte [] buffer = new byte[OBUFFERSIZE * 2]; // all channels interleaved
+	    readonly int [] bufferp = new int[MAXCHANNELS]; // offset in each channel not same!
+	    // end marker, one past end of array. Same as bufferp[0], but
+	    // without the array bounds check.
+	    int _end;
+	    // Read offset used to read from the stream, in bytes.
+	    int _offset;
 
-		// Read offset used to read from the stream, in bytes.
-		int _offset;
-
-		// end marker, one past end of array. Same as bufferp[0], but
-		// without the array bounds check.
-		int _end;
-
-		// Write offset used in append_bytes
-		byte [] buffer = new byte[OBUFFERSIZE * 2]; // all channels interleaved
-		int [] bufferp = new int[MAXCHANNELS]; // offset in each channel not same!
-
-		public OBuffer16BitStereo()
+	    public OBuffer16BitStereo()
 		{
 			// Initialize the buffer pointers
 			clear_buffer();
 		}
 
-		public int bytesLeft
+	    public int bytesLeft
 		{
 			get
 			{
@@ -353,7 +335,7 @@ namespace MP3Sharp
 			}
 		}
 
-		///
+	    ///
 		/// Copies as much of this buffer as will fit into hte output
 		/// buffer.
 		///
@@ -381,8 +363,8 @@ namespace MP3Sharp
 			return copySize;
 		}
 
-		// Inefficiently write one sample value
-		public override void append(int channel, short value)
+	    // Inefficiently write one sample value
+	    public override void append(int channel, short value)
 		{
 			buffer[bufferp[channel]]     = (byte)(value & 0xff);
 			buffer[bufferp[channel] + 1] = (byte)(value >> 8);
@@ -390,8 +372,8 @@ namespace MP3Sharp
 			bufferp[channel] += CHANNELS * 2;
 		}
 
-		// efficiently write 32 samples
-		public override void  appendSamples(int channel, float[] f)
+	    // efficiently write 32 samples
+	    public override void  appendSamples(int channel, float[] f)
 		{
 			// Always, 32 samples are appended
 			int pos = bufferp[channel];
@@ -416,8 +398,7 @@ namespace MP3Sharp
 			bufferp[channel] = pos;
 		}
 
-
-		/// <summary>
+	    /// <summary>
 		/// This implementation does not clear the buffer. 
 		/// </summary>
 		public override void  clear_buffer()  
@@ -429,8 +410,9 @@ namespace MP3Sharp
 				bufferp[i] = i * 2; // two bytes per channel
 		}
 
-		public override void  set_stop_flag() { }
-		public override void  write_buffer(int val) 
+	    public override void  set_stop_flag() { }
+
+	    public override void  write_buffer(int val) 
 		{ 
 			_offset = 0;
 
@@ -440,8 +422,8 @@ namespace MP3Sharp
 			// that temporary "new int(0)" is expensive, too.
 			_end = bufferp[0]; 
 		}
-		public override void  close() {}	
 
+	    public override void  close() {}
 	}
 
 }
