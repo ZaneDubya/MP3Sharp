@@ -1,72 +1,46 @@
+// /***************************************************************************
+//  *   RiffFile.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
 using MP3Sharp.Support;
-/*
-* 02/23/99 JavaConversion by E.B, JavaLayer
-*/
-/*===========================================================================
 
-riff.h  -  Don Cross, April 1993.
-
-RIFF file format classes.
-See Chapter 8 of "Multimedia Programmer's Reference" in
-the Microsoft Windows SDK.
-
-See also:
-..\source\riff.cpp
-ddc.h
-
-===========================================================================*/
-namespace javazoom.jl.converter
+namespace MP3Sharp.Convert
 {
 	using System;
 	/// <summary> Class to manage RIFF files
 	/// </summary>
 	internal class RiffFile
 	{
-		internal class RiffChunkHeader
-		{
-			private void  InitBlock(RiffFile enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-			private RiffFile enclosingInstance;
-			public RiffFile Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			public int ckID = 0; // Four-character chunk ID
-			public int ckSize = 0;
-			// Length of data in chunk
-			public RiffChunkHeader(RiffFile enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-			}
-		}
-		
-		
-		// DDCRET
-		public const int DDC_SUCCESS = 0; // The operation succeded
-		public const int DDC_FAILURE = 1; // The operation failed for unspecified reasons
-		public const int DDC_OUT_OF_MEMORY = 2; // Operation failed due to running out of memory
-		public const int DDC_FILE_ERROR = 3; // Operation encountered file I/O error
-		public const int DDC_INVALID_CALL = 4; // Operation was called with invalid parameters
-		public const int DDC_USER_ABORT = 5; // Operation was aborted by the user
-		public const int DDC_INVALID_FILE = 6; // File format does not match
-		
-		// RiffFileMode
-		public const int RFM_UNKNOWN = 0; // undefined type (can use to mean "N/A" or "not open")
-		public const int RFM_WRITE = 1; // open for write
-		public const int RFM_READ = 2; // open for read
-		
-		private RiffChunkHeader riff_header; // header for whole file
-		protected internal int fmode; // current file I/O mode
-		//protected internal System.IO.FileStream file; // I/O stream to use
-		protected internal System.IO.Stream file; // I/O stream to use
-		
-		/// <summary> Dummy Constructor
+	    // DDCRET
+	    public const int DDC_SUCCESS = 0; // The operation succeded
+	    public const int DDC_FAILURE = 1; // The operation failed for unspecified reasons
+	    public const int DDC_OUT_OF_MEMORY = 2; // Operation failed due to running out of memory
+	    public const int DDC_FILE_ERROR = 3; // Operation encountered file I/O error
+	    public const int DDC_INVALID_CALL = 4; // Operation was called with invalid parameters
+	    public const int DDC_USER_ABORT = 5; // Operation was aborted by the user
+	    public const int DDC_INVALID_FILE = 6; // File format does not match
+	    // RiffFileMode
+	    public const int RFM_UNKNOWN = 0; // undefined type (can use to mean "N/A" or "not open")
+	    public const int RFM_WRITE = 1; // open for write
+	    public const int RFM_READ = 2; // open for read
+	    //protected internal System.IO.FileStream file; // I/O stream to use
+	    protected internal System.IO.Stream file; // I/O stream to use
+	    protected internal int fmode; // current file I/O mode
+	    private RiffChunkHeader riff_header; // header for whole file
+
+	    /// <summary> Dummy Constructor
 		/// </summary>
 		public RiffFile()
 		{
@@ -77,17 +51,17 @@ namespace javazoom.jl.converter
 			riff_header.ckID = FourCC("RIFF");
 			riff_header.ckSize = 0;
 		}
-		
-		/// <summary> Return File Mode.
+
+	    /// <summary> Return File Mode.
 		/// </summary>
 		public virtual int CurrentFileMode()
 		{
 			return fmode;
 		}
-		
-		/// <summary> Open a RIFF file.
+
+	    /// <summary> Open a RIFF file.
 		/// </summary>
-		public virtual int Open(System.String Filename, int NewMode)
+		public virtual int Open(string Filename, int NewMode)
 		{
 			int retcode = DDC_SUCCESS;
 			
@@ -177,9 +151,8 @@ namespace javazoom.jl.converter
 			}
 			return retcode;
 		}
-		
 
-		/// <summary> Open a RIFF STREAM.
+	    /// <summary> Open a RIFF STREAM.
 		/// </summary>
 		public virtual int Open(System.IO.Stream stream, int NewMode)
 		{
@@ -273,10 +246,8 @@ namespace javazoom.jl.converter
 			}
 			return retcode;
 		}
-		
 
-		
-		/// <summary> Write NumBytes data.
+	    /// <summary> Write NumBytes data.
 		/// </summary>
 		public virtual int Write(sbyte[] Data, int NumBytes)
 		{
@@ -296,10 +267,8 @@ namespace javazoom.jl.converter
 			riff_header.ckSize += NumBytes;
 			return DDC_SUCCESS;
 		}
-		
-		
-		
-		/// <summary> Write NumBytes data.
+
+	    /// <summary> Write NumBytes data.
 		/// </summary>
 		public virtual int Write(short[] Data, int NumBytes)
 		{
@@ -326,8 +295,8 @@ namespace javazoom.jl.converter
 			riff_header.ckSize += NumBytes;
 			return DDC_SUCCESS;
 		}
-		
-		/// <summary> Write NumBytes data.
+
+	    /// <summary> Write NumBytes data.
 		/// </summary>
 		public virtual int Write(RiffChunkHeader Triff_header, int NumBytes)
 		{
@@ -363,8 +332,8 @@ namespace javazoom.jl.converter
 			riff_header.ckSize += NumBytes;
 			return DDC_SUCCESS;
 		}
-		
-		/// <summary> Write NumBytes data.
+
+	    /// <summary> Write NumBytes data.
 		/// </summary>
 		public virtual int Write(short Data, int NumBytes)
 		{
@@ -377,7 +346,7 @@ namespace javazoom.jl.converter
 			{
 				System.IO.BinaryWriter temp_BinaryWriter;
 				temp_BinaryWriter = new System.IO.BinaryWriter(file);
-				temp_BinaryWriter.Write((System.Int16) theData);
+				temp_BinaryWriter.Write((short) theData);
 				fmode = RFM_WRITE;
 			}
 			catch (System.IO.IOException ioe)
@@ -387,7 +356,8 @@ namespace javazoom.jl.converter
 			riff_header.ckSize += NumBytes;
 			return DDC_SUCCESS;
 		}
-		/// <summary> Write NumBytes data.
+
+	    /// <summary> Write NumBytes data.
 		/// </summary>
 		public virtual int Write(int Data, int NumBytes)
 		{
@@ -404,7 +374,7 @@ namespace javazoom.jl.converter
 			{
 				System.IO.BinaryWriter temp_BinaryWriter;
 				temp_BinaryWriter = new System.IO.BinaryWriter(file);
-				temp_BinaryWriter.Write((System.Int32) theData);
+				temp_BinaryWriter.Write((int) theData);
 				fmode = RFM_WRITE;
 			}
 			catch (System.IO.IOException ioe)
@@ -414,10 +384,8 @@ namespace javazoom.jl.converter
 			riff_header.ckSize += NumBytes;
 			return DDC_SUCCESS;
 		}
-		
-		
-		
-		/// <summary> Read NumBytes data.
+
+	    /// <summary> Read NumBytes data.
 		/// </summary>
 		public virtual int Read(sbyte[] Data, int NumBytes)
 		{
@@ -432,10 +400,10 @@ namespace javazoom.jl.converter
 			}
 			return retcode;
 		}
-		
-		/// <summary> Expect NumBytes data.
+
+	    /// <summary> Expect NumBytes data.
 		/// </summary>
-		public virtual int Expect(System.String Data, int NumBytes)
+		public virtual int Expect(string Data, int NumBytes)
 		{
 			sbyte target = 0;
 			int cnt = 0;
@@ -454,8 +422,8 @@ namespace javazoom.jl.converter
 			}
 			return DDC_SUCCESS;
 		}
-		
-		/// <summary> Close Riff File.
+
+	    /// <summary> Close Riff File.
 		/// Length is written too.
 		/// </summary>
 		public virtual int Close()
@@ -511,8 +479,8 @@ namespace javazoom.jl.converter
 			fmode = RFM_UNKNOWN;
 			return retcode;
 		}
-		
-		/// <summary> Return File Position.
+
+	    /// <summary> Return File Position.
 		/// </summary>
 		public virtual long CurrentFilePosition()
 		{
@@ -527,8 +495,8 @@ namespace javazoom.jl.converter
 			}
 			return position;
 		}
-		
-		/// <summary> Write Data to specified offset.
+
+	    /// <summary> Write Data to specified offset.
 		/// </summary>
 		public virtual int Backpatch(long FileOffset, RiffChunkHeader Data, int NumBytes)
 		{
@@ -546,8 +514,8 @@ namespace javazoom.jl.converter
 			}
 			return Write(Data, NumBytes);
 		}
-		
-		public virtual int Backpatch(long FileOffset, sbyte[] Data, int NumBytes)
+
+	    public virtual int Backpatch(long FileOffset, sbyte[] Data, int NumBytes)
 		{
 			if (file == null)
 			{
@@ -563,9 +531,8 @@ namespace javazoom.jl.converter
 			}
 			return Write(Data, NumBytes);
 		}
-		
-		
-		/// <summary> Seek in the File.
+
+	    /// <summary> Seek in the File.
 		/// </summary>
 		protected internal virtual int Seek(long offset)
 		{
@@ -581,10 +548,10 @@ namespace javazoom.jl.converter
 			}
 			return rc;
 		}
-		
-		/// <summary> Error Messages.
+
+	    /// <summary> Error Messages.
 		/// </summary>
-		private System.String DDCRET_String(int retcode)
+		private string DDCRET_String(int retcode)
 		{
 			switch (retcode)
 			{
@@ -605,15 +572,41 @@ namespace javazoom.jl.converter
 				}
 			return "Unknown Error";
 		}
-		
-		/// <summary> Fill the header.
+
+	    /// <summary> Fill the header.
 		/// </summary>
-		public static int FourCC(System.String ChunkName)
+		public static int FourCC(string ChunkName)
 		{
 			sbyte[] p = new sbyte[]{(sbyte) (0x20), (sbyte) (0x20), (sbyte) (0x20), (sbyte) (0x20)};
 			SupportClass.GetSBytesFromString(ChunkName, 0, 4, ref p, 0);
 			int ret = (((p[0] << 24) & (int) SupportClass.Identity(0xFF000000)) | ((p[1] << 16) & 0x00FF0000) | ((p[2] << 8) & 0x0000FF00) | (p[3] & 0x000000FF));
 			return ret;
+		}
+
+	    internal class RiffChunkHeader
+		{
+		    public int ckID = 0; // Four-character chunk ID
+		    public int ckSize = 0;
+		    private RiffFile enclosingInstance;
+		    // Length of data in chunk
+		    public RiffChunkHeader(RiffFile enclosingInstance)
+			{
+				InitBlock(enclosingInstance);
+			}
+
+		    public RiffFile Enclosing_Instance
+			{
+				get
+				{
+					return enclosingInstance;
+				}
+				
+			}
+
+		    private void  InitBlock(RiffFile enclosingInstance)
+			{
+				this.enclosingInstance = enclosingInstance;
+			}
 		}
 	}
 }
