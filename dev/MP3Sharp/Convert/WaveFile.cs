@@ -1,21 +1,22 @@
+// /***************************************************************************
+//  *   WaveFile.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
 using MP3Sharp.Support;
-/*
-* 02/23/99 JavaConversion by E.B, JavaLayer
-*/
-/*===========================================================================
 
-riff.h  -  Don Cross, April 1993.
-
-RIFF file format classes.
-See Chapter 8 of "Multimedia Programmer's Reference" in
-the Microsoft Windows SDK.
-
-See also:
-..\source\riff.cpp
-ddc.h
-
-===========================================================================*/
-namespace javazoom.jl.converter
+namespace MP3Sharp.Convert
 {
 	using System;
 	
@@ -23,116 +24,14 @@ namespace javazoom.jl.converter
 	/// </summary>
 	internal class WaveFile:RiffFile
 	{
-		public const int MAX_WAVE_CHANNELS = 2;
-		
-		internal class WaveFormat_ChunkData
-		{
-			private void  InitBlock(WaveFile enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-			private WaveFile enclosingInstance;
-			public WaveFile Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			public short wFormatTag = 0; // Format category (PCM=1)
-			public short nChannels = 0; // Number of channels (mono=1, stereo=2)
-			public int nSamplesPerSec = 0; // Sampling rate [Hz]
-			public int nAvgBytesPerSec = 0;
-			public short nBlockAlign = 0;
-			public short nBitsPerSample = 0;
-			
-			public WaveFormat_ChunkData(WaveFile enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-				wFormatTag = 1; // PCM
-				Config(44100, (short) 16, (short) 1);
-			}
-			
-			public virtual void  Config(int NewSamplingRate, short NewBitsPerSample, short NewNumChannels)
-			{
-				nSamplesPerSec = NewSamplingRate;
-				nChannels = NewNumChannels;
-				nBitsPerSample = NewBitsPerSample;
-				nAvgBytesPerSec = (nChannels * nSamplesPerSec * nBitsPerSample) / 8;
-				nBlockAlign = (short) ((nChannels * nBitsPerSample) / 8);
-			}
-		}
-		
-		
-		internal class WaveFormat_Chunk
-		{
-			private void  InitBlock(WaveFile enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-			private WaveFile enclosingInstance;
-			public WaveFile Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			public RiffChunkHeader header;
-			public WaveFormat_ChunkData data;
-			
-			public WaveFormat_Chunk(WaveFile enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-				header = new RiffChunkHeader(enclosingInstance);
-				data = new WaveFormat_ChunkData(enclosingInstance);
-				header.ckID = javazoom.jl.converter.RiffFile.FourCC("fmt ");
-				header.ckSize = 16;
-			}
-			
-			public virtual int VerifyValidity()
-			{
-				bool ret = header.ckID == javazoom.jl.converter.RiffFile.FourCC("fmt ") && (data.nChannels == 1 || data.nChannels == 2) && data.nAvgBytesPerSec == (data.nChannels * data.nSamplesPerSec * data.nBitsPerSample) / 8 && data.nBlockAlign == (data.nChannels * data.nBitsPerSample) / 8;
-				if (ret == true)
-					return 1;
-				else
-					return 0;
-			}
-		}
-		
-		internal class WaveFileSample
-		{
-			private void  InitBlock(WaveFile enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-			private WaveFile enclosingInstance;
-			public WaveFile Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			public short[] chan;
-			
-			public WaveFileSample(WaveFile enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-				chan = new short[WaveFile.MAX_WAVE_CHANNELS];
-			}
-		}
-		
-		private WaveFormat_Chunk wave_format;
-		private RiffChunkHeader pcm_data;
-		private long pcm_data_offset = 0; // offset of 'pcm_data' in output file
-		private int num_samples = 0;
-		
-		
-		/// <summary> Constructs a new WaveFile instance. 
+	    public const int MAX_WAVE_CHANNELS = 2;
+	    private readonly int num_samples = 0;
+	    private readonly RiffChunkHeader pcm_data;
+	    private readonly WaveFormat_Chunk wave_format;
+	    bool JustWriteLengthBytes = false;
+	    private long pcm_data_offset = 0; // offset of 'pcm_data' in output file
+
+	    /// <summary> Constructs a new WaveFile instance. 
 		/// </summary>
 		public WaveFile()
 		{
@@ -142,8 +41,8 @@ namespace javazoom.jl.converter
 			pcm_data.ckSize = 0;
 			num_samples = 0;
 		}
-		
-		/// <summary>*
+
+	    /// <summary>*
 		/// *
 		/// public int OpenForRead (String Filename)
 		/// {
@@ -190,7 +89,7 @@ namespace javazoom.jl.converter
 		/// <summary>
 		/// Pass in either a FileName or a Stream.
 		/// </summary>
-		public virtual int OpenForWrite(System.String Filename, System.IO.Stream stream, int SamplingRate, short BitsPerSample, short NumChannels)
+		public virtual int OpenForWrite(string Filename, System.IO.Stream stream, int SamplingRate, short BitsPerSample, short NumChannels)
 		{
 			// Verify parameters...
 			if ((BitsPerSample != 8 && BitsPerSample != 16) || NumChannels < 1 || NumChannels > 2)
@@ -232,8 +131,8 @@ namespace javazoom.jl.converter
 			
 			return retcode;
 		}
-		
-		/// <summary>*
+
+	    /// <summary>*
 		/// *
 		/// public int ReadSample ( short[] Sample )
 		/// {
@@ -331,8 +230,8 @@ namespace javazoom.jl.converter
 			pcm_data.ckSize += extraBytes;
 			return base.Write(data, extraBytes);
 		}
-		
-		/// <summary> Read 16-bit audio.
+
+	    /// <summary> Read 16-bit audio.
 		/// *
 		/// public int ReadData  (short[] data, int numData)
 		/// {return super.Read ( data, numData * 2);} 
@@ -486,59 +385,154 @@ namespace javazoom.jl.converter
 			}
 			return rc;
 		}
-		public int Close(bool justWriteLengthBytes)
+
+	    public int Close(bool justWriteLengthBytes)
 		{
 			JustWriteLengthBytes = justWriteLengthBytes;
 			int ret = Close();
 			JustWriteLengthBytes = false;
 			return ret;
 		}
-		bool JustWriteLengthBytes = false;
 
-		
-
-		// [Hz]
-		public virtual int SamplingRate()
+	    // [Hz]
+	    public virtual int SamplingRate()
 		{
 			return wave_format.data.nSamplesPerSec;
 		}
-		
-		public virtual short BitsPerSample()
+
+	    public virtual short BitsPerSample()
 		{
 			return wave_format.data.nBitsPerSample;
 		}
-		
-		public virtual short NumChannels()
+
+	    public virtual short NumChannels()
 		{
 			return wave_format.data.nChannels;
 		}
-		
-		public virtual int NumSamples()
+
+	    public virtual int NumSamples()
 		{
 			return num_samples;
 		}
-		
-		
-		/// <summary> Open for write using another wave file's parameters...
+
+	    /// <summary> Open for write using another wave file's parameters...
 		/// </summary>
-		public virtual int OpenForWrite(System.String Filename, WaveFile OtherWave)
+		public virtual int OpenForWrite(string Filename, WaveFile OtherWave)
 		{
 			return OpenForWrite(Filename, null, OtherWave.SamplingRate(), OtherWave.BitsPerSample(), OtherWave.NumChannels());
 		}
-		
-		/// <summary>*
+
+	    /// <summary>*
 		/// </summary>
 		public override long CurrentFilePosition()
 		{
 			return base.CurrentFilePosition();
 		}
-		
-		/* public int FourCC(String ChunkName)
+
+	    internal class WaveFormat_ChunkData
 		{
-		byte[] p = {0x20,0x20,0x20,0x20};
-		ChunkName.getBytes(0,4,p,0);
-		int ret = (((p[0] << 24)& 0xFF000000) | ((p[1] << 16)&0x00FF0000) | ((p[2] << 8)&0x0000FF00) | (p[3]&0x000000FF));
-		return ret;
-		}*/
+		    private WaveFile enclosingInstance;
+		    public int nAvgBytesPerSec = 0;
+		    public short nBitsPerSample = 0;
+		    public short nBlockAlign = 0;
+		    public short nChannels = 0; // Number of channels (mono=1, stereo=2)
+		    public int nSamplesPerSec = 0; // Sampling rate [Hz]
+		    public short wFormatTag = 0; // Format category (PCM=1)
+
+		    public WaveFormat_ChunkData(WaveFile enclosingInstance)
+			{
+				InitBlock(enclosingInstance);
+				wFormatTag = 1; // PCM
+				Config(44100, (short) 16, (short) 1);
+			}
+
+		    public WaveFile Enclosing_Instance
+			{
+				get
+				{
+					return enclosingInstance;
+				}
+				
+			}
+
+		    private void  InitBlock(WaveFile enclosingInstance)
+			{
+				this.enclosingInstance = enclosingInstance;
+			}
+
+		    public virtual void  Config(int NewSamplingRate, short NewBitsPerSample, short NewNumChannels)
+			{
+				nSamplesPerSec = NewSamplingRate;
+				nChannels = NewNumChannels;
+				nBitsPerSample = NewBitsPerSample;
+				nAvgBytesPerSec = (nChannels * nSamplesPerSec * nBitsPerSample) / 8;
+				nBlockAlign = (short) ((nChannels * nBitsPerSample) / 8);
+			}
+		}
+
+	    internal class WaveFormat_Chunk
+		{
+		    public WaveFormat_ChunkData data;
+		    private WaveFile enclosingInstance;
+		    public RiffChunkHeader header;
+
+		    public WaveFormat_Chunk(WaveFile enclosingInstance)
+			{
+				InitBlock(enclosingInstance);
+				header = new RiffChunkHeader(enclosingInstance);
+				data = new WaveFormat_ChunkData(enclosingInstance);
+				header.ckID = converter.RiffFile.FourCC("fmt ");
+				header.ckSize = 16;
+			}
+
+		    public WaveFile Enclosing_Instance
+			{
+				get
+				{
+					return enclosingInstance;
+				}
+				
+			}
+
+		    private void  InitBlock(WaveFile enclosingInstance)
+			{
+				this.enclosingInstance = enclosingInstance;
+			}
+
+		    public virtual int VerifyValidity()
+			{
+				bool ret = header.ckID == converter.RiffFile.FourCC("fmt ") && (data.nChannels == 1 || data.nChannels == 2) && data.nAvgBytesPerSec == (data.nChannels * data.nSamplesPerSec * data.nBitsPerSample) / 8 && data.nBlockAlign == (data.nChannels * data.nBitsPerSample) / 8;
+				if (ret == true)
+					return 1;
+				else
+					return 0;
+			}
+		}
+
+	    internal class WaveFileSample
+		{
+		    public short[] chan;
+		    private WaveFile enclosingInstance;
+
+		    public WaveFileSample(WaveFile enclosingInstance)
+			{
+				InitBlock(enclosingInstance);
+				chan = new short[MAX_WAVE_CHANNELS];
+			}
+
+		    public WaveFile Enclosing_Instance
+			{
+				get
+				{
+					return enclosingInstance;
+				}
+				
+			}
+
+		    private void  InitBlock(WaveFile enclosingInstance)
+			{
+				this.enclosingInstance = enclosingInstance;
+			}
+		}
 	}
 }

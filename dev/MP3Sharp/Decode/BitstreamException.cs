@@ -18,7 +18,7 @@
 */
 using MP3Sharp.Decode;
 using javazoom;
-using javazoom.jl.converter;
+using MP3Sharp.Convert;
 using javazoom.jl;
 namespace MP3Sharp
 {

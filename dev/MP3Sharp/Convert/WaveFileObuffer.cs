@@ -4,7 +4,7 @@
 *
 * 15/02/99 ,Java Conversion by E.B ,ebsp@iname.com, JavaLayer
 */
-namespace javazoom.jl.converter
+namespace MP3Sharp.Convert
 {
 	using System;
 	using Obuffer = MP3Sharp.Decode.Obuffer;

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-using javazoom.jl.converter;
+using MP3Sharp.Convert;
 using MP3Sharp.Decode;
 
 
