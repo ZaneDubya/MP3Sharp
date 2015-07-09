@@ -1,28 +1,39 @@
+// /***************************************************************************
+//  *   BackStream.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
 using System;
 using System.IO;
 
-using MP3Sharp.Convert;
-using MP3Sharp.Decode;
-
-
-///A BackStream (such a beast doesn't exist in C#'s libraries to my knowledge)
 namespace MP3Sharp.Decode
 {
 	[Serializable]
 	internal class CircularByteBuffer 
 	{
-		byte[] dataArray = null;
-		int length = 1;
-		int index = 0;
-		int numValid = 0;
-    
-		public CircularByteBuffer(int size)
+	    byte[] dataArray = null;
+	    int index = 0;
+	    int length = 1;
+	    int numValid = 0;
+
+	    public CircularByteBuffer(int size)
 		{
 			dataArray = new byte[size];
 			length = size;
 		}
-    
-		/// <summary>
+
+	    /// <summary>
 		/// Initialize by copying the CircularByteBuffer passed in
 		/// </summary>
 		public CircularByteBuffer(CircularByteBuffer cdb) 
@@ -39,13 +50,8 @@ namespace MP3Sharp.Decode
 				}
 			}
 		}
-    
-		public CircularByteBuffer Copy() 
-		{
-			return new CircularByteBuffer(this);
-		}
 
-		/// <summary>
+	    /// <summary>
 		/// The physical size of the Buffer (read/write)
 		/// </summary>
 		public int BufferSize
@@ -67,15 +73,51 @@ namespace MP3Sharp.Decode
 				index = minLength-1;
 				length = value;
 			}
-		}    
-    
-		public void Reset()
+		}
+
+	    /// <summary>
+		/// e.g. Offset[0] is the current value
+		/// </summary>
+		public byte this [int index]   
+		{
+			get 
+			{
+				return InternalGet(-1-index);
+			}
+			set
+			{
+				InternalSet(-1-index, value);
+			}
+		}
+
+	    /// <summary>
+		/// How far back it is safe to look (read/write).  Write only to reduce NumValid.
+		/// </summary>
+		public int NumValid
+		{
+			get
+			{
+				return numValid;
+			}
+			set
+			{
+				if (value > numValid) throw new Exception("Can't set NumValid to " + value + " which is greater than the current numValid value of " + numValid);
+				numValid = value;
+			}
+		}
+
+	    public CircularByteBuffer Copy() 
+		{
+			return new CircularByteBuffer(this);
+		}
+
+	    public void Reset()
 		{
 			index = 0;
 			numValid = 0;
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Push a byte into the buffer.  Returns the value of whatever comes off.
 		/// </summary>
 		public byte Push(byte newValue)
@@ -92,7 +134,7 @@ namespace MP3Sharp.Decode
 			return ret;
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Pop an integer off the start of the buffer. Throws an exception if the buffer is empty (NumValid == 0)
 		/// </summary>
 		public byte Pop()
@@ -104,8 +146,8 @@ namespace MP3Sharp.Decode
 				return this[numValid];
 			}
 		}
-    
-		/// <summary>
+
+	    /// <summary>
 		/// Returns what would fall out of the buffer on a Push.  NOT the same as what you'd get with a Pop().
 		/// </summary>
 		public byte Peek()
@@ -116,22 +158,7 @@ namespace MP3Sharp.Decode
 			}
 		}
 
-		/// <summary>
-		/// e.g. Offset[0] is the current value
-		/// </summary>
-		public byte this [int index]   
-		{
-			get 
-			{
-				return InternalGet(-1-index);
-			}
-			set
-			{
-				InternalSet(-1-index, value);
-			}
-		}
-
-		private byte InternalGet(int offset)
+	    private byte InternalGet(int offset)
 		{
 			int ind=index+offset;
       
@@ -141,8 +168,8 @@ namespace MP3Sharp.Decode
 			// Set value
 			return dataArray[ind];
 		}
-    
-		private void InternalSet(int offset, byte valueToSet)
+
+	    private void InternalSet(int offset, byte valueToSet)
 		{
 			int ind=index+offset;
       
@@ -153,24 +180,7 @@ namespace MP3Sharp.Decode
 			dataArray[ind] = valueToSet;
 		}
 
-    
-		/// <summary>
-		/// How far back it is safe to look (read/write).  Write only to reduce NumValid.
-		/// </summary>
-		public int NumValid
-		{
-			get
-			{
-				return numValid;
-			}
-			set
-			{
-				if (value > numValid) throw new Exception("Can't set NumValid to " + value + " which is greater than the current numValid value of " + numValid);
-				numValid = value;
-			}
-		}
-    
-		/// <summary>
+	    /// <summary>
 		/// Returns a range (in terms of Offsets) in an int array in chronological (oldest-to-newest) order. e.g. (3, 0) returns the last four ints pushed, with result[3] being the most recent.
 		/// </summary>
 		public byte[] GetRange(int str, int stp)
@@ -184,10 +194,10 @@ namespace MP3Sharp.Decode
        
 			return outByte;
 		}
-    
-		public override String ToString()
+
+	    public override string ToString()
 		{
-			String ret = "";
+			string ret = "";
 			for(int i=0;i<dataArray.Length;i++)
 			{
 				ret+= dataArray[i]+" ";
@@ -195,27 +205,25 @@ namespace MP3Sharp.Decode
 			ret += "\n index = "+index+" numValid = " + NumValid;
 			return ret;
 		}
-    
-    
 	}
 
 
 
 	internal class BackStream 
 	{
-		Stream S;
-		int BackBufferSize;
-		int NumForwardBytesInBuffer = 0;
-		byte[] Temp;
-		CircularByteBuffer COB;
+	    readonly int BackBufferSize;
+	    readonly CircularByteBuffer COB;
+	    readonly Stream S;
+	    readonly byte[] Temp;
+	    int NumForwardBytesInBuffer = 0;
 
-		public BackStream(Stream s, int backBufferSize) 
+	    public BackStream(Stream s, int backBufferSize) 
 		{ 
 			S = s; BackBufferSize = backBufferSize; Temp = new byte[BackBufferSize];
 			COB = new CircularByteBuffer(BackBufferSize);
 		}
 
-		public int Read(sbyte[]toRead, int offset, int length)
+	    public int Read(sbyte[]toRead, int offset, int length)
 		{
 			// Read 
 			int currentByte = 0;
@@ -243,13 +251,14 @@ namespace MP3Sharp.Decode
 			}
 			return currentByte;
 		}
-		public void UnRead(int length)
+
+	    public void UnRead(int length)
 		{
 			NumForwardBytesInBuffer += length;
 			if (NumForwardBytesInBuffer > BackBufferSize) { Console.WriteLine("YOUR BACKSTREAM IS FISTED!"); }
 		}
 
-		public void Close() 
+	    public void Close() 
 		{
 			S.Close();
 		}
