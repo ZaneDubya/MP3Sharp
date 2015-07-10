@@ -1,5 +1,6 @@
 using System;
 using Mp3Sharp;
+using Microsoft.Xna.Framework.Audio;
 
 namespace XNA4Sample
 {
@@ -11,13 +12,13 @@ namespace XNA4Sample
         /// </summary>
         static void Main(string[] args)
         {
-            Console.WriteLine("Begin read...");
+            /*Console.WriteLine("Begin read...");
             for (int i = 0; i < 10; i++)
             {
                 ReadAllTheWayThroughMp3File();
             }
             Console.WriteLine("... end!");
-            Console.ReadKey();
+            Console.ReadKey();*/
 
             using (BaseGame game = new BaseGame())
             {
@@ -28,6 +29,8 @@ namespace XNA4Sample
         public static void ReadAllTheWayThroughMp3File()
         {
             Mp3Stream stream = new Mp3Stream(@"sample.mp3");
+            XNAMP3 mp3 = new XNAMP3(stream);
+            mp3.Play();
 
             // Create the buffer
             int numberOfPcmBytesToReadPerChunk = 512;

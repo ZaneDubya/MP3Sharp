@@ -80,6 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="BaseGame.cs" />
+    <Compile Include="XNAMP3.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="sample.mp3">
