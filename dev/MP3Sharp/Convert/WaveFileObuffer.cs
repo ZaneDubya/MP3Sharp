@@ -1,32 +1,37 @@
-/*
-* 12/12/99	 0.0.7 Renamed class, additional constructor arguments 
-*			 and larger write buffers. mdm@techie.com.
-*
-* 15/02/99 ,Java Conversion by E.B ,ebsp@iname.com, JavaLayer
-*/
+// /***************************************************************************
+//  *   WaveFileObuffer.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
+using System;
+using MP3Sharp.Decode;
+
 namespace MP3Sharp.Convert
 {
-	using System;
-	using Obuffer = MP3Sharp.Decode.Obuffer;
-	/// <summary> Implements an Obuffer by writing the data to
-	/// a file in RIFF WAVE format. 
-	/// 
-	/// @since 0.0
-	/// </summary>
-	
-	
+	/// <summary> Implements an Obuffer by writing the data to a file in RIFF WAVE format.</summary>
 	internal class WaveFileObuffer:Obuffer
 	{
-		private void  InitBlock()
-		{
-			myBuffer = new short[2];
-		}
-		private short[] buffer;
-		private short[] bufferp;
-		private int channels;
-		private WaveFile outWave;
-		
-		/// <summary> Creates a new WareFileObuffer instance. 
+	    private readonly short[] buffer;
+	    private readonly short[] bufferp;
+	    private readonly int channels;
+	    private readonly WaveFile outWave;
+
+	    /// <summary> Write the samples to the file (Random Acces).
+		/// </summary>
+		internal short[] myBuffer;
+
+	    /// <summary> Creates a new WareFileObuffer instance. 
 		/// 
 		/// </summary>
 		/// <param name="">number_of_channels	
@@ -40,11 +45,11 @@ namespace MP3Sharp.Convert
 		/// <param name="fileName	The">filename to write the data to.
 		/// 
 		/// </param>
-		public WaveFileObuffer(int number_of_channels, int freq, System.String FileName)
+		public WaveFileObuffer(int number_of_channels, int freq, string FileName)
 		{
 			InitBlock();
 			if (FileName == null)
-				throw new System.NullReferenceException("FileName");
+				throw new NullReferenceException("FileName");
 			
 			buffer = new short[OBUFFERSIZE];
 			bufferp = new short[MAXCHANNELS];
@@ -58,7 +63,7 @@ namespace MP3Sharp.Convert
 			int rc = outWave.OpenForWrite(FileName, null, freq, (short) 16, (short) channels);
 		}
 
-		public WaveFileObuffer(int number_of_channels, int freq, System.IO.Stream stream)
+	    public WaveFileObuffer(int number_of_channels, int freq, System.IO.Stream stream)
 		{
 			InitBlock();
 			
@@ -74,19 +79,20 @@ namespace MP3Sharp.Convert
 			int rc = outWave.OpenForWrite(null, stream, freq, (short) 16, (short) channels);
 		}
 
+	    private void  InitBlock()
+		{
+			myBuffer = new short[2];
+		}
 
-		/// <summary> Takes a 16 Bit PCM sample.
+	    /// <summary> Takes a 16 Bit PCM sample.
 		/// </summary>
 		public override void  append(int channel, short value_Renamed)
 		{
 			buffer[bufferp[channel]] = value_Renamed;
 			bufferp[channel] = (short) (bufferp[channel] + channels);
 		}
-		
-		/// <summary> Write the samples to the file (Random Acces).
-		/// </summary>
-		internal short[] myBuffer;
-		public override void  write_buffer(int val)
+
+	    public override void  write_buffer(int val)
 		{
 			
 			int k = 0;
@@ -108,45 +114,27 @@ namespace MP3Sharp.Convert
 			for (int i = 0; i < channels; ++i)
 				bufferp[i] = (short) i;
 		}
-		
-		public void  close(bool justWriteLengthBytes)
+
+	    public void  close(bool justWriteLengthBytes)
 		{
 			outWave.Close(justWriteLengthBytes);
 		}
 
-		public override void  close()
+	    public override void  close()
 		{
 			outWave.Close();
 		}
 
-
-		/// <summary>*
+	    /// <summary>*
 		/// </summary>
 		public override void  clear_buffer()
 		{
 		}
-		
-		/// <summary>*
+
+	    /// <summary>*
 		/// </summary>
 		public override void  set_stop_flag()
 		{
 		}
-		
-		/*
-		* Create STDOUT buffer
-		*
-		*
-		public static Obuffer create_stdout_obuffer(MPEG_Args maplay_args)
-		{
-		Obuffer thebuffer = null;
-		int mode = maplay_args.MPEGheader.mode();
-		int which_channels = maplay_args.which_c;
-		if (mode == Header.single_channel || which_channels != MPEG_Args.both)
-		thebuffer = new FileObuffer(1,maplay_args.output_filename);
-		else
-		thebuffer = new FileObuffer(2,maplay_args.output_filename);
-		return(thebuffer);
-		}
-		*/
 	}
 }
