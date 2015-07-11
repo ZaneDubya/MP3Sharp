@@ -1,17 +1,19 @@
-/*
-* 12/12/99 0.0.7	Implementation stores single bits 
-*					as ints for better performance. mdm@techie.com.
-*
-* Java Conversion by E.B, ebsp@iname.com, JavaLayer
-*
-*---------------------------------------------------
-* bit_res.h
-*
-* 	Declarations for Bit Reservoir for Layer III
-*
-*  Adapted from the public c code by Jeff Tsay.
-*---------------------------------------------------
-*/
+// /***************************************************************************
+//  *   BitReserve.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
 namespace MP3Sharp.Decode
 {
 	using System;
@@ -30,26 +32,22 @@ namespace MP3Sharp.Decode
 	// can silently occur.
 	sealed class BitReserve
 	{
-		private void  InitBlock()
-		{
-			buf = new int[BUFSIZE];
-		}
-		/// <summary> Size of the internal buffer to store the reserved bits.
+	    /// <summary> Size of the internal buffer to store the reserved bits.
 		/// Must be a power of 2. And x8, as each bit is stored as a single
 		/// entry.
 		/// </summary>
 		private const int BUFSIZE = 4096 * 8;
-		
-		/// <summary> Mask that can be used to quickly implement the
+
+	    /// <summary> Mask that can be used to quickly implement the
 		/// modulus operation on BUFSIZE.
 		/// </summary>
 		private static readonly int BUFSIZE_MASK = BUFSIZE - 1;
-		
-		private int offset, totbit, buf_byte_idx;
-		private int[] buf;
-		private int buf_bit_idx;
-		
-		internal BitReserve()
+
+	    private int[] buf;
+	    private int buf_bit_idx;
+	    private int offset, totbit, buf_byte_idx;
+
+	    internal BitReserve()
 		{
 			InitBlock();
 			
@@ -57,16 +55,20 @@ namespace MP3Sharp.Decode
 			totbit = 0;
 			buf_byte_idx = 0;
 		}
-		
-		
-		/// <summary> Return totbit Field.
+
+	    private void  InitBlock()
+		{
+			buf = new int[BUFSIZE];
+		}
+
+	    /// <summary> Return totbit Field.
 		/// </summary>
 		public int hsstell()
 		{
 			return (totbit);
 		}
-		
-		/// <summary> Read a number bits from the bit stream.
+
+	    /// <summary> Read a number bits from the bit stream.
 		/// </summary>
 		/// <param name="N">the number of
 		/// 
@@ -98,10 +100,8 @@ namespace MP3Sharp.Decode
 			buf_byte_idx = pos;
 			return val;
 		}
-		
-		
-		
-		/// <summary> Read 1 bit from the bit stream.
+
+	    /// <summary> Read 1 bit from the bit stream.
 		/// </summary>
 		/*
 		public int hget1bit_old()
@@ -133,8 +133,8 @@ namespace MP3Sharp.Decode
 			buf_byte_idx = (buf_byte_idx + 1) & BUFSIZE_MASK;
 			return val;
 		}
-		
-		/// <summary> Retrieves bits from the reserve.     
+
+	    /// <summary> Retrieves bits from the reserve.     
 		/// </summary>
 		/*   
 		public int readBits(int[] out, int len)
@@ -185,8 +185,8 @@ namespace MP3Sharp.Decode
 			else
 				offset = ofs;
 		}
-		
-		/// <summary> Rewind N bits in Stream.
+
+	    /// <summary> Rewind N bits in Stream.
 		/// </summary>
 		public void  rewindNbits(int N)
 		{
@@ -195,8 +195,8 @@ namespace MP3Sharp.Decode
 			if (buf_byte_idx < 0)
 				buf_byte_idx += BUFSIZE;
 		}
-		
-		/// <summary> Rewind N bytes in Stream.
+
+	    /// <summary> Rewind N bytes in Stream.
 		/// </summary>
 		public void  rewindNbytes(int N)
 		{
