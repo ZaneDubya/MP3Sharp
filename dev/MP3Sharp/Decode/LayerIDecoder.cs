@@ -17,7 +17,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	

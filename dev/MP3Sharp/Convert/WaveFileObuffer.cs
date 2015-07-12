@@ -7,7 +7,7 @@
 namespace javazoom.jl.converter
 {
 	using System;
-	using Obuffer = javazoom.jl.decoder.Obuffer;
+	using Obuffer = MP3Sharp.Decode.Obuffer;
 	/// <summary> Implements an Obuffer by writing the data to
 	/// a file in RIFF WAVE format. 
 	/// 

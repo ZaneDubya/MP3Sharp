@@ -1,4 +1,4 @@
-using Mp3Sharp;
+using MP3Sharp;
 /*
 * 1/12/99		Initial version.	mdm@techie.com
 /*-----------------------------------------------------------------------
@@ -17,7 +17,7 @@ using Mp3Sharp;
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	
@@ -33,7 +33,7 @@ namespace javazoom.jl.decoder
 	{
 		private void  InitBlock()
 		{
-			errorcode = javazoom.jl.decoder.DecoderErrors_Fields.UNKNOWN_ERROR;
+			errorcode = MP3Sharp.Decode.DecoderErrors_Fields.UNKNOWN_ERROR;
 		}
 		virtual public int ErrorCode
 		{

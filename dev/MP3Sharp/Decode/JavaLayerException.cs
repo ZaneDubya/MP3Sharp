@@ -1,4 +1,4 @@
-using Support;
+using MP3Sharp.Support;
 /*
 * 12/12/99		Initial version.	mdm@techie.com
 /*-----------------------------------------------------------------------
@@ -17,7 +17,7 @@ using Support;
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
-namespace Mp3Sharp
+namespace MP3Sharp
 {
 	using System;
 	/// <summary> The Mp3SharpException is the base class for all API-level

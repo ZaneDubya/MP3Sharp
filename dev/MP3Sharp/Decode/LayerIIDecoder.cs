@@ -31,7 +31,7 @@
 /// *
 /// ********************************************************************
 /// </summary>
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	

@@ -16,7 +16,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	/// <summary> The JavaLayerUtils class is not strictly part of the JavaLayer API.
@@ -35,7 +35,7 @@ namespace javazoom.jl.decoder
 		{
 			get
 			{
-				lock (typeof(javazoom.jl.decoder.JavaLayerUtils))
+				lock (typeof(MP3Sharp.Decode.JavaLayerUtils))
 				{
 					return hook;
 				}
@@ -43,7 +43,7 @@ namespace javazoom.jl.decoder
 			
 			set
 			{
-				lock (typeof(javazoom.jl.decoder.JavaLayerUtils))
+				lock (typeof(MP3Sharp.Decode.JavaLayerUtils))
 				{
 					hook = value;
 				}
@@ -199,7 +199,7 @@ namespace javazoom.jl.decoder
 		/// </returns>
 		static public System.IO.Stream getResourceAsStream(System.String name)
 		{
-			lock (typeof(javazoom.jl.decoder.JavaLayerUtils))
+			lock (typeof(MP3Sharp.Decode.JavaLayerUtils))
 			{
 				System.IO.Stream is_Renamed = null;
 				

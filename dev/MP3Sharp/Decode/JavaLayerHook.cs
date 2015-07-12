@@ -1,4 +1,4 @@
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	/// <summary> The <code>JavaLayerHooks</code> class allows developers to change

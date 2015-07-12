@@ -1,6 +1,6 @@
 using System;
 
-namespace Mp3Sharp
+namespace MP3Sharp
 {
 	/// <summary>
 	/// Some samples that show the use of the Mp3Stream class.

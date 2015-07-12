@@ -1,4 +1,4 @@
-using Support;
+using MP3Sharp.Support;
 /*
 * 16/11/99 Renamed class, added javadoc, and changed table
 *			name from String to 3 chars. mdm@techie.com
@@ -33,7 +33,7 @@ huffman.h
 **********************************************************************
 *----------------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	

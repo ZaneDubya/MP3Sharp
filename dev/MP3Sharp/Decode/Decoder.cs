@@ -16,7 +16,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	/// <summary> The <code>Decoder</code> class encapsulates the details of
@@ -49,7 +49,7 @@ namespace javazoom.jl.decoder
 			set
 			{
 				if (value == null)
-					value = decoder.Equalizer.PASS_THRU_EQ;
+					value = Equalizer.PASS_THRU_EQ;
 				
 				equalizer.FromEqualizer = value;
 				
@@ -124,7 +124,7 @@ namespace javazoom.jl.decoder
 		{
 			get
 			{
-				return javazoom.jl.decoder.Obuffer.OBUFFERSIZE;
+				return MP3Sharp.Decode.Obuffer.OBUFFERSIZE;
 			}
 			
 		}
@@ -282,7 +282,7 @@ namespace javazoom.jl.decoder
 			
 			if (decoder == null)
 			{
-				throw newDecoderException(javazoom.jl.decoder.DecoderErrors_Fields.UNSUPPORTED_LAYER, null);
+				throw newDecoderException(MP3Sharp.Decode.DecoderErrors_Fields.UNSUPPORTED_LAYER, null);
 			}
 			
 			return decoder;

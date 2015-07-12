@@ -1,4 +1,4 @@
-using Support;
+using MP3Sharp.Support;
 /*
 * 02/12/99 : Java Conversion by E.B , ebsp@iname.com, JavaLayer
 *
@@ -22,7 +22,7 @@ using Support;
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *-----------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	

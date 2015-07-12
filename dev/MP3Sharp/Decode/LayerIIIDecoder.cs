@@ -1,4 +1,4 @@
-using Support;
+using MP3Sharp.Support;
 /// <summary> 02/19/99 Java Conversion by E.B
 /// -------------------------------------------------
 /// layer3.h
@@ -26,7 +26,7 @@ using Support;
 /// *
 /// ********************************************************************
 /// </summary>
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	/// <summary> Class Implementing Layer 3 Decoder.

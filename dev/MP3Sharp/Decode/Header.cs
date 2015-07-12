@@ -1,4 +1,4 @@
-using Support;
+using MP3Sharp.Support;
 /*
 * 02/13/99 : Java Conversion by E.B , ebsp@iname.com
 *
@@ -26,7 +26,7 @@ using Support;
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *--------------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	
@@ -138,12 +138,12 @@ namespace javazoom.jl.decoder
 						if (h_version == MPEG2_LSF)
 							h_version = MPEG25_LSF;
 						else
-							throw stream.newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.UNKNOWN_ERROR);
+							throw stream.newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.UNKNOWN_ERROR);
 					
 					
 					if ((h_sample_frequency = ((SupportClass.URShift(headerstring, 10)) & 3)) == 3)
 					{
-						throw stream.newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.UNKNOWN_ERROR);
+						throw stream.newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.UNKNOWN_ERROR);
 					}
 				}
 				

@@ -1,4 +1,4 @@
-using Support;
+using MP3Sharp.Support;
 /*
 * 12/12/99		Initial version.	mdm@techie.com
 /*-----------------------------------------------------------------------
@@ -17,7 +17,7 @@ using Support;
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	/// <summary> <i>Work In Progress.</i>

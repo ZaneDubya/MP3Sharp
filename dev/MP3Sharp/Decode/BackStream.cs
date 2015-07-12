@@ -2,11 +2,11 @@ using System;
 using System.IO;
 
 using javazoom.jl.converter;
-using javazoom.jl.decoder;
+using MP3Sharp.Decode;
 
 
 ///A BackStream (such a beast doesn't exist in C#'s libraries to my knowledge)
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	[Serializable]
 	internal class CircularByteBuffer 

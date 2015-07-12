@@ -34,7 +34,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections;
 
-namespace Mp3Sharp
+namespace MP3Sharp
 {
 
 	/// <summary>
@@ -71,7 +71,7 @@ namespace Mp3Sharp
 		{
 			FormatRep = SoundFormat.Pcm16BitStereo;
 			SourceStream = sourceStream;
-			JZBitStream = new javazoom.jl.decoder.Bitstream(new javazoom.jl.decoder.BackStream(SourceStream, chunkSize));
+			JZBitStream = new MP3Sharp.Decode.Bitstream(new MP3Sharp.Decode.BackStream(SourceStream, chunkSize));
 			QueueOBuffer = new OBuffer16BitStereo();
                    
 			JZDecoder.OutputBuffer = QueueOBuffer;
@@ -83,11 +83,11 @@ namespace Mp3Sharp
 		/// <summary>
 		/// Used to interface with javaZoom.
 		/// </summary>
-		private javazoom.jl.decoder.Decoder JZDecoder = new javazoom.jl.decoder.Decoder(javazoom.jl.decoder.Decoder.DefaultParams);
+		private MP3Sharp.Decode.Decoder JZDecoder = new MP3Sharp.Decode.Decoder(MP3Sharp.Decode.Decoder.DefaultParams);
 		/// <summary>
 		/// Used to interface with javaZoom.
 		/// </summary>
-		private javazoom.jl.decoder.Bitstream JZBitStream;
+		private MP3Sharp.Decode.Bitstream JZBitStream;
 
 
 		private Stream SourceStream;
@@ -257,14 +257,14 @@ namespace Mp3Sharp
 		private bool ReadFrame()
 		{
 			// Read a frame from the bitstream.
-			javazoom.jl.decoder.Header header = JZBitStream.readFrame();
+			MP3Sharp.Decode.Header header = JZBitStream.readFrame();
 			if (header == null) 
 				return false;
                    
 			try
 			{
 				// Set the channel count and frequency values for the stream.
-				if (header.mode() == javazoom.jl.decoder.Header.SINGLE_CHANNEL)
+				if (header.mode() == MP3Sharp.Decode.Header.SINGLE_CHANNEL)
 					ChannelCountRep = (short)1;
 				else
 					ChannelCountRep = (short)2;
@@ -272,7 +272,7 @@ namespace Mp3Sharp
 				FrequencyRep = header.frequency();
                       
 				// Decode the frame.
-				javazoom.jl.decoder.Obuffer decoderOutput = JZDecoder.decodeFrame(header, JZBitStream);
+				MP3Sharp.Decode.Obuffer decoderOutput = JZDecoder.decodeFrame(header, JZBitStream);
                       
 				// Apparently, the way JavaZoom sets the output buffer 
 				// on the decoder is a bit dodgy. Even though
@@ -317,7 +317,7 @@ namespace Mp3Sharp
 	/// This class handles stereo 16-bit data! Switch it out if you want mono or something.
 	/// </summary>
 	internal class OBuffer16BitStereo 
-		: javazoom.jl.decoder.Obuffer
+		: MP3Sharp.Decode.Obuffer
 	{
 		// This is stereo!
 		static readonly int CHANNELS = 2;

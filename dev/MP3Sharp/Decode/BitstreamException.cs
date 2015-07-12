@@ -16,11 +16,11 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
-using javazoom.jl.decoder;
+using MP3Sharp.Decode;
 using javazoom;
 using javazoom.jl.converter;
 using javazoom.jl;
-namespace Mp3Sharp
+namespace MP3Sharp
 {
 	using System;
 	
@@ -46,7 +46,7 @@ namespace Mp3Sharp
 	{
 		private void  InitBlock()
 		{
-			errorcode = javazoom.jl.decoder.BitstreamErrors_Fields.UNKNOWN_ERROR;
+			errorcode = MP3Sharp.Decode.BitstreamErrors_Fields.UNKNOWN_ERROR;
 		}
 		virtual public int ErrorCode
 		{

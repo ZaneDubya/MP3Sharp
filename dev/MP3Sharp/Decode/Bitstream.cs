@@ -1,5 +1,5 @@
-using Support;
-using Mp3Sharp;
+using MP3Sharp.Support;
+using MP3Sharp;
 /*
 * 12/12/99	 Based on Ibitstream. Exceptions thrown on errors,
 *			 Tempoarily removed seek functionality. mdm@techie.com
@@ -30,7 +30,7 @@ using Mp3Sharp;
 *  mechanisms. Also made this file portable.
 *-----------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
         using System.Diagnostics;
@@ -145,7 +145,7 @@ namespace javazoom.jl.decoder
 			}
 			catch (System.IO.IOException ex)
 			{
-				throw newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.STREAM_ERROR, ex);
+				throw newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_ERROR, ex);
 			}
 		}
 		
@@ -164,7 +164,7 @@ namespace javazoom.jl.decoder
 			}
 			catch (BitstreamException ex)
 			{
-				if (ex.ErrorCode != javazoom.jl.decoder.BitstreamErrors_Fields.STREAM_EOF)
+				if (ex.ErrorCode != MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_EOF)
 				{
 					// wrap original exception so stack trace is maintained.
 					throw newBitstreamException(ex.ErrorCode, ex);
@@ -207,7 +207,7 @@ namespace javazoom.jl.decoder
 				}
 				catch (System.IO.IOException ex)
 				{
-					throw newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.STREAM_ERROR);
+					throw newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_ERROR);
 				}
 			}
 		}
@@ -293,7 +293,7 @@ namespace javazoom.jl.decoder
 			int bytesRead = readBytes(syncbuf, 0, 3);
 			
 			if (bytesRead != 3)
-				throw newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.STREAM_EOF, null);
+				throw newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_EOF, null);
 			
 			//_baos.write(syncbuf, 0, 3); // E.B
 			
@@ -312,7 +312,7 @@ namespace javazoom.jl.decoder
 				headerstring <<= 8;
 				
 				if (readBytes(syncbuf, 3, 1) != 1)
-					throw newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.STREAM_EOF, null);
+					throw newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_EOF, null);
 				
 				//_baos.write(syncbuf, 3, 1); // E.B
 				
@@ -340,7 +340,7 @@ namespace javazoom.jl.decoder
                                 if ((bytesSkipped % 2048) == 0) // A paranoia check -- is the code hanging in a loop here?
                                 {
                                     Trace.WriteLine( "Sync still not found", "Bitstream" );
-                                    // throw newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.STREAM_ERROR, 
+                                    // throw newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_ERROR, 
                                     //                             null);
                                 }
 #endif
@@ -531,7 +531,7 @@ namespace javazoom.jl.decoder
 			}
 			catch (System.IO.IOException ex)
 			{
-				throw newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.STREAM_ERROR, ex);
+				throw newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_ERROR, ex);
 			}
 		}
 		
@@ -558,7 +558,7 @@ namespace javazoom.jl.decoder
 			}
 			catch (System.IO.IOException ex)
 			{
-				throw newBitstreamException(javazoom.jl.decoder.BitstreamErrors_Fields.STREAM_ERROR, ex);
+				throw newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_ERROR, ex);
 			}
 			return totalBytesRead;
 		}

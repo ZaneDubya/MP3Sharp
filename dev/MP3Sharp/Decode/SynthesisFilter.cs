@@ -14,7 +14,7 @@
 //  *   Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	/// <summary> A class for the synthesis filter bank.

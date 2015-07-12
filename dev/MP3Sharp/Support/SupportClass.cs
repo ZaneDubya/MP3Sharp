@@ -1,6 +1,6 @@
 using System;
 
-namespace Support
+namespace MP3Sharp.Support
 {
 
 	internal interface IThreadRunnable

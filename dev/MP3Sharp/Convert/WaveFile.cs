@@ -1,4 +1,4 @@
-using Support;
+using MP3Sharp.Support;
 /*
 * 02/23/99 JavaConversion by E.B, JavaLayer
 */

@@ -16,7 +16,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
-namespace javazoom.jl.decoder
+namespace MP3Sharp.Decode
 {
 	using System;
 	
@@ -33,8 +33,8 @@ namespace javazoom.jl.decoder
 		public readonly static int UNSUPPORTED_LAYER;
 		static DecoderErrors_Fields()
 		{
-			UNKNOWN_ERROR = javazoom.jl.decoder.JavaLayerErrors_Fields.DECODER_ERROR + 0;
-			UNSUPPORTED_LAYER = javazoom.jl.decoder.JavaLayerErrors_Fields.DECODER_ERROR + 1;
+			UNKNOWN_ERROR = MP3Sharp.Decode.JavaLayerErrors_Fields.DECODER_ERROR + 0;
+			UNSUPPORTED_LAYER = MP3Sharp.Decode.JavaLayerErrors_Fields.DECODER_ERROR + 1;
 		}
 	}
 	internal interface DecoderErrors : JavaLayerErrors
