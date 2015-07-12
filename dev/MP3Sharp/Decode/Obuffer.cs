@@ -14,52 +14,58 @@
 //  *   Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
+
 namespace MP3Sharp.Decode
 {
-	using System;
-	
-	/// <summary> Base Class for audio output.
-	/// </summary>
-	internal abstract class Obuffer
-	{
-	    public const int OBUFFERSIZE = 2 * 1152; // max. 2 * 1152 samples per frame
-	    public const int MAXCHANNELS = 2; // max. number of channels
+    /// <summary>
+    ///     Base Class for audio output.
+    /// </summary>
+    internal abstract class Obuffer
+    {
+        public const int OBUFFERSIZE = 2*1152; // max. 2 * 1152 samples per frame
+        public const int MAXCHANNELS = 2; // max. number of channels
 
-	    /// <summary> Takes a 16 Bit PCM sample.
-		/// </summary>
-		public abstract void  append(int channel, short value_Renamed);
+        /// <summary>
+        ///     Takes a 16 Bit PCM sample.
+        /// </summary>
+        public abstract void append(int channel, short value_Renamed);
 
-	    /// <summary> Accepts 32 new PCM samples. 
-		/// </summary>
-		public virtual void  appendSamples(int channel, float[] f)
-		{
-			short s;
-			for (int i = 0; i < 32; i++)
-			{
-				append(channel, (short)clip((f[i])));
-			}
-		}
+        /// <summary>
+        ///     Accepts 32 new PCM samples.
+        /// </summary>
+        public virtual void appendSamples(int channel, float[] f)
+        {
+            short s;
+            for (int i = 0; i < 32; i++)
+            {
+                append(channel, (short) clip((f[i])));
+            }
+        }
 
-	    /// <summary> Clip Sample to 16 Bits
-		/// </summary>
-		private short clip(float sample)
-		{
-			//UPGRADE_WARNING: Narrowing conversions may produce unexpected results in C#. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1042"'
-			return ((sample > 32767.0f)?(short)32767:((sample < - 32768.0f)?(short)- 32768:(short) sample));
-		}
+        /// <summary>
+        ///     Clip Sample to 16 Bits
+        /// </summary>
+        private short clip(float sample)
+        {
+            //UPGRADE_WARNING: Narrowing conversions may produce unexpected results in C#. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1042"'
+            return ((sample > 32767.0f) ? (short) 32767 : ((sample < -32768.0f) ? (short) -32768 : (short) sample));
+        }
 
-	    /// <summary> Write the samples to the file or directly to the audio hardware.
-		/// </summary>
-		public abstract void  write_buffer(int val);
+        /// <summary>
+        ///     Write the samples to the file or directly to the audio hardware.
+        /// </summary>
+        public abstract void write_buffer(int val);
 
-	    public abstract void  close();
+        public abstract void close();
 
-	    /// <summary> Clears all data in the buffer (for seeking).
-		/// </summary>
-		public abstract void  clear_buffer();
+        /// <summary>
+        ///     Clears all data in the buffer (for seeking).
+        /// </summary>
+        public abstract void clear_buffer();
 
-	    /// <summary> Notify the buffer that the user has stopped the stream.
-		/// </summary>
-		public abstract void  set_stop_flag();
-	}
+        /// <summary>
+        ///     Notify the buffer that the user has stopped the stream.
+        /// </summary>
+        public abstract void set_stop_flag();
+    }
 }

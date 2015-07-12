@@ -1,4 +1,27 @@
+// /***************************************************************************
+//  *   JavaLayerException.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
+
+#region usings
+
+using System;
 using MP3Sharp.Support;
+
+#endregion
+
 /*
 * 12/12/99		Initial version.	mdm@techie.com
 /*-----------------------------------------------------------------------
@@ -17,65 +40,58 @@ using MP3Sharp.Support;
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 *----------------------------------------------------------------------
 */
+
 namespace MP3Sharp
 {
-	using System;
-	/// <summary> The Mp3SharpException is the base class for all API-level
-	/// exceptions thrown by JavaLayer. To facilitate conversion and 
-	/// common handling of exceptions from other domains, the class 
-	/// can delegate some functionality to a contained Throwable instance. 
-	/// <p> 
-	/// 
-	/// </summary>
-	/// <author>  MDM
-	/// 
-	/// </author>
-	public class Mp3SharpException:System.Exception
-	{
-		virtual public System.Exception Exception
-		{
-			get
-			{
-				return exception;
-			}
-			
-		}
-		
-		private System.Exception exception;
-		
-		
-		public Mp3SharpException()
-		{
-		}
-		
-		public Mp3SharpException(System.String msg):base(msg)
-		{
-		}
-		
-		public Mp3SharpException(System.String msg, System.Exception t):base(msg)
-		{
-			exception = t;
-		}
-		
-		
-		
-		//UPGRADE_TODO: The equivalent of method 'java.lang.Throwable.printStackTrace' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
-		public void  printStackTrace()
-		{
-			SupportClass.WriteStackTrace(this, System.Console.Error);
-		}
-		
-		//UPGRADE_TODO: The equivalent of method 'java.lang.Throwable.printStackTrace' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
-		public void  printStackTrace(System.IO.StreamWriter ps)
-		{
-			if (this.exception == null)
-			{
-				SupportClass.WriteStackTrace((System.Exception) this, ps);
-			}
-			else
-			{
-				SupportClass.WriteStackTrace(exception, Console.Error);
-			}
-		}
-	}
+    /// <summary>
+    ///     The Mp3SharpException is the base class for all API-level
+    ///     exceptions thrown by JavaLayer. To facilitate conversion and
+    ///     common handling of exceptions from other domains, the class
+    ///     can delegate some functionality to a contained Throwable instance.
+    ///     <p>
+    /// </summary>
+    /// <author>
+    ///     MDM
+    /// </author>
+    public class Mp3SharpException : Exception
+    {
+        private readonly Exception exception;
+
+        public Mp3SharpException()
+        {
+        }
+
+        public Mp3SharpException(string msg) : base(msg)
+        {
+        }
+
+        public Mp3SharpException(string msg, Exception t) : base(msg)
+        {
+            exception = t;
+        }
+
+        public virtual Exception Exception
+        {
+            get { return exception; }
+        }
+
+        //UPGRADE_TODO: The equivalent of method 'java.lang.Throwable.printStackTrace' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
+        public void printStackTrace()
+        {
+            SupportClass.WriteStackTrace(this, Console.Error);
+        }
+
+        //UPGRADE_TODO: The equivalent of method 'java.lang.Throwable.printStackTrace' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
+        public void printStackTrace(System.IO.StreamWriter ps)
+        {
+            if (exception == null)
+            {
+                SupportClass.WriteStackTrace((Exception) this, ps);
+            }
+            else
+            {
+                SupportClass.WriteStackTrace(exception, Console.Error);
+            }
+        }
+    }
 }

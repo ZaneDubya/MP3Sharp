@@ -14,124 +14,110 @@
 //  *   Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
+
 namespace MP3Sharp.Decode
 {
-	using System;
-	
-	/// <summary> The <code>SampleBuffer</code> class implements an output buffer
-	/// that provides storage for a fixed size block of samples. 
-	/// 
-	/// 
-	/// </summary>
-	internal class SampleBuffer:Obuffer
-	{
-	    private readonly short[] buffer;
-	    private readonly int[] bufferp;
-	    private readonly int channels;
-	    private readonly int frequency;
+    /// <summary>
+    ///     The <code>SampleBuffer</code> class implements an output buffer
+    ///     that provides storage for a fixed size block of samples.
+    /// </summary>
+    internal class SampleBuffer : Obuffer
+    {
+        private readonly short[] buffer;
+        private readonly int[] bufferp;
+        private readonly int channels;
+        private readonly int frequency;
 
-	    /// <summary> Constructor
-		/// </summary>
-		public SampleBuffer(int sample_frequency, int number_of_channels)
-		{
-			buffer = new short[OBUFFERSIZE];
-			bufferp = new int[MAXCHANNELS];
-			channels = number_of_channels;
-			frequency = sample_frequency;
-			
-			for (int i = 0; i < number_of_channels; ++i)
-				bufferp[i] = (short) i;
-		}
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        public SampleBuffer(int sample_frequency, int number_of_channels)
+        {
+            buffer = new short[OBUFFERSIZE];
+            bufferp = new int[MAXCHANNELS];
+            channels = number_of_channels;
+            frequency = sample_frequency;
 
-	    virtual public int ChannelCount
-		{
-			get
-			{
-				return channels;
-			}
-			
-		}
+            for (int i = 0; i < number_of_channels; ++i)
+                bufferp[i] = (short) i;
+        }
 
-	    virtual public int SampleFrequency
-		{
-			get
-			{
-				return frequency;
-			}
-			
-		}
+        public virtual int ChannelCount
+        {
+            get { return channels; }
+        }
 
-	    virtual public short[] Buffer
-		{
-			get
-			{
-				return buffer;
-			}
-			
-		}
+        public virtual int SampleFrequency
+        {
+            get { return frequency; }
+        }
 
-	    virtual public int BufferLength
-		{
-			get
-			{
-				return bufferp[0];
-			}
-			
-		}
+        public virtual short[] Buffer
+        {
+            get { return buffer; }
+        }
 
-	    /// <summary> Takes a 16 Bit PCM sample.
-		/// </summary>
-		public override void  append(int channel, short value_Renamed)
-		{
-			buffer[bufferp[channel]] = value_Renamed;
-			bufferp[channel] += channels;
-		}
+        public virtual int BufferLength
+        {
+            get { return bufferp[0]; }
+        }
 
-	    public override void  appendSamples(int channel, float[] f)
-		{
-			int pos = bufferp[channel];
-			
-			short s;
-			float fs;
-			for (int i = 0; i < 32; )
-			{
-				fs = f[i++];
-				fs = (fs > 32767.0f?32767.0f:(fs < - 32767.0f?- 32767.0f:fs));
-				
-				//UPGRADE_WARNING: Narrowing conversions may produce unexpected results in C#. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1042"'
-				s = (short) fs;
-				buffer[pos] = s;
-				pos += channels;
-			}
-			
-			bufferp[channel] = pos;
-		}
+        /// <summary>
+        ///     Takes a 16 Bit PCM sample.
+        /// </summary>
+        public override void append(int channel, short value_Renamed)
+        {
+            buffer[bufferp[channel]] = value_Renamed;
+            bufferp[channel] += channels;
+        }
 
-	    /// <summary> Write the samples to the file (Random Acces).
-		/// </summary>
-		public override void  write_buffer(int val)
-		{
-			
-			//for (int i = 0; i < channels; ++i) 
-			//	bufferp[i] = (short)i;
-		}
+        public override void appendSamples(int channel, float[] f)
+        {
+            int pos = bufferp[channel];
 
-	    public override void  close()
-		{
-		}
+            short s;
+            float fs;
+            for (int i = 0; i < 32;)
+            {
+                fs = f[i++];
+                fs = (fs > 32767.0f ? 32767.0f : (fs < -32767.0f ? -32767.0f : fs));
 
-	    /// <summary>*
-		/// </summary>
-		public override void  clear_buffer()
-		{
-			for (int i = 0; i < channels; ++i)
-				bufferp[i] = (short) i;
-		}
+                //UPGRADE_WARNING: Narrowing conversions may produce unexpected results in C#. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1042"'
+                s = (short) fs;
+                buffer[pos] = s;
+                pos += channels;
+            }
 
-	    /// <summary>*
-		/// </summary>
-		public override void  set_stop_flag()
-		{
-		}
-	}
+            bufferp[channel] = pos;
+        }
+
+        /// <summary>
+        ///     Write the samples to the file (Random Acces).
+        /// </summary>
+        public override void write_buffer(int val)
+        {
+            //for (int i = 0; i < channels; ++i) 
+            //	bufferp[i] = (short)i;
+        }
+
+        public override void close()
+        {
+        }
+
+        /// <summary>
+        ///     *
+        /// </summary>
+        public override void clear_buffer()
+        {
+            for (int i = 0; i < channels; ++i)
+                bufferp[i] = (short) i;
+        }
+
+        /// <summary>
+        ///     *
+        /// </summary>
+        public override void set_stop_flag()
+        {
+        }
+    }
 }

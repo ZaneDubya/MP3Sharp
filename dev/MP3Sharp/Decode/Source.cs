@@ -14,36 +14,30 @@
 //  *   Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
+
 namespace MP3Sharp.Decode
 {
-	using System;
-	/// <summary> Work in progress.
-	/// 
-	/// Class to describe a seekable data source. 
-	/// 
-	/// </summary>
-	
-	internal struct Source_Fields
+    /// <summary>
+    ///     Work in progress.
+    ///     Class to describe a seekable data source.
+    /// </summary>
+    internal struct Source_Fields
     {
-	    public readonly static long LENGTH_UNKNOWN = - 1;
-	}
+        public static readonly long LENGTH_UNKNOWN = -1;
+    }
 
-	internal interface Source
-	{
-	bool Seekable
-		{
-			get;
-				
-		}
+    internal interface Source
+    {
+        bool Seekable { get; }
 
-	int read(sbyte[] b, int offs, int len);
+        int read(sbyte[] b, int offs, int len);
 
-	bool willReadBlock();
+        bool willReadBlock();
 
-	long length();
+        long length();
 
-	long tell();
+        long tell();
 
-	long seek(long pos);
-	}
+        long seek(long pos);
+    }
 }

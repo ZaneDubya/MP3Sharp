@@ -1,45 +1,39 @@
-/*
-* 1/12/99		Initial version.	mdm@techie.com
-/*-----------------------------------------------------------------------
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*----------------------------------------------------------------------
-*/
+// /***************************************************************************
+//  *   DecoderErrors.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
+
 namespace MP3Sharp.Decode
 {
-	using System;
-	
-	/// <summary> This interface provides constants describing the error
-	/// codes used by the Decoder to indicate errors. 
-	/// 
-	/// </summary>
-	/// <author> 	MDM
-	/// 
-	/// </author>
-	
-	internal struct DecoderErrors_Fields{
-		public readonly static int UNKNOWN_ERROR;
-		public readonly static int UNSUPPORTED_LAYER;
-		static DecoderErrors_Fields()
-		{
-			UNKNOWN_ERROR = MP3Sharp.Decode.JavaLayerErrors_Fields.DECODER_ERROR + 0;
-			UNSUPPORTED_LAYER = MP3Sharp.Decode.JavaLayerErrors_Fields.DECODER_ERROR + 1;
-		}
-	}
-	internal interface DecoderErrors : JavaLayerErrors
-		{
-			/// <summary> Layer not supported by the decoder. 
-			/// </summary>
-		}
+    /// <summary>
+    ///     This interface provides constants describing the error
+    ///     codes used by the Decoder to indicate errors.
+    /// </summary>
+    internal struct DecoderErrors_Fields
+    {
+        public static readonly int UNKNOWN_ERROR;
+        public static readonly int UNSUPPORTED_LAYER;
+
+        static DecoderErrors_Fields()
+        {
+            UNKNOWN_ERROR = JavaLayerErrors_Fields.DECODER_ERROR + 0;
+            UNSUPPORTED_LAYER = JavaLayerErrors_Fields.DECODER_ERROR + 1;
+        }
+    }
+
+    internal interface DecoderErrors : JavaLayerErrors
+    {
+    }
 }
