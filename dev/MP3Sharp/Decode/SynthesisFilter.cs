@@ -896,7 +896,7 @@ namespace MP3Sharp.Decode
             // insert V[32] (== -new_v[0]) into other v:
         }
 
-        private void compute_pcm_samples0(Obuffer buffer)
+        private void compute_pcm_samples0(ABuffer buffer)
         {
             float[] vp = actual_v;
             //int inc = v_inc;
@@ -922,7 +922,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples1(Obuffer buffer)
+        private void compute_pcm_samples1(ABuffer buffer)
         {
             float[] vp = actual_v;
             //int inc = v_inc;
@@ -949,7 +949,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples2(Obuffer buffer)
+        private void compute_pcm_samples2(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -977,7 +977,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples3(Obuffer buffer)
+        private void compute_pcm_samples3(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -999,7 +999,7 @@ namespace MP3Sharp.Decode
             }
         }
 
-        private void compute_pcm_samples4(Obuffer buffer)
+        private void compute_pcm_samples4(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1022,7 +1022,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples5(Obuffer buffer)
+        private void compute_pcm_samples5(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1045,7 +1045,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples6(Obuffer buffer)
+        private void compute_pcm_samples6(ABuffer buffer)
         {
             float[] vp = actual_v;
             float[] tmpOut = _tmpOut;
@@ -1068,7 +1068,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples7(Obuffer buffer)
+        private void compute_pcm_samples7(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1096,7 +1096,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples8(Obuffer buffer)
+        private void compute_pcm_samples8(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1124,7 +1124,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples9(Obuffer buffer)
+        private void compute_pcm_samples9(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1152,7 +1152,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples10(Obuffer buffer)
+        private void compute_pcm_samples10(ABuffer buffer)
         {
             float[] vp = actual_v;
             //int inc = v_inc;
@@ -1179,7 +1179,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples11(Obuffer buffer)
+        private void compute_pcm_samples11(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1207,7 +1207,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples12(Obuffer buffer)
+        private void compute_pcm_samples12(ABuffer buffer)
         {
             float[] vp = actual_v;
             //int inc = v_inc;
@@ -1234,7 +1234,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples13(Obuffer buffer)
+        private void compute_pcm_samples13(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1262,7 +1262,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples14(Obuffer buffer)
+        private void compute_pcm_samples14(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1290,7 +1290,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples15(Obuffer buffer)
+        private void compute_pcm_samples15(ABuffer buffer)
         {
             float[] vp = actual_v;
 
@@ -1316,7 +1316,7 @@ namespace MP3Sharp.Decode
             // for
         }
 
-        private void compute_pcm_samples(Obuffer buffer)
+        private void compute_pcm_samples(ABuffer buffer)
         {
             switch (actual_write_pos)
             {
@@ -1422,7 +1422,7 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Calculate 32 PCM samples and put the into the Obuffer-object.
         /// </summary>
-        public void calculate_pcm_samples(Obuffer buffer)
+        public void calculate_pcm_samples(ABuffer buffer)
         {
             compute_new_v();
             compute_pcm_samples(buffer);

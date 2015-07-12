@@ -33,8 +33,8 @@ namespace XNA4Sample
             mp3.Play();
 
             // Create the buffer
-            int numberOfPcmBytesToReadPerChunk = 512;
-            byte[] buffer = new byte[numberOfPcmBytesToReadPerChunk];
+            const int NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK = 4096;
+            byte[] buffer = new byte[NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK];
 
             int bytesReturned = -1;
             int totalBytes = 0;

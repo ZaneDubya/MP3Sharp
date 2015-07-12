@@ -25,42 +25,23 @@ namespace MP3Sharp.Decode
     {
         private static readonly Params DEFAULT_PARAMS = new Params();
         private readonly Params params_Renamed;
-        private Equalizer equalizer;
+        private Equalizer m_Equalizer;
+
+        private SynthesisFilter m_LeftChannelFilter;
+        private SynthesisFilter m_RightChannelFilter;
+
+        private bool m_IsInitialized;
+        private LayerIDecoder m_L1Decoder;
+        private LayerIIDecoder m_L2Decoder;
+        private LayerIIIDecoder m_L3Decoder;
+
+        private ABuffer m_Output;
+
+        private int m_OutputChannels;
+        private int m_OutputFrequency;
 
         /// <summary>
-        ///     Synthesis filter for the left channel.
-        /// </summary>
-        private SynthesisFilter filter1;
-
-        /// <summary>
-        ///     Sythesis filter for the right channel.
-        /// </summary>
-        private SynthesisFilter filter2;
-
-        private bool initialized;
-        private LayerIDecoder l1decoder;
-        private LayerIIDecoder l2decoder;
-
-        /// <summary>
-        ///     The decoder used to decode layer III frames.
-        /// </summary>
-        private LayerIIIDecoder l3decoder;
-
-        /// <summary>
-        ///     The Bistream from which the MPEG audio frames are read.
-        /// </summary>
-        /// <summary>
-        ///     The Obuffer instance that will receive the decoded
-        ///     PCM samples.
-        /// </summary>
-        private Obuffer output;
-
-        private int outputChannels;
-        private int outputFrequency;
-
-        /// <summary>
-        ///     Creates a new <code>Decoder</code> instance with default
-        ///     parameters.
+        ///     Creates a new Decoder instance with default parameters.
         /// </summary>
         public Decoder() : this(null)
         {
@@ -68,13 +49,8 @@ namespace MP3Sharp.Decode
         }
 
         /// <summary>
-        ///     Creates a new <code>Decoder</code> instance with default
-        ///     parameters.
+        ///     Creates a new Decoder instance with custom parameters.
         /// </summary>
-        /// <param name="params	The">
-        ///     <code>Params</code> instance that describes
-        ///     the customizable aspects of the decoder.
-        /// </param>
         public Decoder(Params params0)
         {
             InitBlock();
@@ -86,7 +62,7 @@ namespace MP3Sharp.Decode
             Equalizer eq = params_Renamed.InitialEqualizerSettings;
             if (eq != null)
             {
-                equalizer.FromEqualizer = eq;
+                m_Equalizer.FromEqualizer = eq;
             }
         }
 
@@ -103,14 +79,14 @@ namespace MP3Sharp.Decode
                 if (value == null)
                     value = Equalizer.PASS_THRU_EQ;
 
-                equalizer.FromEqualizer = value;
+                m_Equalizer.FromEqualizer = value;
 
-                float[] factors = equalizer.BandFactors;
-                if (filter1 != null)
-                    filter1.EQ = factors;
+                float[] factors = m_Equalizer.BandFactors;
+                if (m_LeftChannelFilter != null)
+                    m_LeftChannelFilter.EQ = factors;
 
-                if (filter2 != null)
-                    filter2.EQ = factors;
+                if (m_RightChannelFilter != null)
+                    m_RightChannelFilter.EQ = factors;
             }
         }
 
@@ -118,9 +94,9 @@ namespace MP3Sharp.Decode
         ///     Changes the output buffer. This will take effect the next time
         ///     decodeFrame() is called.
         /// </summary>
-        public virtual Obuffer OutputBuffer
+        public virtual ABuffer OutputBuffer
         {
-            set { output = value; }
+            set { m_Output = value; }
         }
 
         /// <summary>
@@ -128,27 +104,19 @@ namespace MP3Sharp.Decode
         ///     by this decoder. This typically corresponds to the sample
         ///     rate encoded in the MPEG audio stream.
         /// </summary>
-        /// <param name="the">
-        ///     sample rate (in Hz) of the samples written to the
-        ///     output buffer when decoding.
-        /// </param>
         public virtual int OutputFrequency
         {
-            get { return outputFrequency; }
+            get { return m_OutputFrequency; }
         }
 
         /// <summary>
         ///     Retrieves the number of channels of PCM samples output by
         ///     this decoder. This usually corresponds to the number of
-        ///     channels in the MPEG audio stream, although it may differ.
+        ///     channels in the MPEG audio stream.
         /// </summary>
-        /// <returns>
-        ///     The number of output channels in the decoded samples: 1
-        ///     for mono, or 2 for stereo.
-        /// </returns>
         public virtual int OutputChannels
         {
-            get { return outputChannels; }
+            get { return m_OutputChannels; }
         }
 
         /// <summary>
@@ -159,63 +127,59 @@ namespace MP3Sharp.Decode
         ///     an upper bound and fewer samples may actually be written, depending
         ///     upon the sample rate and number of channels.
         /// </summary>
-        /// <returns>
-        ///     The maximum number of samples that are written to the
-        ///     output buffer when decoding a single frame of MPEG audio.
-        /// </returns>
         public virtual int OutputBlockSize
         {
-            get { return Obuffer.OBUFFERSIZE; }
+            get { return ABuffer.OBUFFERSIZE; }
         }
 
         private void InitBlock()
         {
-            equalizer = new Equalizer();
+            m_Equalizer = new Equalizer();
         }
 
         /// <summary>
         ///     Decodes one frame from an MPEG audio bitstream.
         /// </summary>
-        /// <param name="header		The">
-        ///     header describing the frame to decode.
+        /// <param name="header">
+        ///     Header describing the frame to decode.
         /// </param>
-        /// <param name="bitstream		The">
-        ///     bistream that provides the bits for te body of the frame.
+        /// <param name="stream">
+        ///     Bistream that provides the bits for the body of the frame.
         /// </param>
         /// <returns>
         ///     A SampleBuffer containing the decoded samples.
         /// </returns>
-        public virtual Obuffer decodeFrame(Header header, Bitstream stream)
+        public virtual ABuffer decodeFrame(Header header, Bitstream stream)
         {
-            if (!initialized)
+            if (!m_IsInitialized)
             {
-                initialize(header);
+                Initialize(header);
             }
 
             int layer = header.layer();
 
-            output.ClearBuffer();
+            m_Output.ClearBuffer();
 
-            IFrameDecoder decoder = retrieveDecoder(header, stream, layer);
+            IFrameDecoder decoder = RetrieveDecoder(header, stream, layer);
 
             decoder.decodeFrame();
 
-            output.WriteBuffer(1);
+            m_Output.WriteBuffer(1);
 
-            return output;
+            return m_Output;
         }
 
-        protected internal virtual DecoderException newDecoderException(int errorcode)
+        protected internal virtual DecoderException NewDecoderException(int errorcode)
         {
             return new DecoderException(errorcode, null);
         }
 
-        protected internal virtual DecoderException newDecoderException(int errorcode, Exception throwable)
+        protected internal virtual DecoderException NewDecoderException(int errorcode, Exception throwable)
         {
             return new DecoderException(errorcode, throwable);
         }
 
-        protected internal virtual IFrameDecoder retrieveDecoder(Header header, Bitstream stream, int layer)
+        protected internal virtual IFrameDecoder RetrieveDecoder(Header header, Bitstream stream, int layer)
         {
             IFrameDecoder decoder = null;
 
@@ -224,45 +188,45 @@ namespace MP3Sharp.Decode
             switch (layer)
             {
                 case 3:
-                    if (l3decoder == null)
+                    if (m_L3Decoder == null)
                     {
-                        l3decoder = new LayerIIIDecoder(stream, header, filter1, filter2, output,
+                        m_L3Decoder = new LayerIIIDecoder(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
                             (int) OutputChannelsEnum.BOTH_CHANNELS);
                     }
 
-                    decoder = l3decoder;
+                    decoder = m_L3Decoder;
                     break;
 
                 case 2:
-                    if (l2decoder == null)
+                    if (m_L2Decoder == null)
                     {
-                        l2decoder = new LayerIIDecoder();
-                        l2decoder.create(stream, header, filter1, filter2, output,
+                        m_L2Decoder = new LayerIIDecoder();
+                        m_L2Decoder.create(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
                             (int) OutputChannelsEnum.BOTH_CHANNELS);
                     }
-                    decoder = l2decoder;
+                    decoder = m_L2Decoder;
                     break;
 
                 case 1:
-                    if (l1decoder == null)
+                    if (m_L1Decoder == null)
                     {
-                        l1decoder = new LayerIDecoder();
-                        l1decoder.create(stream, header, filter1, filter2, output,
+                        m_L1Decoder = new LayerIDecoder();
+                        m_L1Decoder.create(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
                             (int) OutputChannelsEnum.BOTH_CHANNELS);
                     }
-                    decoder = l1decoder;
+                    decoder = m_L1Decoder;
                     break;
             }
 
             if (decoder == null)
             {
-                throw newDecoderException(DecoderErrors_Fields.UNSUPPORTED_LAYER, null);
+                throw NewDecoderException(DecoderErrors_Fields.UNSUPPORTED_LAYER, null);
             }
 
             return decoder;
         }
 
-        private void initialize(Header header)
+        private void Initialize(Header header)
         {
             // REVIEW: allow customizable scale factor
             float scalefactor = 32700.0f;
@@ -272,44 +236,42 @@ namespace MP3Sharp.Decode
             int channels = mode == Header.SINGLE_CHANNEL ? 1 : 2;
 
             // set up output buffer if not set up by client.
-            if (output == null)
-                output = new SampleBuffer(header.frequency(), channels);
+            if (m_Output == null)
+                m_Output = new SampleBuffer(header.frequency(), channels);
 
-            float[] factors = equalizer.BandFactors;
+            float[] factors = m_Equalizer.BandFactors;
             //Console.WriteLine("NOT CREATING SYNTHESIS FILTERS");
-            filter1 = new SynthesisFilter(0, scalefactor, factors);
+            m_LeftChannelFilter = new SynthesisFilter(0, scalefactor, factors);
 
             // REVIEW: allow mono output for stereo
             if (channels == 2)
-                filter2 = new SynthesisFilter(1, scalefactor, factors);
+                m_RightChannelFilter = new SynthesisFilter(1, scalefactor, factors);
 
-            outputChannels = channels;
-            outputFrequency = header.frequency();
+            m_OutputChannels = channels;
+            m_OutputFrequency = header.frequency();
 
-            initialized = true;
+            m_IsInitialized = true;
         }
 
         /// <summary>
-        ///     The <code>Params</code> class presents the customizable
-        ///     aspects of the decoder.
-        ///     <p>
-        ///         Instances of this class are not thread safe.
+        ///     The Params class presents the customizable
+        ///     aspects of the decoder. Instances of this class are not thread safe.
         /// </summary>
         internal class Params : ICloneable
         {
-            private Equalizer equalizer;
-            private OutputChannels outputChannels;
+            private Equalizer m_Equalizer;
+            private OutputChannels m_OutputChannels;
 
             public virtual OutputChannels OutputChannels
             {
-                get { return outputChannels; }
+                get { return m_OutputChannels; }
 
                 set
                 {
                     if (value == null)
                         throw new NullReferenceException("out");
 
-                    outputChannels = value;
+                    m_OutputChannels = value;
                 }
             }
 
@@ -330,7 +292,7 @@ namespace MP3Sharp.Decode
             /// </returns>
             public virtual Equalizer InitialEqualizerSettings
             {
-                get { return equalizer; }
+                get { return m_Equalizer; }
             }
 
             //UPGRADE_TODO: The equivalent of method 'java.lang.Object.clone' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
@@ -344,12 +306,6 @@ namespace MP3Sharp.Decode
                 {
                     throw new ApplicationException(this + ": " + ex);
                 }
-            }
-
-            private void InitBlock()
-            {
-                outputChannels = OutputChannels.BOTH;
-                equalizer = new Equalizer();
             }
         }
     }

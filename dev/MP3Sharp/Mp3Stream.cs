@@ -29,13 +29,13 @@ namespace MP3Sharp
     {
         // Used to interface with JavaZoom code.
         private readonly Decode.Bitstream m_BitStream;
-        private readonly Decoder m_Decoder = new Decode.Decoder(Decode.Decoder.DefaultParams);
+        private readonly Decoder m_Decoder = new Decoder(Decoder.DefaultParams);
         // local variables.
-        private readonly OBuffer16BitStereo m_QueueOBuffer;
+        private readonly Buffer16BitStereo m_QueueOBuffer;
         private readonly Stream m_SourceStream;
         private int m_BackStreamByteCountRep = 0;
         private short m_ChannelCountRep = -1;
-        protected SoundFormat FormatRep = SoundFormat.Pcm16BitStereo;
+        protected SoundFormat FormatRep;
         private int m_FrequencyRep = -1;
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace MP3Sharp
             FormatRep = SoundFormat.Pcm16BitStereo;
             m_SourceStream = sourceStream;
             m_BitStream = new Bitstream(new BackStream(m_SourceStream, chunkSize));
-            m_QueueOBuffer = new OBuffer16BitStereo();
+            m_QueueOBuffer = new Buffer16BitStereo();
 
             m_Decoder.OutputBuffer = m_QueueOBuffer;
         }
@@ -257,7 +257,7 @@ namespace MP3Sharp
                 m_FrequencyRep = header.frequency();
 
                 // Decode the frame.
-                Obuffer decoderOutput = m_Decoder.decodeFrame(header, m_BitStream);
+                ABuffer decoderOutput = m_Decoder.decodeFrame(header, m_BitStream);
 
                 // Apparently, the way JavaZoom sets the output buffer 
                 // on the decoder is a bit dodgy. Even though

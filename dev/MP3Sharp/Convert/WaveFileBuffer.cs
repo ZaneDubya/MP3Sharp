@@ -20,14 +20,14 @@ using MP3Sharp.Decode;
 namespace MP3Sharp.Convert
 {
     /// <summary> Implements an Obuffer by writing the data to a file in RIFF WAVE format.</summary>
-    internal class WaveFileObuffer : Obuffer
+    internal class WaveFileBuffer : ABuffer
     {
         private readonly short[] m_Buffer;
         private readonly short[] m_Bufferp;
         private readonly int m_Channels;
         private readonly WaveFile m_OutWave;
 
-        public WaveFileObuffer(int numberOfChannels, int freq, string fileName)
+        public WaveFileBuffer(int numberOfChannels, int freq, string fileName)
         {
             if (fileName == null)
                 throw new NullReferenceException("FileName");
@@ -44,7 +44,7 @@ namespace MP3Sharp.Convert
             int rc = m_OutWave.OpenForWrite(fileName, null, freq, 16, (short) m_Channels);
         }
 
-        public WaveFileObuffer(int numberOfChannels, int freq, System.IO.Stream stream)
+        public WaveFileBuffer(int numberOfChannels, int freq, System.IO.Stream stream)
         {
             m_Buffer = new short[OBUFFERSIZE];
             m_Bufferp = new short[MAXCHANNELS];

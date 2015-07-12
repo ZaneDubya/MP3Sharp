@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using MP3Sharp;
 
 namespace XNA4Sample
@@ -15,14 +8,14 @@ namespace XNA4Sample
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class BaseGame : Microsoft.Xna.Framework.Game
+    public class BaseGame : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        GraphicsDeviceManager m_Graphics;
+        SpriteBatch m_SpriteBatch;
 
         public BaseGame()
         {
-            graphics = new GraphicsDeviceManager(this);
+            m_Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -46,7 +39,7 @@ namespace XNA4Sample
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            m_SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
             MP3Stream stream = new MP3Stream(@"sample.mp3");
@@ -72,7 +65,7 @@ namespace XNA4Sample
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+                Exit();
 
             // TODO: Add your update logic here
 

@@ -488,7 +488,7 @@ namespace MP3Sharp.Decode
             new[] {new[] {8, 8, 5, 0}, new[] {15, 12, 9, 0}, new[] {6, 18, 9, 0}}
         };
 
-        private readonly Obuffer buffer;
+        private readonly ABuffer buffer;
         private readonly int channels;
         private readonly SynthesisFilter filter1;
         private readonly SynthesisFilter filter2;
@@ -577,7 +577,7 @@ namespace MP3Sharp.Decode
         // REVIEW: these constructor arguments should be moved to the
         // decodeFrame() method, where possible, so that one
         public LayerIIIDecoder(Bitstream stream0, Header header0, SynthesisFilter filtera, SynthesisFilter filterb,
-            Obuffer buffer0, int which_ch0)
+            ABuffer buffer0, int which_ch0)
         {
             InitBlock();
             huffcodetab.inithuff();

@@ -20,7 +20,7 @@ namespace MP3Sharp.Decode
     ///     The <code>SampleBuffer</code> class implements an output buffer
     ///     that provides storage for a fixed size block of samples.
     /// </summary>
-    internal class SampleBuffer : Obuffer
+    internal class SampleBuffer : ABuffer
     {
         private readonly short[] buffer;
         private readonly int[] bufferp;

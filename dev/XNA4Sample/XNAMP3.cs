@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MP3Sharp;
 using Microsoft.Xna.Framework.Audio;
 
@@ -11,8 +8,8 @@ namespace XNA4Sample
     {
         private MP3Stream m_Stream;
 
-        private const int numberOfPcmBytesToReadPerChunk = 2048;
-        private byte[] m_WaveBuffer = new byte[numberOfPcmBytesToReadPerChunk];
+        private const int NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK = 4096;
+        private byte[] m_WaveBuffer = new byte[NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK];
         DynamicSoundEffectInstance m_Instance;
 
         public XNAMP3(MP3Stream stream)
@@ -32,7 +29,7 @@ namespace XNA4Sample
         private void ReadFromStream()
         {
             int bytesReturned = m_Stream.Read(m_WaveBuffer, 0, m_WaveBuffer.Length);
-            if (bytesReturned != numberOfPcmBytesToReadPerChunk)
+            if (bytesReturned != NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK)
             {
 
             }

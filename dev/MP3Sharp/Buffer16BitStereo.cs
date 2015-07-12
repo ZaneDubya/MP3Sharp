@@ -11,8 +11,8 @@ namespace MP3Sharp
     ///     over. --trs
     ///     This class handles stereo 16-bit data! Switch it out if you want mono or something.
     /// </summary>
-    internal class OBuffer16BitStereo
-        : Decode.Obuffer
+    internal class Buffer16BitStereo
+        : Decode.ABuffer
     {
         // This is stereo!
         private static readonly int CHANNELS = 2;
@@ -25,7 +25,7 @@ namespace MP3Sharp
         // Read offset used to read from the stream, in bytes.
         private int m_Offset;
 
-        public OBuffer16BitStereo()
+        public Buffer16BitStereo()
         {
             // Initialize the buffer pointers
             ClearBuffer();

@@ -21,7 +21,7 @@ namespace MP3Sharp.Decode
     /// </summary>
     internal class LayerIDecoder : IFrameDecoder
     {
-        protected internal Obuffer buffer;
+        protected internal ABuffer buffer;
         protected internal Crc16 crc;
         protected internal SynthesisFilter filter1, filter2;
         protected internal Header header;
@@ -57,7 +57,7 @@ namespace MP3Sharp.Decode
         }
 
         public virtual void create(Bitstream stream0, Header header0, SynthesisFilter filtera, SynthesisFilter filterb,
-            Obuffer buffer0, int which_ch0)
+            ABuffer buffer0, int which_ch0)
         {
             stream = stream0;
             header = header0;

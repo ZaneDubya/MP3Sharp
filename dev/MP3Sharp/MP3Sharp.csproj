@@ -48,7 +48,7 @@
     <Compile Include="Decode\Bitstream.cs" />
     <Compile Include="Decode\BitstreamErrors.cs" />
     <Compile Include="Decode\BitstreamException.cs" />
-    <Compile Include="Decode\Control.cs" />
+    <Compile Include="Decode\CircularByteBuffer.cs" />
     <Compile Include="Decode\Crc16.cs" />
     <Compile Include="Decode\Decoder.cs" />
     <Compile Include="Decode\DecoderErrors.cs" />
@@ -66,18 +66,18 @@
     <Compile Include="Decode\LayerIDecoder.cs" />
     <Compile Include="Decode\LayerIIDecoder.cs" />
     <Compile Include="Decode\LayerIIIDecoder.cs" />
-    <Compile Include="Decode\Obuffer.cs" />
+    <Compile Include="Decode\ABuffer.cs" />
     <Compile Include="Decode\OutputChannels.cs" />
     <Compile Include="Decode\SampleBuffer.cs" />
     <Compile Include="Decode\Source.cs" />
-    <Compile Include="OBuffer16BitStereo.cs" />
+    <Compile Include="Buffer16BitStereo.cs" />
     <Compile Include="SoundFormat.cs" />
     <Compile Include="Support\SupportClass.cs" />
     <Compile Include="Decode\SynthesisFilter.cs" />
     <Compile Include="MP3Stream.cs" />
     <Compile Include="Convert\RiffFile.cs" />
     <Compile Include="Convert\WaveFile.cs" />
-    <Compile Include="Convert\WaveFileObuffer.cs" />
+    <Compile Include="Convert\WaveFileBuffer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -271,9 +271,7 @@ namespace MP3Sharp.Convert
                 bool ret = Header.CkId == FourCC("fmt ") && (Data.NumChannels == 1 || Data.NumChannels == 2) &&
                            Data.NumAvgBytesPerSec == (Data.NumChannels*Data.NumSamplesPerSec*Data.NumBitsPerSample)/8 &&
                            Data.NumBlockAlign == (Data.NumChannels*Data.NumBitsPerSample)/8;
-                if (ret)
-                    return 1;
-                return 0;
+                return ret ? 1 : 0;
             }
         }
 
@@ -288,7 +286,7 @@ namespace MP3Sharp.Convert
                 Chan = new short[MAX_WAVE_CHANNELS];
             }
 
-            public WaveFile Enclosing_Instance
+            public WaveFile EnclosingInstance
             {
                 get { return m_EnclosingInstance; }
             }
