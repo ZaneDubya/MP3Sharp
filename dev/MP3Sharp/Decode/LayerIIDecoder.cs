@@ -21,7 +21,7 @@ namespace MP3Sharp.Decode
     /// </summary>
     internal class LayerIIDecoder : LayerIDecoder, IFrameDecoder
     {
-        protected internal override void createSubbands()
+        protected internal override void CreateSubbands()
         {
             int i;
             if (mode == Header.SINGLE_CHANNEL)
@@ -41,7 +41,7 @@ namespace MP3Sharp.Decode
             }
         }
 
-        protected internal override void readScaleFactorSelection()
+        protected internal override void ReadScaleFactorSelection()
         {
             for (int i = 0; i < num_subbands; ++i)
                 ((SubbandLayer2) subbands[i]).read_scalefactor_selection(stream, crc);
@@ -632,23 +632,23 @@ namespace MP3Sharp.Decode
                     switch (scfsi)
                     {
                         case 0:
-                            scalefactor1 = scalefactors[stream.get_bits(6)];
-                            scalefactor2 = scalefactors[stream.get_bits(6)];
-                            scalefactor3 = scalefactors[stream.get_bits(6)];
+                            scalefactor1 = ScaleFactors[stream.get_bits(6)];
+                            scalefactor2 = ScaleFactors[stream.get_bits(6)];
+                            scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 1:
-                            scalefactor1 = scalefactor2 = scalefactors[stream.get_bits(6)];
-                            scalefactor3 = scalefactors[stream.get_bits(6)];
+                            scalefactor1 = scalefactor2 = ScaleFactors[stream.get_bits(6)];
+                            scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 2:
-                            scalefactor1 = scalefactor2 = scalefactor3 = scalefactors[stream.get_bits(6)];
+                            scalefactor1 = scalefactor2 = scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 3:
-                            scalefactor1 = scalefactors[stream.get_bits(6)];
-                            scalefactor2 = scalefactor3 = scalefactors[stream.get_bits(6)];
+                            scalefactor1 = ScaleFactors[stream.get_bits(6)];
+                            scalefactor2 = scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
                     }
                     prepare_sample_reading(header, allocation, 0, factor, codelength, c, d);
@@ -784,24 +784,24 @@ namespace MP3Sharp.Decode
                     switch (channel2_scfsi)
                     {
                         case 0:
-                            channel2_scalefactor1 = scalefactors[stream.get_bits(6)];
-                            channel2_scalefactor2 = scalefactors[stream.get_bits(6)];
-                            channel2_scalefactor3 = scalefactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor2 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 1:
-                            channel2_scalefactor1 = channel2_scalefactor2 = scalefactors[stream.get_bits(6)];
-                            channel2_scalefactor3 = scalefactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = channel2_scalefactor2 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 2:
                             channel2_scalefactor1 =
-                                channel2_scalefactor2 = channel2_scalefactor3 = scalefactors[stream.get_bits(6)];
+                                channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 3:
-                            channel2_scalefactor1 = scalefactors[stream.get_bits(6)];
-                            channel2_scalefactor2 = channel2_scalefactor3 = scalefactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
                     }
                 }
@@ -944,24 +944,24 @@ namespace MP3Sharp.Decode
                     switch (channel2_scfsi)
                     {
                         case 0:
-                            channel2_scalefactor1 = scalefactors[stream.get_bits(6)];
-                            channel2_scalefactor2 = scalefactors[stream.get_bits(6)];
-                            channel2_scalefactor3 = scalefactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor2 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 1:
-                            channel2_scalefactor1 = channel2_scalefactor2 = scalefactors[stream.get_bits(6)];
-                            channel2_scalefactor3 = scalefactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = channel2_scalefactor2 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 2:
                             channel2_scalefactor1 =
-                                channel2_scalefactor2 = channel2_scalefactor3 = scalefactors[stream.get_bits(6)];
+                                channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
 
                         case 3:
-                            channel2_scalefactor1 = scalefactors[stream.get_bits(6)];
-                            channel2_scalefactor2 = channel2_scalefactor3 = scalefactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
                             break;
                     }
                     prepare_sample_reading(header, channel2_allocation, 1, channel2_factor, channel2_codelength,

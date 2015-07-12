@@ -37,37 +37,37 @@ namespace MP3Sharp.Decode
             crc = new Crc16();
         }
 
-        public virtual void decodeFrame()
+        public virtual void DecodeFrame()
         {
             num_subbands = header.number_of_subbands();
             subbands = new Subband[32];
             mode = header.mode();
 
-            createSubbands();
+            CreateSubbands();
 
-            readAllocation();
-            readScaleFactorSelection();
+            ReadAllocation();
+            ReadScaleFactorSelection();
 
             if ((crc != null) || header.checksum_ok())
             {
-                readScaleFactors();
+                ReadScaleFactors();
 
-                readSampleData();
+                ReadSampleData();
             }
         }
 
-        public virtual void create(Bitstream stream0, Header header0, SynthesisFilter filtera, SynthesisFilter filterb,
-            ABuffer buffer0, int which_ch0)
+        public virtual void Create(Bitstream stream0, Header header0, SynthesisFilter filtera, SynthesisFilter filterb,
+            ABuffer buffer0, int whichCh0)
         {
             stream = stream0;
             header = header0;
             filter1 = filtera;
             filter2 = filterb;
             buffer = buffer0;
-            which_channels = which_ch0;
+            which_channels = whichCh0;
         }
 
-        protected internal virtual void createSubbands()
+        protected internal virtual void CreateSubbands()
         {
             int i;
             if (mode == Header.SINGLE_CHANNEL)
@@ -87,44 +87,44 @@ namespace MP3Sharp.Decode
             }
         }
 
-        protected internal virtual void readAllocation()
+        protected internal virtual void ReadAllocation()
         {
             // start to read audio data:
             for (int i = 0; i < num_subbands; ++i)
                 subbands[i].read_allocation(stream, header, crc);
         }
 
-        protected internal virtual void readScaleFactorSelection()
+        protected internal virtual void ReadScaleFactorSelection()
         {
             // scale factor selection not present for layer I. 
         }
 
-        protected internal virtual void readScaleFactors()
+        protected internal virtual void ReadScaleFactors()
         {
             for (int i = 0; i < num_subbands; ++i)
                 subbands[i].read_scalefactor(stream, header);
         }
 
-        protected internal virtual void readSampleData()
+        protected internal virtual void ReadSampleData()
         {
-            bool read_ready = false;
-            bool write_ready = false;
-            int mode = header.mode();
-            int i;
+            bool readReady = false;
+            bool writeReady = false;
+            int hdrMode = header.mode();
             do
             {
+                int i;
                 for (i = 0; i < num_subbands; ++i)
-                    read_ready = subbands[i].read_sampledata(stream);
+                    readReady = subbands[i].read_sampledata(stream);
                 do
                 {
                     for (i = 0; i < num_subbands; ++i)
-                        write_ready = subbands[i].put_next_sample(which_channels, filter1, filter2);
+                        writeReady = subbands[i].put_next_sample(which_channels, filter1, filter2);
 
                     filter1.calculate_pcm_samples(buffer);
-                    if ((which_channels == OutputChannels.BOTH_CHANNELS) && (mode != Header.SINGLE_CHANNEL))
+                    if ((which_channels == OutputChannels.BOTH_CHANNELS) && (hdrMode != Header.SINGLE_CHANNEL))
                         filter2.calculate_pcm_samples(buffer);
-                } while (!write_ready);
-            } while (!read_ready);
+                } while (!writeReady);
+            } while (!readReady);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace MP3Sharp.Decode
 			*      is illegal (to prevent segmentation faults)
 			*/
             // Scalefactors for layer I and II, Annex 3-B.1 in ISO/IEC DIS 11172:
-            public static readonly float[] scalefactors =
+            public static readonly float[] ScaleFactors =
             {
                 2.00000000000000f, 1.58740105196820f, 1.25992104989487f, 1.00000000000000f, 0.79370052598410f,
                 0.62996052494744f, 0.50000000000000f, 0.39685026299205f, 0.31498026247372f, 0.25000000000000f,
@@ -172,7 +172,7 @@ namespace MP3Sharp.Decode
         internal class SubbandLayer1 : Subband
         {
             // Factors and offsets for sample requantization
-            public static readonly float[] table_factor =
+            public static readonly float[] TableFactor =
             {
                 0.0f, (1.0f/2.0f)*(4.0f/3.0f), (1.0f/4.0f)*(8.0f/7.0f), (1.0f/8.0f)*(16.0f/15.0f),
                 (1.0f/16.0f)*(32.0f/31.0f), (1.0f/32.0f)*(64.0f/63.0f), (1.0f/64.0f)*(128.0f/127.0f),
@@ -181,7 +181,7 @@ namespace MP3Sharp.Decode
                 (1.0f/8192.0f)*(16384.0f/16383.0f), (1.0f/16384.0f)*(32768.0f/32767.0f)
             };
 
-            public static readonly float[] table_offset =
+            public static readonly float[] TableOffset =
             {
                 0.0f, ((1.0f/2.0f) - 1.0f)*(4.0f/3.0f), ((1.0f/4.0f) - 1.0f)*(8.0f/7.0f),
                 ((1.0f/8.0f) - 1.0f)*(16.0f/15.0f), ((1.0f/16.0f) - 1.0f)*(32.0f/31.0f),
@@ -192,13 +192,13 @@ namespace MP3Sharp.Decode
                 ((1.0f/8192.0f) - 1.0f)*(16384.0f/16383.0f), ((1.0f/16384.0f) - 1.0f)*(32768.0f/32767.0f)
             };
 
-            protected internal int allocation;
-            protected internal float factor, offset;
-            protected internal float sample;
-            protected internal int samplelength;
-            protected internal int samplenumber;
-            protected internal float scalefactor;
-            protected internal int subbandnumber;
+            protected int allocation;
+            protected float factor, offset;
+            protected float sample;
+            protected int samplelength;
+            protected int samplenumber;
+            protected float scalefactor;
+            protected int subbandnumber;
 
             /// <summary>
             ///     Construtor.
@@ -224,8 +224,8 @@ namespace MP3Sharp.Decode
                 if (allocation != 0)
                 {
                     samplelength = allocation + 1;
-                    factor = table_factor[allocation];
-                    offset = table_offset[allocation];
+                    factor = TableFactor[allocation];
+                    offset = TableOffset[allocation];
                 }
             }
 
@@ -235,7 +235,7 @@ namespace MP3Sharp.Decode
             public override void read_scalefactor(Bitstream stream, Header header)
             {
                 if (allocation != 0)
-                    scalefactor = scalefactors[stream.get_bits(6)];
+                    scalefactor = ScaleFactors[stream.get_bits(6)];
             }
 
             /// <summary>
@@ -298,8 +298,8 @@ namespace MP3Sharp.Decode
             {
                 if (allocation != 0)
                 {
-                    scalefactor = scalefactors[stream.get_bits(6)];
-                    channel2_scalefactor = scalefactors[stream.get_bits(6)];
+                    scalefactor = ScaleFactors[stream.get_bits(6)];
+                    channel2_scalefactor = ScaleFactors[stream.get_bits(6)];
                 }
             }
 
@@ -373,14 +373,14 @@ namespace MP3Sharp.Decode
                 if (allocation != 0)
                 {
                     samplelength = allocation + 1;
-                    factor = table_factor[allocation];
-                    offset = table_offset[allocation];
+                    factor = TableFactor[allocation];
+                    offset = TableOffset[allocation];
                 }
                 if (channel2_allocation != 0)
                 {
                     channel2_samplelength = channel2_allocation + 1;
-                    channel2_factor = table_factor[channel2_allocation];
-                    channel2_offset = table_offset[channel2_allocation];
+                    channel2_factor = TableFactor[channel2_allocation];
+                    channel2_offset = TableOffset[channel2_allocation];
                 }
             }
 
@@ -390,9 +390,9 @@ namespace MP3Sharp.Decode
             public override void read_scalefactor(Bitstream stream, Header header)
             {
                 if (allocation != 0)
-                    scalefactor = scalefactors[stream.get_bits(6)];
+                    scalefactor = ScaleFactors[stream.get_bits(6)];
                 if (channel2_allocation != 0)
-                    channel2_scalefactor = scalefactors[stream.get_bits(6)];
+                    channel2_scalefactor = ScaleFactors[stream.get_bits(6)];
             }
 
             /// <summary>

@@ -162,7 +162,7 @@ namespace MP3Sharp.Decode
 
             IFrameDecoder decoder = RetrieveDecoder(header, stream, layer);
 
-            decoder.decodeFrame();
+            decoder.DecodeFrame();
 
             m_Output.WriteBuffer(1);
 
@@ -201,7 +201,7 @@ namespace MP3Sharp.Decode
                     if (m_L2Decoder == null)
                     {
                         m_L2Decoder = new LayerIIDecoder();
-                        m_L2Decoder.create(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
+                        m_L2Decoder.Create(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
                             (int) OutputChannelsEnum.BOTH_CHANNELS);
                     }
                     decoder = m_L2Decoder;
@@ -211,7 +211,7 @@ namespace MP3Sharp.Decode
                     if (m_L1Decoder == null)
                     {
                         m_L1Decoder = new LayerIDecoder();
-                        m_L1Decoder.create(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
+                        m_L1Decoder.Create(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
                             (int) OutputChannelsEnum.BOTH_CHANNELS);
                     }
                     decoder = m_L1Decoder;

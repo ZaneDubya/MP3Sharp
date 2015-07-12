@@ -28,6 +28,6 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Decodes one frame of MPEG audio.
         /// </summary>
-        void decodeFrame();
+        void DecodeFrame();
     }
 }

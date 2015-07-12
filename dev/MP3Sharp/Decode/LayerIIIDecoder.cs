@@ -754,7 +754,7 @@ namespace MP3Sharp.Decode
             si = new III_side_info_t();
         }
 
-        public void decodeFrame()
+        public void DecodeFrame()
         {
             decode();
         }
