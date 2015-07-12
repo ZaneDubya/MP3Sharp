@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Mp3Sharp;
+using MP3Sharp;
 
 namespace XNA4Sample
 {
@@ -49,7 +49,7 @@ namespace XNA4Sample
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            Mp3Stream stream = new Mp3Stream(@"sample.mp3");
+            MP3Stream stream = new MP3Stream(@"sample.mp3");
             XNAMP3 mp3 = new XNAMP3(stream);
             mp3.Play();
         }

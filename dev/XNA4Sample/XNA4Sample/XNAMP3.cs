@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Mp3Sharp;
+using MP3Sharp;
 using Microsoft.Xna.Framework.Audio;
 
 namespace XNA4Sample
 {
     class XNAMP3
     {
-        private Mp3Stream m_Stream;
+        private MP3Stream m_Stream;
 
         private const int numberOfPcmBytesToReadPerChunk = 2048;
         private byte[] m_WaveBuffer = new byte[numberOfPcmBytesToReadPerChunk];
         DynamicSoundEffectInstance m_Instance;
 
-        public XNAMP3(Mp3Stream stream)
+        public XNAMP3(MP3Stream stream)
         {
             m_Stream = stream;
             ReadFromStream();

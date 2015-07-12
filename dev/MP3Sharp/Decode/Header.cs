@@ -1,19 +1,19 @@
 // /***************************************************************************
-//  *   Header.cs
-//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
-//  *   the JavaZoom team, and others.
+//  * Header.cs
+//  * Copyright (c) 2015 the authors.
 //  * 
-//  *   All rights reserved. This program and the accompanying materials
-//  *   are made available under the terms of the GNU Lesser General Public License
-//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
-//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the GNU Lesser General Public License
+//  * (LGPL) version 3 which accompanies this distribution, and is available at
+//  * https://www.gnu.org/licenses/lgpl-3.0.en.html
 //  *
-//  *   This library is distributed in the hope that it will be useful,
-//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-//  *   Lesser General Public License for more details.
+//  * This library is distributed in the hope that it will be useful,
+//  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  * Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
+
 using System.Text;
 using MP3Sharp.Support;
 
@@ -93,12 +93,14 @@ namespace MP3Sharp.Decode
                 },
                 new[]
                 {
-                    0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000, 160000,
+                    0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000,
+                    160000,
                     0
                 },
                 new[]
                 {
-                    0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000, 160000,
+                    0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000,
+                    160000,
                     0
                 }
             },
@@ -106,7 +108,8 @@ namespace MP3Sharp.Decode
             {
                 new[]
                 {
-                    0, 32000, 64000, 96000, 128000, 160000, 192000, 224000, 256000, 288000, 320000, 352000, 384000, 416000,
+                    0, 32000, 64000, 96000, 128000, 160000, 192000, 224000, 256000, 288000, 320000, 352000, 384000,
+                    416000,
                     448000, 0
                 },
                 new[]
@@ -129,12 +132,14 @@ namespace MP3Sharp.Decode
                 },
                 new[]
                 {
-                    0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000, 160000,
+                    0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000,
+                    160000,
                     0
                 },
                 new[]
                 {
-                    0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000, 160000,
+                    0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000,
+                    160000,
                     0
                 }
             }
@@ -153,13 +158,15 @@ namespace MP3Sharp.Decode
                 },
                 new[]
                 {
-                    "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s", "56 kbit/s",
+                    "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
+                    "56 kbit/s",
                     "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
                     "forbidden"
                 },
                 new[]
                 {
-                    "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s", "56 kbit/s",
+                    "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
+                    "56 kbit/s",
                     "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
                     "forbidden"
                 }
@@ -195,13 +202,15 @@ namespace MP3Sharp.Decode
                 },
                 new[]
                 {
-                    "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s", "56 kbit/s",
+                    "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
+                    "56 kbit/s",
                     "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
                     "forbidden"
                 },
                 new[]
                 {
-                    "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s", "56 kbit/s",
+                    "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
+                    "56 kbit/s",
                     "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
                     "forbidden"
                 }
@@ -637,7 +646,7 @@ namespace MP3Sharp.Decode
                         return "32 kHz";
                     if (h_version == MPEG2_LSF)
                         return "16 kHz";
-                        // SZD
+                    // SZD
                     return "8 kHz";
                     goto case FOURTYFOUR_POINT_ONE;
 
@@ -646,7 +655,7 @@ namespace MP3Sharp.Decode
                         return "44.1 kHz";
                     if (h_version == MPEG2_LSF)
                         return "22.05 kHz";
-                        // SZD
+                    // SZD
                     return "11.025 kHz";
                     goto case FOURTYEIGHT;
 
@@ -655,7 +664,7 @@ namespace MP3Sharp.Decode
                         return "48 kHz";
                     if (h_version == MPEG2_LSF)
                         return "24 kHz";
-                        // SZD
+                    // SZD
                     return "12 kHz";
                     break;
             }

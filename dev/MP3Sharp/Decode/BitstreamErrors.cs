@@ -1,66 +1,52 @@
-/*
-* 12/12/99		Initial version.	mdm@techie.com
-/*-----------------------------------------------------------------------
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*----------------------------------------------------------------------
-*/
+// /***************************************************************************
+//  * BitstreamErrors.cs
+//  * Copyright (c) 2015 the authors.
+//  * 
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the GNU Lesser General Public License
+//  * (LGPL) version 3 which accompanies this distribution, and is available at
+//  * https://www.gnu.org/licenses/lgpl-3.0.en.html
+//  *
+//  * This library is distributed in the hope that it will be useful,
+//  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  * Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
+
 namespace MP3Sharp.Decode
 {
-	using System;
-	
-	/// <summary> This interface describes all error codes that can be thrown 
-	/// in <code>BistreamException</code>s.
-	/// 
-	/// </summary>
-	/// <seealso cref="">BitstreamException
-	/// 
-	/// </seealso>
-	/// <author> 	MDM		12/12/99
-	/// @since	0.0.6
-	/// 
-	/// </author>
-	
-	internal struct BitstreamErrors_Fields{
-		public readonly static int UNKNOWN_ERROR;
-		public readonly static int UNKNOWN_SAMPLE_RATE;
-		public readonly static int STREAM_ERROR;
-		public readonly static int UNEXPECTED_EOF;
-		public readonly static int STREAM_EOF;
-		public readonly static int BITSTREAM_LAST = 0x1ff;
-		static BitstreamErrors_Fields()
-		{
-			UNKNOWN_ERROR = MP3Sharp.Decode.JavaLayerErrors_Fields.BITSTREAM_ERROR + 0;
-			UNKNOWN_SAMPLE_RATE = MP3Sharp.Decode.JavaLayerErrors_Fields.BITSTREAM_ERROR + 1;
-			STREAM_ERROR = MP3Sharp.Decode.JavaLayerErrors_Fields.BITSTREAM_ERROR + 2;
-			UNEXPECTED_EOF = MP3Sharp.Decode.JavaLayerErrors_Fields.BITSTREAM_ERROR + 3;
-			STREAM_EOF = MP3Sharp.Decode.JavaLayerErrors_Fields.BITSTREAM_ERROR + 4;
-		}
-	}
-	internal interface BitstreamErrors : JavaLayerErrors
-		{
-			/// <summary> An undeterminable error occurred. 
-			/// </summary>
-			/// <summary> The header describes an unknown sample rate.
-			/// </summary>
-			/// <summary> A problem occurred reading from the stream.
-			/// </summary>
-			/// <summary> The end of the stream was reached prematurely. 
-			/// </summary>
-			/// <summary> The end of the stream was reached. 
-			/// </summary>
-			/// <summary> 
-			/// </summary>
-		}
+    /// <summary>
+    ///     This interface describes all error codes that can be thrown
+    ///     in <code>BistreamException</code>s.
+    /// </summary>
+    /// <seealso cref="">
+    ///     BitstreamException
+    /// </seealso>
+    /// <author>
+    ///     MDM		12/12/99
+    ///     @since	0.0.6
+    /// </author>
+    internal struct BitstreamErrors_Fields
+    {
+        public static readonly int UNKNOWN_ERROR;
+        public static readonly int UNKNOWN_SAMPLE_RATE;
+        public static readonly int STREAM_ERROR;
+        public static readonly int UNEXPECTED_EOF;
+        public static readonly int STREAM_EOF;
+        public static readonly int BITSTREAM_LAST = 0x1ff;
+
+        static BitstreamErrors_Fields()
+        {
+            UNKNOWN_ERROR = JavaLayerErrors_Fields.BITSTREAM_ERROR + 0;
+            UNKNOWN_SAMPLE_RATE = JavaLayerErrors_Fields.BITSTREAM_ERROR + 1;
+            STREAM_ERROR = JavaLayerErrors_Fields.BITSTREAM_ERROR + 2;
+            UNEXPECTED_EOF = JavaLayerErrors_Fields.BITSTREAM_ERROR + 3;
+            STREAM_EOF = JavaLayerErrors_Fields.BITSTREAM_ERROR + 4;
+        }
+    }
+
+    internal interface BitstreamErrors : JavaLayerErrors
+    {
+    }
 }

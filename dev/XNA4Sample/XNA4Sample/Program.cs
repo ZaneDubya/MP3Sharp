@@ -1,5 +1,5 @@
 using System;
-using Mp3Sharp;
+using MP3Sharp;
 using Microsoft.Xna.Framework.Audio;
 
 namespace XNA4Sample
@@ -28,7 +28,7 @@ namespace XNA4Sample
 
         public static void ReadAllTheWayThroughMp3File()
         {
-            Mp3Stream stream = new Mp3Stream(@"sample.mp3");
+            MP3Stream stream = new MP3Stream(@"sample.mp3");
             XNAMP3 mp3 = new XNAMP3(stream);
             mp3.Play();
 
