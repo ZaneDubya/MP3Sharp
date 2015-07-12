@@ -1,21 +1,19 @@
-/*
-* 12/12/99 Initial implementation.		mdm@techie.com. 
-/*-----------------------------------------------------------------------
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*----------------------------------------------------------------------
-*/
+// /***************************************************************************
+//  *   OutputChannels.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
 namespace MP3Sharp.Decode
 {
 	using System;
@@ -27,8 +25,6 @@ namespace MP3Sharp.Decode
 		RIGHT_CHANNEL = 2,
 		DOWNMIX_CHANNELS = 3
 	}
-	
-		
 		
 	/// <summary> A Type-safe representation of the the supported output channel
 	/// constants. 
@@ -42,7 +38,37 @@ namespace MP3Sharp.Decode
 	/// </author>
 	internal class OutputChannels
 	{
-		/// <summary> Retrieves the code representing the desired output channels.
+	    /// <summary> Flag to indicate output should include both channels. 
+		/// </summary>
+		public static int BOTH_CHANNELS = 0;
+
+	    /// <summary> Flag to indicate output should include the left channel only. 
+		/// </summary>
+		public static int LEFT_CHANNEL = 1;
+
+	    /// <summary> Flag to indicate output should include the right channel only. 
+		/// </summary>
+		public static int RIGHT_CHANNEL = 2;
+
+	    /// <summary> Flag to indicate output is mono. 
+		/// </summary>
+		public static int DOWNMIX_CHANNELS = 3;
+
+	    public static readonly OutputChannels LEFT = new OutputChannels(LEFT_CHANNEL);
+	    public static readonly OutputChannels RIGHT = new OutputChannels(RIGHT_CHANNEL);
+	    public static readonly OutputChannels BOTH = new OutputChannels(BOTH_CHANNELS);
+	    public static readonly OutputChannels DOWNMIX = new OutputChannels(DOWNMIX_CHANNELS);
+	    private readonly int outputChannels;
+
+	    private OutputChannels(int channels)
+		{
+			outputChannels = channels;
+			
+			if (channels < 0 || channels > 3)
+				throw new ArgumentException("channels");
+		}
+
+	    /// <summary> Retrieves the code representing the desired output channels.
 		/// Will be one of LEFT_CHANNEL, RIGHT_CHANNEL, BOTH_CHANNELS
 		/// or DOWNMIX_CHANNELS.
 		/// 
@@ -58,7 +84,8 @@ namespace MP3Sharp.Decode
 			}
 			
 		}
-		/// <summary> Retrieves the number of output channels represented 
+
+	    /// <summary> Retrieves the number of output channels represented 
 		/// by this channel output type.
 		/// 
 		/// </summary>
@@ -77,32 +104,7 @@ namespace MP3Sharp.Decode
 			
 		}
 
-		/// <summary> Flag to indicate output should include both channels. 
-		/// </summary>
-		public static int BOTH_CHANNELS = 0;
-		
-		/// <summary> Flag to indicate output should include the left channel only. 
-		/// </summary>
-		public static int LEFT_CHANNEL = 1;
-		
-		/// <summary> Flag to indicate output should include the right channel only. 
-		/// </summary>
-		public static int RIGHT_CHANNEL = 2;
-		
-		/// <summary> Flag to indicate output is mono. 
-		/// </summary>
-		public static int DOWNMIX_CHANNELS = 3;
-		
-		
-		public static readonly OutputChannels LEFT = new OutputChannels(LEFT_CHANNEL);
-		public static readonly OutputChannels RIGHT = new OutputChannels(RIGHT_CHANNEL);
-		public static readonly OutputChannels BOTH = new OutputChannels(BOTH_CHANNELS);
-		public static readonly OutputChannels DOWNMIX = new OutputChannels(DOWNMIX_CHANNELS);
-		
-		
-		private int outputChannels;
-		
-		/// <summary> Creates an <code>OutputChannels</code> instance
+	    /// <summary> Creates an <code>OutputChannels</code> instance
 		/// corresponding to the given channel code.
 		/// 
 		/// </summary>
@@ -130,23 +132,12 @@ namespace MP3Sharp.Decode
 					return DOWNMIX;
 				
 				default: 
-					throw new System.ArgumentException("Invalid channel code: " + code);
+					throw new ArgumentException("Invalid channel code: " + code);
 				
 			}
 		}
-		
-		private OutputChannels(int channels)
-		{
-			outputChannels = channels;
-			
-			if (channels < 0 || channels > 3)
-				throw new System.ArgumentException("channels");
-		}
-		
-		
-		
-		
-		public  override bool Equals(System.Object o)
+
+	    public  override bool Equals(object o)
 		{
 			bool equals = false;
 			
@@ -158,8 +149,8 @@ namespace MP3Sharp.Decode
 			
 			return equals;
 		}
-		
-		public override int GetHashCode()
+
+	    public override int GetHashCode()
 		{
 			return outputChannels;
 		}

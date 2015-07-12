@@ -1,5 +1,5 @@
 // /***************************************************************************
-//  *   Source.cs.cs
+//  *   Source.cs
 //  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
 //  *   the JavaZoom team, and others.
 //  * 

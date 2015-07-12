@@ -1,25 +1,19 @@
-/* 
-* 12/12/99  Initial Version based on FileObuffer.	mdm@techie.com.
-* 
-* FileObuffer:
-* 15/02/99 ,Java Conversion by E.B ,ebsp@iname.com, JavaLayer
-*
-*----------------------------------------------------------------------------- 
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*----------------------------------------------------------------------------
-*/
+// /***************************************************************************
+//  *   SampleBuffer.cs
+//  *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+//  *   the JavaZoom team, and others.
+//  * 
+//  *   All rights reserved. This program and the accompanying materials
+//  *   are made available under the terms of the GNU Lesser General Public License
+//  *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+//  *   http://www.gnu.org/licenses/lgpl-2.1.html
+//  *
+//  *   This library is distributed in the hope that it will be useful,
+//  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  *   Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
 namespace MP3Sharp.Decode
 {
 	using System;
@@ -31,44 +25,12 @@ namespace MP3Sharp.Decode
 	/// </summary>
 	internal class SampleBuffer:Obuffer
 	{
-		virtual public int ChannelCount
-		{
-			get
-			{
-				return this.channels;
-			}
-			
-		}
-		virtual public int SampleFrequency
-		{
-			get
-			{
-				return this.frequency;
-			}
-			
-		}
-		virtual public short[] Buffer
-		{
-			get
-			{
-				return this.buffer;
-			}
-			
-		}
-		virtual public int BufferLength
-		{
-			get
-			{
-				return bufferp[0];
-			}
-			
-		}
-		private short[] buffer;
-		private int[] bufferp;
-		private int channels;
-		private int frequency;
-		
-		/// <summary> Constructor
+	    private readonly short[] buffer;
+	    private readonly int[] bufferp;
+	    private readonly int channels;
+	    private readonly int frequency;
+
+	    /// <summary> Constructor
 		/// </summary>
 		public SampleBuffer(int sample_frequency, int number_of_channels)
 		{
@@ -80,20 +42,52 @@ namespace MP3Sharp.Decode
 			for (int i = 0; i < number_of_channels; ++i)
 				bufferp[i] = (short) i;
 		}
-		
-		
-		
-		
-		
-		/// <summary> Takes a 16 Bit PCM sample.
+
+	    virtual public int ChannelCount
+		{
+			get
+			{
+				return channels;
+			}
+			
+		}
+
+	    virtual public int SampleFrequency
+		{
+			get
+			{
+				return frequency;
+			}
+			
+		}
+
+	    virtual public short[] Buffer
+		{
+			get
+			{
+				return buffer;
+			}
+			
+		}
+
+	    virtual public int BufferLength
+		{
+			get
+			{
+				return bufferp[0];
+			}
+			
+		}
+
+	    /// <summary> Takes a 16 Bit PCM sample.
 		/// </summary>
 		public override void  append(int channel, short value_Renamed)
 		{
 			buffer[bufferp[channel]] = value_Renamed;
 			bufferp[channel] += channels;
 		}
-		
-		public override void  appendSamples(int channel, float[] f)
+
+	    public override void  appendSamples(int channel, float[] f)
 		{
 			int pos = bufferp[channel];
 			
@@ -112,9 +106,8 @@ namespace MP3Sharp.Decode
 			
 			bufferp[channel] = pos;
 		}
-		
-		
-		/// <summary> Write the samples to the file (Random Acces).
+
+	    /// <summary> Write the samples to the file (Random Acces).
 		/// </summary>
 		public override void  write_buffer(int val)
 		{
@@ -122,20 +115,20 @@ namespace MP3Sharp.Decode
 			//for (int i = 0; i < channels; ++i) 
 			//	bufferp[i] = (short)i;
 		}
-		
-		public override void  close()
+
+	    public override void  close()
 		{
 		}
-		
-		/// <summary>*
+
+	    /// <summary>*
 		/// </summary>
 		public override void  clear_buffer()
 		{
 			for (int i = 0; i < channels; ++i)
 				bufferp[i] = (short) i;
 		}
-		
-		/// <summary>*
+
+	    /// <summary>*
 		/// </summary>
 		public override void  set_stop_flag()
 		{
