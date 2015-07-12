@@ -63,10 +63,10 @@ namespace MP3Sharp
         }
 
         // Inefficiently write one sample value
-        public override void append(int channel, short value)
+        public override void append(int channel, short valueRenamed)
         {
-            m_Buffer[m_Bufferp[channel]] = (byte)(value & 0xff);
-            m_Buffer[m_Bufferp[channel] + 1] = (byte)(value >> 8);
+            m_Buffer[m_Bufferp[channel]] = (byte)(valueRenamed & 0xff);
+            m_Buffer[m_Bufferp[channel] + 1] = (byte)(valueRenamed >> 8);
 
             m_Bufferp[channel] += CHANNELS * 2;
         }

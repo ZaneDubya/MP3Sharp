@@ -88,9 +88,9 @@ namespace MP3Sharp.Convert
         /// <summary>
         ///     Takes a 16 Bit PCM sample.
         /// </summary>
-        public override void append(int channel, short value_Renamed)
+        public override void append(int channel, short valueRenamed)
         {
-            buffer[bufferp[channel]] = value_Renamed;
+            buffer[bufferp[channel]] = valueRenamed;
             bufferp[channel] = (short) (bufferp[channel] + channels);
         }
 

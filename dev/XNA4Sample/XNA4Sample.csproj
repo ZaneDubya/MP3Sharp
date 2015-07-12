@@ -110,7 +110,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MP3Sharp\MP3Sharp.csproj">
+    <ProjectReference Include="..\MP3Sharp\MP3Sharp.csproj">
       <Project>{bf3b29f8-da04-4973-93db-144a5bbe2472}</Project>
       <Name>MP3Sharp</Name>
     </ProjectReference>

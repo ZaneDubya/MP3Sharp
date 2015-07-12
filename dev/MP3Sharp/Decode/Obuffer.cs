@@ -27,7 +27,7 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Takes a 16 Bit PCM sample.
         /// </summary>
-        public abstract void append(int channel, short value_Renamed);
+        public abstract void append(int channel, short valueRenamed);
 
         /// <summary>
         ///     Accepts 32 new PCM samples.

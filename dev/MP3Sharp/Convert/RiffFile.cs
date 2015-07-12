@@ -47,8 +47,8 @@ namespace MP3Sharp.Convert
             Fmode = RFM_UNKNOWN;
             m_RiffHeader = new RiffChunkHeader(this);
 
-            m_RiffHeader.ckID = FourCC("RIFF");
-            m_RiffHeader.ckSize = 0;
+            m_RiffHeader.CkId = FourCC("RIFF");
+            m_RiffHeader.CkSize = 0;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace MP3Sharp.Convert
         /// <summary>
         ///     Open a RIFF file.
         /// </summary>
-        public virtual int Open(string Filename, int NewMode)
+        public virtual int Open(string filename, int newMode)
         {
             int retcode = DDC_SUCCESS;
 
@@ -73,27 +73,27 @@ namespace MP3Sharp.Convert
 
             if (retcode == DDC_SUCCESS)
             {
-                switch (NewMode)
+                switch (newMode)
                 {
                     case RFM_WRITE:
                         try
                         {
-                            m_File = SupportClass.RandomAccessFileSupport.CreateRandomAccessFile(Filename, "rw");
+                            m_File = SupportClass.RandomAccessFileSupport.CreateRandomAccessFile(filename, "rw");
 
                             try
                             {
                                 // Write the RIFF header...
                                 // We will have to come back later and patch it!
                                 sbyte[] br = new sbyte[8];
-                                br[0] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 24)) & 0x000000FF);
-                                br[1] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 16)) & 0x000000FF);
-                                br[2] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 8)) & 0x000000FF);
-                                br[3] = (sbyte) (m_RiffHeader.ckID & 0x000000FF);
+                                br[0] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 24)) & 0x000000FF);
+                                br[1] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 16)) & 0x000000FF);
+                                br[2] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 8)) & 0x000000FF);
+                                br[3] = (sbyte) (m_RiffHeader.CkId & 0x000000FF);
 
-                                sbyte br4 = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 24)) & 0x000000FF);
-                                sbyte br5 = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 16)) & 0x000000FF);
-                                sbyte br6 = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 8)) & 0x000000FF);
-                                sbyte br7 = (sbyte) (m_RiffHeader.ckSize & 0x000000FF);
+                                sbyte br4 = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 24)) & 0x000000FF);
+                                sbyte br5 = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 16)) & 0x000000FF);
+                                sbyte br6 = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 8)) & 0x000000FF);
+                                sbyte br7 = (sbyte) (m_RiffHeader.CkSize & 0x000000FF);
 
                                 br[4] = br7;
                                 br[5] = br6;
@@ -119,17 +119,17 @@ namespace MP3Sharp.Convert
                     case RFM_READ:
                         try
                         {
-                            m_File = SupportClass.RandomAccessFileSupport.CreateRandomAccessFile(Filename, "r");
+                            m_File = SupportClass.RandomAccessFileSupport.CreateRandomAccessFile(filename, "r");
                             try
                             {
                                 // Try to read the RIFF header...   				   
                                 sbyte[] br = new sbyte[8];
                                 SupportClass.ReadInput(m_File, ref br, 0, 8);
                                 Fmode = RFM_READ;
-                                m_RiffHeader.ckID = ((br[0] << 24) & (int) SupportClass.Identity(0xFF000000)) |
+                                m_RiffHeader.CkId = ((br[0] << 24) & (int) SupportClass.Identity(0xFF000000)) |
                                                     ((br[1] << 16) & 0x00FF0000) | ((br[2] << 8) & 0x0000FF00) |
                                                     (br[3] & 0x000000FF);
-                                m_RiffHeader.ckSize = ((br[4] << 24) & (int) SupportClass.Identity(0xFF000000)) |
+                                m_RiffHeader.CkSize = ((br[4] << 24) & (int) SupportClass.Identity(0xFF000000)) |
                                                       ((br[5] << 16) & 0x00FF0000) | ((br[6] << 8) & 0x0000FF00) |
                                                       (br[7] & 0x000000FF);
                             }
@@ -157,7 +157,7 @@ namespace MP3Sharp.Convert
         /// <summary>
         ///     Open a RIFF STREAM.
         /// </summary>
-        public virtual int Open(Stream stream, int NewMode)
+        public virtual int Open(Stream stream, int newMode)
         {
             int retcode = DDC_SUCCESS;
 
@@ -168,7 +168,7 @@ namespace MP3Sharp.Convert
 
             if (retcode == DDC_SUCCESS)
             {
-                switch (NewMode)
+                switch (newMode)
                 {
                     case RFM_WRITE:
                         try
@@ -181,15 +181,15 @@ namespace MP3Sharp.Convert
                                 // Write the RIFF header...
                                 // We will have to come back later and patch it!
                                 sbyte[] br = new sbyte[8];
-                                br[0] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 24)) & 0x000000FF);
-                                br[1] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 16)) & 0x000000FF);
-                                br[2] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 8)) & 0x000000FF);
-                                br[3] = (sbyte) (m_RiffHeader.ckID & 0x000000FF);
+                                br[0] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 24)) & 0x000000FF);
+                                br[1] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 16)) & 0x000000FF);
+                                br[2] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 8)) & 0x000000FF);
+                                br[3] = (sbyte) (m_RiffHeader.CkId & 0x000000FF);
 
-                                sbyte br4 = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 24)) & 0x000000FF);
-                                sbyte br5 = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 16)) & 0x000000FF);
-                                sbyte br6 = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 8)) & 0x000000FF);
-                                sbyte br7 = (sbyte) (m_RiffHeader.ckSize & 0x000000FF);
+                                sbyte br4 = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 24)) & 0x000000FF);
+                                sbyte br5 = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 16)) & 0x000000FF);
+                                sbyte br6 = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 8)) & 0x000000FF);
+                                sbyte br7 = (sbyte) (m_RiffHeader.CkSize & 0x000000FF);
 
                                 br[4] = br7;
                                 br[5] = br6;
@@ -223,10 +223,10 @@ namespace MP3Sharp.Convert
                                 sbyte[] br = new sbyte[8];
                                 SupportClass.ReadInput(m_File, ref br, 0, 8);
                                 Fmode = RFM_READ;
-                                m_RiffHeader.ckID = ((br[0] << 24) & (int) SupportClass.Identity(0xFF000000)) |
+                                m_RiffHeader.CkId = ((br[0] << 24) & (int) SupportClass.Identity(0xFF000000)) |
                                                     ((br[1] << 16) & 0x00FF0000) | ((br[2] << 8) & 0x0000FF00) |
                                                     (br[3] & 0x000000FF);
-                                m_RiffHeader.ckSize = ((br[4] << 24) & (int) SupportClass.Identity(0xFF000000)) |
+                                m_RiffHeader.CkSize = ((br[4] << 24) & (int) SupportClass.Identity(0xFF000000)) |
                                                       ((br[5] << 16) & 0x00FF0000) | ((br[6] << 8) & 0x0000FF00) |
                                                       (br[7] & 0x000000FF);
                             }
@@ -254,7 +254,7 @@ namespace MP3Sharp.Convert
         /// <summary>
         ///     Write NumBytes data.
         /// </summary>
-        public virtual int Write(sbyte[] Data, int NumBytes)
+        public virtual int Write(sbyte[] data, int numBytes)
         {
             if (Fmode != RFM_WRITE)
             {
@@ -262,28 +262,28 @@ namespace MP3Sharp.Convert
             }
             try
             {
-                m_File.Write(SupportClass.ToByteArray(Data), 0, NumBytes);
+                m_File.Write(SupportClass.ToByteArray(data), 0, numBytes);
                 Fmode = RFM_WRITE;
             }
             catch
             {
                 return DDC_FILE_ERROR;
             }
-            m_RiffHeader.ckSize += NumBytes;
+            m_RiffHeader.CkSize += numBytes;
             return DDC_SUCCESS;
         }
 
         /// <summary>
         ///     Write NumBytes data.
         /// </summary>
-        public virtual int Write(short[] Data, int NumBytes)
+        public virtual int Write(short[] data, int numBytes)
         {
-            sbyte[] theData = new sbyte[NumBytes];
+            sbyte[] theData = new sbyte[numBytes];
             int yc = 0;
-            for (int y = 0; y < NumBytes; y = y + 2)
+            for (int y = 0; y < numBytes; y = y + 2)
             {
-                theData[y] = (sbyte) (Data[yc] & 0x00FF);
-                theData[y + 1] = (sbyte) ((SupportClass.URShift(Data[yc++], 8)) & 0x00FF);
+                theData[y] = (sbyte)(data[yc] & 0x00FF);
+                theData[y + 1] = (sbyte)((SupportClass.URShift(data[yc++], 8)) & 0x00FF);
             }
             if (Fmode != RFM_WRITE)
             {
@@ -291,32 +291,32 @@ namespace MP3Sharp.Convert
             }
             try
             {
-                m_File.Write(SupportClass.ToByteArray(theData), 0, NumBytes);
+                m_File.Write(SupportClass.ToByteArray(theData), 0, numBytes);
                 Fmode = RFM_WRITE;
             }
             catch
             {
                 return DDC_FILE_ERROR;
             }
-            m_RiffHeader.ckSize += NumBytes;
+            m_RiffHeader.CkSize += numBytes;
             return DDC_SUCCESS;
         }
 
         /// <summary>
         ///     Write NumBytes data.
         /// </summary>
-        public virtual int Write(RiffChunkHeader Triff_header, int NumBytes)
+        public virtual int Write(RiffChunkHeader riffHeader, int numBytes)
         {
             sbyte[] br = new sbyte[8];
-            br[0] = (sbyte) ((SupportClass.URShift(Triff_header.ckID, 24)) & 0x000000FF);
-            br[1] = (sbyte) ((SupportClass.URShift(Triff_header.ckID, 16)) & 0x000000FF);
-            br[2] = (sbyte) ((SupportClass.URShift(Triff_header.ckID, 8)) & 0x000000FF);
-            br[3] = (sbyte) (Triff_header.ckID & 0x000000FF);
+            br[0] = (sbyte) ((SupportClass.URShift(riffHeader.CkId, 24)) & 0x000000FF);
+            br[1] = (sbyte) ((SupportClass.URShift(riffHeader.CkId, 16)) & 0x000000FF);
+            br[2] = (sbyte) ((SupportClass.URShift(riffHeader.CkId, 8)) & 0x000000FF);
+            br[3] = (sbyte) (riffHeader.CkId & 0x000000FF);
 
-            sbyte br4 = (sbyte) ((SupportClass.URShift(Triff_header.ckSize, 24)) & 0x000000FF);
-            sbyte br5 = (sbyte) ((SupportClass.URShift(Triff_header.ckSize, 16)) & 0x000000FF);
-            sbyte br6 = (sbyte) ((SupportClass.URShift(Triff_header.ckSize, 8)) & 0x000000FF);
-            sbyte br7 = (sbyte) (Triff_header.ckSize & 0x000000FF);
+            sbyte br4 = (sbyte) ((SupportClass.URShift(riffHeader.CkSize, 24)) & 0x000000FF);
+            sbyte br5 = (sbyte) ((SupportClass.URShift(riffHeader.CkSize, 16)) & 0x000000FF);
+            sbyte br6 = (sbyte) ((SupportClass.URShift(riffHeader.CkSize, 8)) & 0x000000FF);
+            sbyte br7 = (sbyte) (riffHeader.CkSize & 0x000000FF);
 
             br[4] = br7;
             br[5] = br6;
@@ -329,23 +329,23 @@ namespace MP3Sharp.Convert
             }
             try
             {
-                m_File.Write(SupportClass.ToByteArray(br), 0, NumBytes);
+                m_File.Write(SupportClass.ToByteArray(br), 0, numBytes);
                 Fmode = RFM_WRITE;
             }
             catch
             {
                 return DDC_FILE_ERROR;
             }
-            m_RiffHeader.ckSize += NumBytes;
+            m_RiffHeader.CkSize += numBytes;
             return DDC_SUCCESS;
         }
 
         /// <summary>
         ///     Write NumBytes data.
         /// </summary>
-        public virtual int Write(short Data, int NumBytes)
+        public virtual int Write(short data, int numBytes)
         {
-            short theData = Data; //(short) (((SupportClass.URShift(Data, 8)) & 0x00FF) | ((Data << 8) & 0xFF00));
+            short theData = data; //(short) (((SupportClass.URShift(data, 8)) & 0x00FF) | ((Data << 8) & 0xFF00));
             if (Fmode != RFM_WRITE)
             {
                 return DDC_INVALID_CALL;
@@ -360,49 +360,43 @@ namespace MP3Sharp.Convert
             {
                 return DDC_FILE_ERROR;
             }
-            m_RiffHeader.ckSize += NumBytes;
+            m_RiffHeader.CkSize += numBytes;
             return DDC_SUCCESS;
         }
 
         /// <summary>
         ///     Write NumBytes data.
         /// </summary>
-        public virtual int Write(int Data, int NumBytes)
+        public virtual int Write(int data, int numBytes)
         {
-            short theDataL = (short) ((SupportClass.URShift(Data, 16)) & 0x0000FFFF);
-            short theDataR = (short) (Data & 0x0000FFFF);
-            short theDataLI = (short) (((SupportClass.URShift(theDataL, 8)) & 0x00FF) | ((theDataL << 8) & 0xFF00));
-            short theDataRI = (short) (((SupportClass.URShift(theDataR, 8)) & 0x00FF) | ((theDataR << 8) & 0xFF00));
-            int theData = Data;
-            //((theDataRI << 16) & (int) SupportClass.Identity(0xFFFF0000)) | (theDataLI & 0x0000FFFF);
+            int theData = data;
             if (Fmode != RFM_WRITE)
             {
                 return DDC_INVALID_CALL;
             }
             try
             {
-                BinaryWriter temp_BinaryWriter;
-                temp_BinaryWriter = new BinaryWriter(m_File);
-                temp_BinaryWriter.Write(theData);
+                BinaryWriter tempBinaryWriter = new BinaryWriter(m_File);
+                tempBinaryWriter.Write(theData);
                 Fmode = RFM_WRITE;
             }
             catch
             {
                 return DDC_FILE_ERROR;
             }
-            m_RiffHeader.ckSize += NumBytes;
+            m_RiffHeader.CkSize += numBytes;
             return DDC_SUCCESS;
         }
 
         /// <summary>
         ///     Read NumBytes data.
         /// </summary>
-        public virtual int Read(sbyte[] Data, int NumBytes)
+        public virtual int Read(sbyte[] data, int numBytes)
         {
             int retcode = DDC_SUCCESS;
             try
             {
-                SupportClass.ReadInput(m_File, ref Data, 0, NumBytes);
+                SupportClass.ReadInput(m_File, ref data, 0, numBytes);
             }
             catch
             {
@@ -414,16 +408,15 @@ namespace MP3Sharp.Convert
         /// <summary>
         ///     Expect NumBytes data.
         /// </summary>
-        public virtual int Expect(string Data, int NumBytes)
+        public virtual int Expect(string data, int numBytes)
         {
-            sbyte target = 0;
             int cnt = 0;
             try
             {
-                while ((NumBytes--) != 0)
+                while ((numBytes--) != 0)
                 {
-                    target = (sbyte) m_File.ReadByte();
-                    if (target != Data[cnt++])
+                    sbyte target = (sbyte) m_File.ReadByte();
+                    if (target != data[cnt++])
                         return DDC_FILE_ERROR;
                 }
             }
@@ -451,15 +444,15 @@ namespace MP3Sharp.Convert
                         try
                         {
                             sbyte[] br = new sbyte[8];
-                            br[0] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 24)) & 0x000000FF);
-                            br[1] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 16)) & 0x000000FF);
-                            br[2] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckID, 8)) & 0x000000FF);
-                            br[3] = (sbyte) (m_RiffHeader.ckID & 0x000000FF);
+                            br[0] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 24)) & 0x000000FF);
+                            br[1] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 16)) & 0x000000FF);
+                            br[2] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkId, 8)) & 0x000000FF);
+                            br[3] = (sbyte) (m_RiffHeader.CkId & 0x000000FF);
 
-                            br[7] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 24)) & 0x000000FF);
-                            br[6] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 16)) & 0x000000FF);
-                            br[5] = (sbyte) ((SupportClass.URShift(m_RiffHeader.ckSize, 8)) & 0x000000FF);
-                            br[4] = (sbyte) (m_RiffHeader.ckSize & 0x000000FF);
+                            br[7] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 24)) & 0x000000FF);
+                            br[6] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 16)) & 0x000000FF);
+                            br[5] = (sbyte) ((SupportClass.URShift(m_RiffHeader.CkSize, 8)) & 0x000000FF);
+                            br[4] = (sbyte) (m_RiffHeader.CkSize & 0x000000FF);
                             m_File.Write(SupportClass.ToByteArray(br), 0, 8);
                             m_File.Close();
                         }
@@ -510,7 +503,7 @@ namespace MP3Sharp.Convert
         /// <summary>
         ///     Write Data to specified offset.
         /// </summary>
-        public virtual int Backpatch(long FileOffset, RiffChunkHeader Data, int NumBytes)
+        public virtual int Backpatch(long fileOffset, RiffChunkHeader data, int numBytes)
         {
             if (m_File == null)
             {
@@ -518,16 +511,16 @@ namespace MP3Sharp.Convert
             }
             try
             {
-                m_File.Seek(FileOffset, SeekOrigin.Begin);
+                m_File.Seek(fileOffset, SeekOrigin.Begin);
             }
             catch
             {
                 return DDC_FILE_ERROR;
             }
-            return Write(Data, NumBytes);
+            return Write(data, numBytes);
         }
 
-        public virtual int Backpatch(long FileOffset, sbyte[] Data, int NumBytes)
+        public virtual int Backpatch(long fileOffset, sbyte[] data, int numBytes)
         {
             if (m_File == null)
             {
@@ -535,13 +528,13 @@ namespace MP3Sharp.Convert
             }
             try
             {
-                m_File.Seek(FileOffset, SeekOrigin.Begin);
+                m_File.Seek(fileOffset, SeekOrigin.Begin);
             }
             catch
             {
                 return DDC_FILE_ERROR;
             }
-            return Write(Data, NumBytes);
+            return Write(data, numBytes);
         }
 
         /// <summary>
@@ -596,10 +589,10 @@ namespace MP3Sharp.Convert
         /// <summary>
         ///     Fill the header.
         /// </summary>
-        public static int FourCC(string ChunkName)
+        public static int FourCC(string chunkName)
         {
             sbyte[] p = {0x20, 0x20, 0x20, 0x20};
-            SupportClass.GetSBytesFromString(ChunkName, 0, 4, ref p, 0);
+            SupportClass.GetSBytesFromString(chunkName, 0, 4, ref p, 0);
             int ret = (((p[0] << 24) & (int) SupportClass.Identity(0xFF000000)) | ((p[1] << 16) & 0x00FF0000) |
                        ((p[2] << 8) & 0x0000FF00) | (p[3] & 0x000000FF));
             return ret;
@@ -607,23 +600,23 @@ namespace MP3Sharp.Convert
 
         internal class RiffChunkHeader
         {
-            public int ckID; // Four-character chunk ID
-            public int ckSize;
-            private RiffFile enclosingInstance;
+            public int CkId; // Four-character chunk ID
+            public int CkSize;
+            private RiffFile m_EnclosingInstance;
             // Length of data in chunk
             public RiffChunkHeader(RiffFile enclosingInstance)
             {
                 InitBlock(enclosingInstance);
             }
 
-            public RiffFile Enclosing_Instance
+            public RiffFile EnclosingInstance
             {
-                get { return enclosingInstance; }
+                get { return m_EnclosingInstance; }
             }
 
             private void InitBlock(RiffFile enclosingInstance)
             {
-                this.enclosingInstance = enclosingInstance;
+                this.m_EnclosingInstance = enclosingInstance;
             }
         }
     }
