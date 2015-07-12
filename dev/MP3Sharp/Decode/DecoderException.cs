@@ -26,12 +26,12 @@ namespace MP3Sharp.Decode
     {
         private int m_ErrorCode;
 
-        public DecoderException(string msg, Exception t) : base(msg, t)
+        public DecoderException(string msg, Exception ex) : base(msg, ex)
         {
             InitBlock();
         }
 
-        public DecoderException(int errorcode, Exception t) : this(GetErrorString(errorcode), t)
+        public DecoderException(int errorcode, Exception ex) : this(GetErrorString(errorcode), ex)
         {
             InitBlock();
             m_ErrorCode = errorcode;

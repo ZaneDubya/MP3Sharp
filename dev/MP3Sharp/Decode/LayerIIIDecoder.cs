@@ -21,8 +21,6 @@ namespace MP3Sharp.Decode
 {
     /// <summary>
     ///     Class Implementing Layer 3 Decoder.
-    ///     *
-    ///     @since 0.0
     /// </summary>
     internal sealed class LayerIIIDecoder : IFrameDecoder
     {
@@ -2697,12 +2695,6 @@ namespace MP3Sharp.Decode
             }
         }
 
-        /// <summary>
-        ///     ***********************************************************
-        /// </summary>
-        /// <summary>
-        ///     ***********************************************************
-        /// </summary>
         internal class Sftable
         {
             private LayerIIIDecoder enclosingInstance;
