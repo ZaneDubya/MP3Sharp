@@ -1,5 +1,5 @@
-// /***************************************************************************
-//  * JavaLayerError.cs
+﻿// /***************************************************************************
+//  * SoundFormat.cs
 //  * Copyright (c) 2015 the authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
@@ -14,16 +14,21 @@
 //  *
 //  ***************************************************************************/
 
-using System;
-
-namespace MP3Sharp.Decode
+namespace MP3Sharp
 {
     /// <summary>
-    ///     Work in progress.
-    ///     API usage errors may be handled by throwing an instance of this
-    ///     class, as per JMF 2.0.
+    ///     Describes sound formats that can be produced by the Mp3Stream class.
     /// </summary>
-    internal class JavaLayerError : ApplicationException
+    public enum SoundFormat
     {
+        /// <summary>
+        ///     PCM encoded, 16-bit Mono sound format.
+        /// </summary>
+        Pcm16BitMono,
+
+        /// <summary>
+        ///     PCM encoded, 16-bit Stereo sound format.
+        /// </summary>
+        Pcm16BitStereo
     }
 }

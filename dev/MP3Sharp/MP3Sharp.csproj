@@ -70,6 +70,8 @@
     <Compile Include="Decode\OutputChannels.cs" />
     <Compile Include="Decode\SampleBuffer.cs" />
     <Compile Include="Decode\Source.cs" />
+    <Compile Include="OBuffer16BitStereo.cs" />
+    <Compile Include="SoundFormat.cs" />
     <Compile Include="Support\SupportClass.cs" />
     <Compile Include="Decode\SynthesisFilter.cs" />
     <Compile Include="MP3Stream.cs" />

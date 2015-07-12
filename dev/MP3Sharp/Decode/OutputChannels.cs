@@ -14,11 +14,7 @@
 //  *
 //  ***************************************************************************/
 
-#region usings
-
 using System;
-
-#endregion
 
 namespace MP3Sharp.Decode
 {

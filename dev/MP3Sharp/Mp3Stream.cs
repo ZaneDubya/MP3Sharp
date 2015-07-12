@@ -17,6 +17,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using MP3Sharp.Decode;
 
 namespace MP3Sharp
 {
@@ -26,22 +27,16 @@ namespace MP3Sharp
     /// </summary>
     public class MP3Stream : Stream
     {
-        /// <summary>
-        ///     Used to interface with javaZoom.
-        /// </summary>
-        private readonly Decode.Bitstream JZBitStream;
-
-        /// <summary>
-        ///     Used to interface with javaZoom.
-        /// </summary>
-        private readonly Decode.Decoder JZDecoder = new Decode.Decoder(Decode.Decoder.DefaultParams);
-
-        private readonly OBuffer16BitStereo QueueOBuffer;
-        private readonly Stream SourceStream;
-        private int BackStreamByteCountRep;
-        private short ChannelCountRep = -1;
+        // Used to interface with JavaZoom code.
+        private readonly Decode.Bitstream m_BitStream;
+        private readonly Decoder m_Decoder = new Decode.Decoder(Decode.Decoder.DefaultParams);
+        // local variables.
+        private readonly OBuffer16BitStereo m_QueueOBuffer;
+        private readonly Stream m_SourceStream;
+        private int m_BackStreamByteCountRep = 0;
+        private short m_ChannelCountRep = -1;
         protected SoundFormat FormatRep = SoundFormat.Pcm16BitStereo;
-        private int FrequencyRep = -1;
+        private int m_FrequencyRep = -1;
 
         /// <summary>
         ///     Creates a new stream instance using the provided filename, and the default chunk size of 4096 bytes.
@@ -75,36 +70,36 @@ namespace MP3Sharp
         public MP3Stream(Stream sourceStream, int chunkSize)
         {
             FormatRep = SoundFormat.Pcm16BitStereo;
-            SourceStream = sourceStream;
-            JZBitStream = new Decode.Bitstream(new Decode.BackStream(SourceStream, chunkSize));
-            QueueOBuffer = new OBuffer16BitStereo();
+            m_SourceStream = sourceStream;
+            m_BitStream = new Bitstream(new BackStream(m_SourceStream, chunkSize));
+            m_QueueOBuffer = new OBuffer16BitStereo();
 
-            JZDecoder.OutputBuffer = QueueOBuffer;
+            m_Decoder.OutputBuffer = m_QueueOBuffer;
         }
 
         public int ChunkSize
         {
-            get { return BackStreamByteCountRep; }
+            get { return m_BackStreamByteCountRep; }
         }
 
         public override bool CanRead
         {
-            get { return SourceStream.CanRead; }
+            get { return m_SourceStream.CanRead; }
         }
 
         public override bool CanSeek
         {
-            get { return SourceStream.CanSeek; }
+            get { return m_SourceStream.CanSeek; }
         }
 
         public override bool CanWrite
         {
-            get { return SourceStream.CanWrite; }
+            get { return m_SourceStream.CanWrite; }
         }
 
         public override long Length
         {
-            get { return SourceStream.Length; }
+            get { return m_SourceStream.Length; }
         }
 
         /// <summary>
@@ -114,8 +109,8 @@ namespace MP3Sharp
         /// </summary>
         public override long Position
         {
-            get { return SourceStream.Position; }
-            set { SourceStream.Position = value; }
+            get { return m_SourceStream.Position; }
+            set { m_SourceStream.Position = value; }
         }
 
         /// <summary>
@@ -126,7 +121,7 @@ namespace MP3Sharp
         /// </summary>
         public int Frequency
         {
-            get { return FrequencyRep; }
+            get { return m_FrequencyRep; }
         }
 
         /// <summary>
@@ -137,7 +132,7 @@ namespace MP3Sharp
         /// </summary>
         public short ChannelCount
         {
-            get { return ChannelCountRep; }
+            get { return m_ChannelCountRep; }
         }
 
         /// <summary>
@@ -155,7 +150,7 @@ namespace MP3Sharp
 
         public override void Flush()
         {
-            SourceStream.Flush();
+            m_SourceStream.Flush();
         }
 
         /// <summary>
@@ -163,7 +158,7 @@ namespace MP3Sharp
         /// </summary>
         public override long Seek(long pos, SeekOrigin origin)
         {
-            return SourceStream.Seek(pos, origin);
+            return m_SourceStream.Seek(pos, origin);
         }
 
         /// <summary>
@@ -210,14 +205,14 @@ namespace MP3Sharp
             int bytesRead = 0;
             while (true)
             {
-                if (QueueOBuffer.bytesLeft <= 0)
+                if (m_QueueOBuffer.BytesLeft <= 0)
                 {
                     if (!ReadFrame()) // out of frames or end of stream?
                         break;
                 }
 
                 // Copy as much as we can from the current buffer:
-                bytesRead += QueueOBuffer.Read(buffer,
+                bytesRead += m_QueueOBuffer.Read(buffer,
                     offset + bytesRead,
                     count - bytesRead);
 
@@ -226,26 +221,6 @@ namespace MP3Sharp
             }
             return bytesRead;
         }
-
-        // 			bool aFrameWasRead = true;
-        // 			while (QueueOBuffer.QueuedByteCount < count && aFrameWasRead)
-        // 			{
-        // 				aFrameWasRead = ReadFrame();
-        // 			}
-        // 			int bytesToReturn = Math.Min(QueueOBuffer.QueuedByteCount, count);
-        // 			int bytesRead = 0;
-        // 			switch(Format)
-        // 			{
-        // 				case SoundFormat.Pcm16BitMono:
-        // 					bytesRead = QueueOBuffer.DequeueAs16BitPcmMono(buffer, offset, bytesToReturn);
-        // 					break;
-        // 				case SoundFormat.Pcm16BitStereo:
-        // 					bytesRead = QueueOBuffer.DequeueAs16BitPcmStereo(buffer, offset, bytesToReturn);
-        // 					break;
-        // 				default:
-        // 					throw new ApplicationException("Unknown sound format in Mp3Stream Read call: " + Format);
-        // 			}
-        // 			return bytesRead;
 
         /// <summary>
         ///     Reads a single byte of the PCM-encoded stream.
@@ -256,7 +231,7 @@ namespace MP3Sharp
         /// </summary>
         public override void Close()
         {
-            JZBitStream.close(); // This should close SourceStream as well.
+            m_BitStream.close(); // This should close SourceStream as well.
             // SourceStream.Close();
         }
 
@@ -267,27 +242,27 @@ namespace MP3Sharp
         private bool ReadFrame()
         {
             // Read a frame from the bitstream.
-            Decode.Header header = JZBitStream.readFrame();
+            Decode.Header header = m_BitStream.readFrame();
             if (header == null)
                 return false;
 
             try
             {
                 // Set the channel count and frequency values for the stream.
-                if (header.mode() == Decode.Header.SINGLE_CHANNEL)
-                    ChannelCountRep = (short) 1;
+                if (header.mode() == Header.SINGLE_CHANNEL)
+                    m_ChannelCountRep = 1;
                 else
-                    ChannelCountRep = (short) 2;
+                    m_ChannelCountRep = 2;
 
-                FrequencyRep = header.frequency();
+                m_FrequencyRep = header.frequency();
 
                 // Decode the frame.
-                Decode.Obuffer decoderOutput = JZDecoder.decodeFrame(header, JZBitStream);
+                Obuffer decoderOutput = m_Decoder.decodeFrame(header, m_BitStream);
 
                 // Apparently, the way JavaZoom sets the output buffer 
                 // on the decoder is a bit dodgy. Even though
                 // this exception should never happen, we test to be sure.
-                if (decoderOutput != QueueOBuffer)
+                if (decoderOutput != m_QueueOBuffer)
                     throw new ApplicationException("Output buffers are different.");
 
                 // And we're done.
@@ -295,160 +270,13 @@ namespace MP3Sharp
             finally
             {
                 // No resource leaks please!
-                JZBitStream.closeFrame();
+                m_BitStream.CloseFrame();
             }
             return true;
         }
     }
 
-    /// <summary>
-    ///     Describes sound formats that can be produced by the Mp3Stream class.
-    /// </summary>
-    public enum SoundFormat
-    {
-        /// <summary>
-        ///     PCM encoded, 16-bit Mono sound format.
-        /// </summary>
-        Pcm16BitMono,
 
-        /// <summary>
-        ///     PCM encoded, 16-bit Stereo sound format.
-        /// </summary>
-        Pcm16BitStereo,
-    }
 
-    /// <summary>
-    ///     Internal class used to queue samples that are being obtained
-    ///     from an Mp3 stream. This merges the old mp3stream OBuffer with
-    ///     the javazoom SampleBuffer code for the highest efficiency...
-    ///     well, not the highest possible. The highest I'm willing to sweat
-    ///     over. --trs
-    ///     This class handles stereo 16-bit data! Switch it out if you want mono or something.
-    /// </summary>
-    internal class OBuffer16BitStereo
-        : Decode.Obuffer
-    {
-        // This is stereo!
-        private static readonly int CHANNELS = 2;
-        // Write offset used in append_bytes
-        private readonly byte[] buffer = new byte[OBUFFERSIZE*2]; // all channels interleaved
-        private readonly int[] bufferp = new int[MAXCHANNELS]; // offset in each channel not same!
-        // end marker, one past end of array. Same as bufferp[0], but
-        // without the array bounds check.
-        private int _end;
-        // Read offset used to read from the stream, in bytes.
-        private int _offset;
 
-        public OBuffer16BitStereo()
-        {
-            // Initialize the buffer pointers
-            clear_buffer();
-        }
-
-        public int bytesLeft
-        {
-            get
-            {
-                // Note: should be Math.Max( bufferp[0], bufferp[1]-1 ). 
-                // Heh.
-                return _end - _offset;
-
-                // This results in a measurable performance improvement, but
-                // is actually incorrect. Is there a trick to optimize this?
-                // return (OBUFFERSIZE * 2) - _offset;
-            }
-        }
-
-        /// Copies as much of this buffer as will fit into hte output
-        /// buffer.
-        /// 
-        /// \return The amount of bytes copied.
-        public int Read(byte[] buffer_out, int offset, int count)
-        {
-            int remaining = bytesLeft;
-            int copySize;
-            if (count > remaining)
-            {
-                copySize = remaining;
-                Debug.Assert(copySize%(2*CHANNELS) == 0);
-            }
-            else
-            {
-                // Copy an even number of sample frames
-                int remainder = count%(2*CHANNELS);
-                copySize = count - remainder;
-            }
-
-            Array.Copy(buffer, _offset, buffer_out, offset, copySize);
-
-            _offset += copySize;
-            return copySize;
-        }
-
-        // Inefficiently write one sample value
-        public override void append(int channel, short value)
-        {
-            buffer[bufferp[channel]] = (byte) (value & 0xff);
-            buffer[bufferp[channel] + 1] = (byte) (value >> 8);
-
-            bufferp[channel] += CHANNELS*2;
-        }
-
-        // efficiently write 32 samples
-        public override void appendSamples(int channel, float[] f)
-        {
-            // Always, 32 samples are appended
-            int pos = bufferp[channel];
-
-            short s;
-            float fs;
-            for (int i = 0; i < 32; i++)
-            {
-                fs = f[i];
-                if (fs > 32767.0f) // can this happen?
-                    fs = 32767.0f;
-                else if (fs < -32767.0f)
-                    fs = -32767.0f;
-
-                int sample = (int) fs;
-                buffer[pos] = (byte) (sample & 0xff);
-                buffer[pos + 1] = (byte) (sample >> 8);
-
-                pos += CHANNELS*2;
-            }
-
-            bufferp[channel] = pos;
-        }
-
-        /// <summary>
-        ///     This implementation does not clear the buffer.
-        /// </summary>
-        public override void clear_buffer()
-        {
-            _offset = 0;
-            _end = 0;
-
-            for (int i = 0; i < CHANNELS; i++)
-                bufferp[i] = i*2; // two bytes per channel
-        }
-
-        public override void set_stop_flag()
-        {
-        }
-
-        public override void write_buffer(int val)
-        {
-            _offset = 0;
-
-            // speed optimization - save end marker, and avoid
-            // array access at read time. Can you believe this saves
-            // like 1-2% of the cpu on a PIII? I guess allocating
-            // that temporary "new int(0)" is expensive, too.
-            _end = bufferp[0];
-        }
-
-        public override void close()
-        {
-        }
-    }
 }

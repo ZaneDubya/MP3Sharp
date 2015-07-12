@@ -25,7 +25,7 @@ namespace MP3Sharp.Decode
     /// </author>
     internal class JavaLayerUtils
     {
-        private static JavaLayerHook hook = null;
+        private static JavaLayerHook hook;
 
         /// <summary>
         ///     Sets the system-wide JavaLayer hook.

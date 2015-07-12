@@ -22,10 +22,10 @@ namespace MP3Sharp.Decode
     [Serializable]
     internal class CircularByteBuffer
     {
-        private byte[] dataArray = null;
-        private int index = 0;
+        private byte[] dataArray;
+        private int index;
         private int length = 1;
-        private int numValid = 0;
+        private int numValid;
 
         public CircularByteBuffer(int size)
         {
@@ -205,7 +205,7 @@ namespace MP3Sharp.Decode
         private readonly CircularByteBuffer COB;
         private readonly Stream S;
         private readonly byte[] Temp;
-        private int NumForwardBytesInBuffer = 0;
+        private int NumForwardBytesInBuffer;
 
         public BackStream(Stream s, int backBufferSize)
         {

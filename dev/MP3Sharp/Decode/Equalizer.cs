@@ -42,7 +42,7 @@ namespace MP3Sharp.Decode
         ///     Equalizer setting to denote that a given band will not be
         ///     present in the output signal.
         /// </summary>
-        public static readonly float BAND_NOT_PRESENT = float.NegativeInfinity;
+        public const float BAND_NOT_PRESENT = float.NegativeInfinity;
 
         public static readonly Equalizer PASS_THRU_EQ = new Equalizer();
         private float[] settings;

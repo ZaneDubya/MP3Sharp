@@ -14,12 +14,8 @@
 //  *
 //  ***************************************************************************/
 
-#region usings
-
 using System;
 using MP3Sharp.Support;
-
-#endregion
 
 namespace MP3Sharp.Decode
 {
@@ -46,14 +42,13 @@ namespace MP3Sharp.Decode
 
         private static readonly int[][] slen =
         {
-            new int[] {0, 0, 0, 0, 3, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4},
-            new int[] {0, 1, 2, 3, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3, 2, 3}
+            new[] {0, 0, 0, 0, 3, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4},
+            new[] {0, 1, 2, 3, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3, 2, 3}
         };
 
-        public static readonly int[] pretab = new int[]
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 2, 0};
+        public static readonly int[] pretab = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 2, 0};
 
-        public static readonly float[] two_to_negative_half_pow = new float[]
+        public static readonly float[] two_to_negative_half_pow =
         {
             1.0000000000e+00f, 7.0710678119e-01f, 5.0000000000e-01f, 3.5355339059e-01f, 2.5000000000e-01f,
             1.7677669530e-01f, 1.2500000000e-01f, 8.8388347648e-02f, 6.2500000000e-02f, 4.4194173824e-02f,
@@ -74,7 +69,7 @@ namespace MP3Sharp.Decode
 
         public static readonly float[][] io =
         {
-            new float[]
+            new[]
             {
                 1.0000000000e+00f, 8.4089641526e-01f, 7.0710678119e-01f, 5.9460355751e-01f, 5.0000000001e-01f,
                 4.2044820763e-01f, 3.5355339060e-01f, 2.9730177876e-01f, 2.5000000001e-01f, 2.1022410382e-01f,
@@ -84,7 +79,7 @@ namespace MP3Sharp.Decode
                 1.3139006489e-02f, 1.1048543457e-02f, 9.2906805866e-03f, 7.8125000006e-03f, 6.5695032447e-03f,
                 5.5242717285e-03f, 4.6453402934e-03f
             },
-            new float[]
+            new[]
             {
                 1.0000000000e+00f, 7.0710678119e-01f, 5.0000000000e-01f, 3.5355339060e-01f, 2.5000000000e-01f,
                 1.7677669530e-01f, 1.2500000000e-01f, 8.8388347650e-02f, 6.2500000001e-02f, 4.4194173825e-02f,
@@ -96,7 +91,7 @@ namespace MP3Sharp.Decode
             }
         };
 
-        public static readonly float[] TAN12 = new float[]
+        public static readonly float[] TAN12 =
         {
             0.0f, 0.26794919f, 0.57735027f, 1.0f, 1.73205081f, 3.73205081f, 9.9999999e10f, -3.73205081f, -1.73205081f,
             -1.0f, -0.57735027f, -0.26794919f, 0.0f, 0.26794919f, 0.57735027f, 1.0f
@@ -399,13 +394,13 @@ namespace MP3Sharp.Decode
 		570,547,559,571,548,560,572,549,561,573,550,562,574,551,563,575}
 		};*/
 
-        private static readonly float[] cs = new float[]
+        private static readonly float[] cs =
         {
             0.857492925712f, 0.881741997318f, 0.949628649103f, 0.983314592492f, 0.995517816065f, 0.999160558175f,
             0.999899195243f, 0.999993155067f
         };
 
-        private static readonly float[] ca = new float[]
+        private static readonly float[] ca =
         {
             -0.5144957554270f, -0.4717319685650f, -0.3133774542040f, -0.1819131996110f, -0.0945741925262f,
             -0.0409655828852f, -0.0141985685725f, -0.00369997467375f
@@ -437,7 +432,7 @@ namespace MP3Sharp.Decode
         /// </summary>
         public static readonly float[][] win =
         {
-            new float[]
+            new[]
             {
                 -1.6141214951e-02f, -5.3603178919e-02f, -1.0070713296e-01f, -1.6280817573e-01f, -4.9999999679e-01f,
                 -3.8388735032e-01f, -6.2061144372e-01f, -1.1659756083e+00f, -3.8720752656e+00f, -4.2256286556e+00f,
@@ -448,7 +443,7 @@ namespace MP3Sharp.Decode
                 -1.2103922149e-01f, -2.0710679058e-01f, -8.4752577594e-02f, -6.4157525656e-02f, -4.1131172614e-02f,
                 -1.4790705759e-02f
             },
-            new float[]
+            new[]
             {
                 -1.6141214951e-02f, -5.3603178919e-02f, -1.0070713296e-01f, -1.6280817573e-01f, -4.9999999679e-01f,
                 -3.8388735032e-01f, -6.2061144372e-01f, -1.1659756083e+00f, -3.8720752656e+00f, -4.2256286556e+00f,
@@ -459,7 +454,7 @@ namespace MP3Sharp.Decode
                 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f,
                 0.0000000000e+00f
             },
-            new float[]
+            new[]
             {
                 -4.8300800645e-02f, -1.5715656932e-01f, -2.8325045177e-01f, -4.2953747763e-01f, -1.2071067795e+00f,
                 -8.2426483178e-01f, -1.1451749106e+00f, -1.7695290101e+00f, -4.5470225061e+00f, -3.4890531002e+00f,
@@ -470,7 +465,7 @@ namespace MP3Sharp.Decode
                 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f,
                 0.0000000000e+00f
             },
-            new float[]
+            new[]
             {
                 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f, 0.0000000000e+00f,
                 0.0000000000e+00f, -1.5076513660e-01f, -7.3296291107e-01f, -3.4890530566e+00f, -4.5470224727e+00f,
@@ -485,12 +480,12 @@ namespace MP3Sharp.Decode
 
         public static readonly int[][][] nr_of_sfb_block =
         {
-            new int[][] {new int[] {6, 5, 5, 5}, new int[] {9, 9, 9, 9}, new int[] {6, 9, 9, 9}},
-            new int[][] {new int[] {6, 5, 7, 3}, new int[] {9, 9, 12, 6}, new int[] {6, 9, 12, 6}},
-            new int[][] {new int[] {11, 10, 0, 0}, new int[] {18, 18, 0, 0}, new int[] {15, 18, 0, 0}},
-            new int[][] {new int[] {7, 7, 7, 0}, new int[] {12, 12, 12, 0}, new int[] {6, 15, 12, 0}},
-            new int[][] {new int[] {6, 6, 6, 3}, new int[] {12, 9, 9, 6}, new int[] {6, 12, 9, 6}},
-            new int[][] {new int[] {8, 8, 5, 0}, new int[] {15, 12, 9, 0}, new int[] {6, 18, 9, 0}}
+            new[] {new[] {6, 5, 5, 5}, new[] {9, 9, 9, 9}, new[] {6, 9, 9, 9}},
+            new[] {new[] {6, 5, 7, 3}, new[] {9, 9, 12, 6}, new[] {6, 9, 12, 6}},
+            new[] {new[] {11, 10, 0, 0}, new[] {18, 18, 0, 0}, new[] {15, 18, 0, 0}},
+            new[] {new[] {7, 7, 7, 0}, new[] {12, 12, 12, 0}, new[] {6, 15, 12, 0}},
+            new[] {new[] {6, 6, 6, 3}, new[] {12, 9, 9, 6}, new[] {6, 12, 9, 6}},
+            new[] {new[] {8, 8, 5, 0}, new[] {15, 12, 9, 0}, new[] {6, 18, 9, 0}}
         };
 
         private readonly Obuffer buffer;
@@ -520,8 +515,8 @@ namespace MP3Sharp.Decode
         private BitReserve br;
         // MDM: removed, as this wasn't being used.
         //private float               CheckSumOut1d = 0.0f;
-        private int CheckSumHuff = 0;
-        private int counter = 0;
+        private int CheckSumHuff;
+        private int counter;
         private int frame_start;
 
         /// <summary>
@@ -561,15 +556,15 @@ namespace MP3Sharp.Decode
         // can be reused.
         internal float[] tsOutCopy;
 
-        internal int[] v = new int[] {0};
-        internal int[] w = new int[] {0};
+        internal int[] v = {0};
+        internal int[] w = {0};
 
         /// <summary>
         ///     *
         /// </summary>
-        internal int[] x = new int[] {0};
+        internal int[] x = {0};
 
-        internal int[] y = new int[] {0};
+        internal int[] y = {0};
 
         static LayerIIIDecoder()
         {
@@ -626,35 +621,60 @@ namespace MP3Sharp.Decode
             // L3TABLE INIT
 
             sfBandIndex = new SBI[9]; // SZD: MPEG2.5 +3 indices
-            int[] l0 = new int[]
-            {0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522, 576};
-            int[] s0 = new int[] {0, 4, 8, 12, 18, 24, 32, 42, 56, 74, 100, 132, 174, 192};
-            int[] l1 = new int[]
-            {0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 114, 136, 162, 194, 232, 278, 330, 394, 464, 540, 576};
-            int[] s1 = new int[] {0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 136, 180, 192};
-            int[] l2 = new int[]
-            {0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522, 576};
-            int[] s2 = new int[] {0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192};
+            int[] l0 =
+            {
+                0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522,
+                576
+            };
+            int[] s0 = {0, 4, 8, 12, 18, 24, 32, 42, 56, 74, 100, 132, 174, 192};
+            int[] l1 =
+            {
+                0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 114, 136, 162, 194, 232, 278, 330, 394, 464, 540,
+                576
+            };
+            int[] s1 = {0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 136, 180, 192};
+            int[] l2 =
+            {
+                0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522,
+                576
+            };
+            int[] s2 = {0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192};
 
-            int[] l3 = new int[]
-            {0, 4, 8, 12, 16, 20, 24, 30, 36, 44, 52, 62, 74, 90, 110, 134, 162, 196, 238, 288, 342, 418, 576};
-            int[] s3 = new int[] {0, 4, 8, 12, 16, 22, 30, 40, 52, 66, 84, 106, 136, 192};
-            int[] l4 = new int[]
-            {0, 4, 8, 12, 16, 20, 24, 30, 36, 42, 50, 60, 72, 88, 106, 128, 156, 190, 230, 276, 330, 384, 576};
-            int[] s4 = new int[] {0, 4, 8, 12, 16, 22, 28, 38, 50, 64, 80, 100, 126, 192};
-            int[] l5 = new int[]
-            {0, 4, 8, 12, 16, 20, 24, 30, 36, 44, 54, 66, 82, 102, 126, 156, 194, 240, 296, 364, 448, 550, 576};
-            int[] s5 = new int[] {0, 4, 8, 12, 16, 22, 30, 42, 58, 78, 104, 138, 180, 192};
+            int[] l3 =
+            {
+                0, 4, 8, 12, 16, 20, 24, 30, 36, 44, 52, 62, 74, 90, 110, 134, 162, 196, 238, 288, 342, 418, 576
+            };
+            int[] s3 = {0, 4, 8, 12, 16, 22, 30, 40, 52, 66, 84, 106, 136, 192};
+            int[] l4 =
+            {
+                0, 4, 8, 12, 16, 20, 24, 30, 36, 42, 50, 60, 72, 88, 106, 128, 156, 190, 230, 276, 330, 384, 576
+            };
+            int[] s4 = {0, 4, 8, 12, 16, 22, 28, 38, 50, 64, 80, 100, 126, 192};
+            int[] l5 =
+            {
+                0, 4, 8, 12, 16, 20, 24, 30, 36, 44, 54, 66, 82, 102, 126, 156, 194, 240, 296, 364, 448, 550,
+                576
+            };
+            int[] s5 = {0, 4, 8, 12, 16, 22, 30, 42, 58, 78, 104, 138, 180, 192};
             // SZD: MPEG2.5
-            int[] l6 = new int[]
-            {0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522, 576};
-            int[] s6 = new int[] {0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192};
-            int[] l7 = new int[]
-            {0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522, 576};
-            int[] s7 = new int[] {0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192};
-            int[] l8 = new int[]
-            {0, 12, 24, 36, 48, 60, 72, 88, 108, 132, 160, 192, 232, 280, 336, 400, 476, 566, 568, 570, 572, 574, 576};
-            int[] s8 = new int[] {0, 8, 16, 24, 36, 52, 72, 96, 124, 160, 162, 164, 166, 192};
+            int[] l6 =
+            {
+                0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522,
+                576
+            };
+            int[] s6 = {0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192};
+            int[] l7 =
+            {
+                0, 6, 12, 18, 24, 30, 36, 44, 54, 66, 80, 96, 116, 140, 168, 200, 238, 284, 336, 396, 464, 522,
+                576
+            };
+            int[] s7 = {0, 4, 8, 12, 18, 26, 36, 48, 62, 80, 104, 134, 174, 192};
+            int[] l8 =
+            {
+                0, 12, 24, 36, 48, 60, 72, 88, 108, 132, 160, 192, 232, 280, 336, 400, 476, 566, 568, 570, 572,
+                574, 576
+            };
+            int[] s8 = {0, 8, 16, 24, 36, 52, 72, 96, 124, 160, 162, 164, 166, 192};
 
             sfBandIndex[0] = new SBI(l0, s0);
             sfBandIndex[1] = new SBI(l1, s1);
@@ -678,8 +698,8 @@ namespace MP3Sharp.Decode
             }
 
             // Sftable
-            int[] ll0 = new int[] {0, 6, 11, 16, 21};
-            int[] ss0 = new int[] {0, 6, 12};
+            int[] ll0 = {0, 6, 11, 16, 21};
+            int[] ss0 = {0, 6, 12};
             sftable = new Sftable(this, ll0, ss0);
             // END OF Sftable
 
@@ -951,7 +971,7 @@ namespace MP3Sharp.Decode
                                 //	 Side info bad: block_type == 0 in split block
                                 return false;
                             }
-                            else if (si.ch[ch].gr[gr].block_type == 2 && si.ch[ch].gr[gr].mixed_block_flag == 0)
+                            if (si.ch[ch].gr[gr].block_type == 2 && si.ch[ch].gr[gr].mixed_block_flag == 0)
                             {
                                 si.ch[ch].gr[gr].region0_count = 8;
                             }
@@ -1012,7 +1032,7 @@ namespace MP3Sharp.Decode
                             // Side info bad: block_type == 0 in split block
                             return false;
                         }
-                        else if (si.ch[ch].gr[0].block_type == 2 && si.ch[ch].gr[0].mixed_block_flag == 0)
+                        if (si.ch[ch].gr[0].block_type == 2 && si.ch[ch].gr[0].mixed_block_flag == 0)
                         {
                             si.ch[ch].gr[0].region0_count = 8;
                         }
@@ -1494,7 +1514,7 @@ namespace MP3Sharp.Decode
             {
                 // Modif E.B 02/22/99
                 int reste = j%SSLIMIT;
-                int quotien = (int) ((j - reste)/SSLIMIT);
+                int quotien = (j - reste)/SSLIMIT;
                 if (is_1d[j] == 0)
                     xr_1d[quotien][reste] = 0.0f;
                 else
@@ -1513,7 +1533,7 @@ namespace MP3Sharp.Decode
             {
                 // Modif E.B 02/22/99
                 int reste = j%SSLIMIT;
-                int quotien = (int) ((j - reste)/SSLIMIT);
+                int quotien = (j - reste)/SSLIMIT;
 
                 if (index == next_cb_boundary)
                 {
@@ -1600,15 +1620,13 @@ namespace MP3Sharp.Decode
             {
                 // Modif E.B 02/22/99
                 int reste = j%SSLIMIT;
-                int quotien = (int) ((j - reste)/SSLIMIT);
+                int quotien = (j - reste)/SSLIMIT;
                 if (reste < 0)
                     reste = 0;
                 if (quotien < 0)
                     quotien = 0;
                 xr_1d[quotien][reste] = 0.0f;
             }
-
-            return;
         }
 
         /// <summary>
@@ -1635,7 +1653,7 @@ namespace MP3Sharp.Decode
                     {
                         // Modif E.B 02/22/99
                         int reste = index%SSLIMIT;
-                        int quotien = (int) ((index - reste)/SSLIMIT);
+                        int quotien = (index - reste)/SSLIMIT;
                         out_1d[index] = xr_1d[quotien][reste];
                     }
                     // REORDERING FOR REST SWITCHED SHORT
@@ -1652,21 +1670,21 @@ namespace MP3Sharp.Decode
                             des_line = sfb_start3 + freq3;
                             // Modif E.B 02/22/99
                             int reste = src_line%SSLIMIT;
-                            int quotien = (int) ((src_line - reste)/SSLIMIT);
+                            int quotien = (src_line - reste)/SSLIMIT;
 
                             out_1d[des_line] = xr_1d[quotien][reste];
                             src_line += sfb_lines;
                             des_line++;
 
                             reste = src_line%SSLIMIT;
-                            quotien = (int) ((src_line - reste)/SSLIMIT);
+                            quotien = (src_line - reste)/SSLIMIT;
 
                             out_1d[des_line] = xr_1d[quotien][reste];
                             src_line += sfb_lines;
                             des_line++;
 
                             reste = src_line%SSLIMIT;
-                            quotien = (int) ((src_line - reste)/SSLIMIT);
+                            quotien = (src_line - reste)/SSLIMIT;
 
                             out_1d[des_line] = xr_1d[quotien][reste];
                         }
@@ -1679,7 +1697,7 @@ namespace MP3Sharp.Decode
                     {
                         int j = reorder_table[sfreq][index];
                         int reste = j%SSLIMIT;
-                        int quotien = (int) ((j - reste)/SSLIMIT);
+                        int quotien = (j - reste)/SSLIMIT;
                         out_1d[index] = xr_1d[quotien][reste];
                     }
                 }
@@ -1691,7 +1709,7 @@ namespace MP3Sharp.Decode
                 {
                     // Modif E.B 02/22/99
                     int reste = index%SSLIMIT;
-                    int quotien = (int) ((index - reste)/SSLIMIT);
+                    int quotien = (index - reste)/SSLIMIT;
                     out_1d[index] = xr_1d[quotien][reste];
                 }
             }
@@ -2035,7 +2053,7 @@ namespace MP3Sharp.Decode
                             }
                             else
                             {
-                                lr[1][sb][ss] = ro[0][sb][ss]/(float) (1 + is_ratio[i]);
+                                lr[1][sb][ss] = ro[0][sb][ss]/(1 + is_ratio[i]);
                                 lr[0][sb][ss] = lr[1][sb][ss]*is_ratio[i];
                             }
                         }
@@ -2601,20 +2619,20 @@ namespace MP3Sharp.Decode
 
         internal class gr_info_s
         {
-            public int big_values = 0;
-            public int block_type = 0;
-            public int count1table_select = 0;
-            public int global_gain = 0;
-            public int mixed_block_flag = 0;
-            public int part2_3_length = 0;
-            public int preflag = 0;
-            public int region0_count = 0;
-            public int region1_count = 0;
-            public int scalefac_compress = 0;
-            public int scalefac_scale = 0;
+            public int big_values;
+            public int block_type;
+            public int count1table_select;
+            public int global_gain;
+            public int mixed_block_flag;
+            public int part2_3_length;
+            public int preflag;
+            public int region0_count;
+            public int region1_count;
+            public int scalefac_compress;
+            public int scalefac_scale;
             public int[] subblock_gain;
             public int[] table_select;
-            public int window_switching_flag = 0;
+            public int window_switching_flag;
 
             /// <summary>
             ///     Dummy Constructor
@@ -2646,8 +2664,8 @@ namespace MP3Sharp.Decode
         internal class III_side_info_t
         {
             public temporaire[] ch;
-            public int main_data_begin = 0;
-            public int private_bits = 0;
+            public int main_data_begin;
+            public int private_bits;
 
             /// <summary>
             ///     Dummy Constructor

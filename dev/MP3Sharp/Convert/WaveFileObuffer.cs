@@ -61,7 +61,7 @@ namespace MP3Sharp.Convert
 
             outWave = new WaveFile();
 
-            int rc = outWave.OpenForWrite(FileName, null, freq, (short) 16, (short) channels);
+            int rc = outWave.OpenForWrite(FileName, null, freq, 16, (short) channels);
         }
 
         public WaveFileObuffer(int number_of_channels, int freq, System.IO.Stream stream)
@@ -77,7 +77,7 @@ namespace MP3Sharp.Convert
 
             outWave = new WaveFile();
 
-            int rc = outWave.OpenForWrite(null, stream, freq, (short) 16, (short) channels);
+            int rc = outWave.OpenForWrite(null, stream, freq, 16, (short) channels);
         }
 
         private void InitBlock()
@@ -96,22 +96,7 @@ namespace MP3Sharp.Convert
 
         public override void write_buffer(int val)
         {
-            int k = 0;
-            int rc = 0;
-
-            rc = outWave.WriteData(buffer, bufferp[0]);
-            // REVIEW: handle RiffFile errors. 
-            /*
-			for (int j=0;j<bufferp[0];j=j+2)
-			{
-			
-			//myBuffer[0] = (short)(((buffer[j]>>8)&0x000000FF) | ((buffer[j]<<8)&0x0000FF00));
-			//myBuffer[1] = (short) (((buffer[j+1]>>8)&0x000000FF) | ((buffer[j+1]<<8)&0x0000FF00));
-			myBuffer[0] = buffer[j];
-			myBuffer[1] = buffer[j+1];
-			rc = outWave.WriteData (myBuffer,2);
-			}
-			*/
+            int rc = outWave.WriteData(buffer, bufferp[0]);
             for (int i = 0; i < channels; ++i)
                 bufferp[i] = (short) i;
         }

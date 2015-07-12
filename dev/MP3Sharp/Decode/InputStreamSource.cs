@@ -14,12 +14,8 @@
 //  *
 //  ***************************************************************************/
 
-#region usings
-
 using System;
 using MP3Sharp.Support;
-
-#endregion
 
 /*
 * 12/12/99		Initial version.	mdm@techie.com

@@ -14,11 +14,7 @@
 //  *
 //  ***************************************************************************/
 
-#region usings
-
 using System;
-
-#endregion
 
 namespace MP3Sharp.Decode
 {
@@ -30,6 +26,8 @@ namespace MP3Sharp.Decode
     internal class SynthesisFilter
     {
         private const double MY_PI = 3.14159265358979323846;
+        // Note: These values are not in the same order
+        // as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
         private static readonly float cos1_64 = (float) (1.0/(2.0*Math.Cos(MY_PI/64.0)));
         private static readonly float cos3_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*3.0/64.0)));
         private static readonly float cos5_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*5.0/64.0)));
@@ -61,16 +59,13 @@ namespace MP3Sharp.Decode
         private static readonly float cos1_8 = (float) (1.0/(2.0*Math.Cos(MY_PI/8.0)));
         private static readonly float cos3_8 = (float) (1.0/(2.0*Math.Cos(MY_PI*3.0/8.0)));
         private static readonly float cos1_4 = (float) (1.0/(2.0*Math.Cos(MY_PI/4.0)));
-        // Note: These values are not in the same order
-        // as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
-        // private float d[] = {0.000000000, -4.000442505};
 
-        private static float[] d = null;
+        private static float[] d;
 
         /// d[] split into subarrays of length 16. This provides for
         /// more faster access by allowing a block of 16 to be addressed
         /// with constant offset.
-        private static float[][] d16 = null;
+        private static float[][] d16;
 
         // The original data for d[]. This data (was) loaded from a file
         // to reduce the overall package size and to improve performance. 
@@ -244,7 +239,6 @@ namespace MP3Sharp.Decode
             channel = channelnumber;
             scalefactor = factor;
             EQ = eq;
-            //setQuality(HIGH_QUALITY);
 
             reset();
         }
@@ -273,45 +267,16 @@ namespace MP3Sharp.Decode
             _tmpOut = new float[32];
         }
 
-        /*
-		private void setQuality(int quality0)
-		{
-		switch (quality0)
-		{		
-		case HIGH_QUALITY:
-		case MEDIUM_QUALITY:
-		case LOW_QUALITY:						  
-		v_inc = 16 * quality0;			
-		quality = quality0;
-		break;	
-		default :
-		throw new IllegalArgumentException("Unknown quality value");
-		}				
-		}
-		
-		public int getQuality()
-		{
-		return quality;	
-		}
-		*/
-
         /// <summary>
         ///     Reset the synthesis filter.
         /// </summary>
         public void reset()
         {
-            //float[] floatp;
-            // float[] floatp2;
-
             // initialize v1[] and v2[]:
-            //for (floatp = v1 + 512, floatp2 = v2 + 512; floatp > v1; )
-            //   *--floatp = *--floatp2 = 0.0;
             for (int p = 0; p < 512; p++)
                 v1[p] = v2[p] = 0.0f;
 
             // initialize samples[]:
-            //for (floatp = samples + 32; floatp > samples; )
-            //  *--floatp = 0.0;
             for (int p2 = 0; p2 < 32; p2++)
                 samples[p2] = 0.0f;
 
@@ -340,73 +305,10 @@ namespace MP3Sharp.Decode
         /// </summary>
         private void compute_new_v()
         {
-            // p is fully initialized from x1
-            //float[] p = _p;
-            // pp is fully initialized from p
-            //float[] pp = _pp; 
-
-            //float[] new_v = _new_v;
-
-            //float[] new_v = new float[32]; // new V[0-15] and V[33-48] of Figure 3-A.2 in ISO DIS 11172-3
-            //float[] p = new float[16];
-            //float[] pp = new float[16];
-
-            /*
-			for (int i=31; i>=0; i--)
-			{
-			new_v[i] = 0.0f;
-			}
-			*/
-
             float new_v0, new_v1, new_v2, new_v3, new_v4, new_v5, new_v6, new_v7, new_v8, new_v9;
             float new_v10, new_v11, new_v12, new_v13, new_v14, new_v15, new_v16, new_v17, new_v18, new_v19;
             float new_v20, new_v21, new_v22, new_v23, new_v24, new_v25, new_v26, new_v27, new_v28, new_v29;
             float new_v30, new_v31;
-
-            new_v0 =
-                new_v1 =
-                    new_v2 =
-                        new_v3 =
-                            new_v4 =
-                                new_v5 =
-                                    new_v6 =
-                                        new_v7 =
-                                            new_v8 =
-                                                new_v9 =
-                                                    new_v10 =
-                                                        new_v11 =
-                                                            new_v12 =
-                                                                new_v13 =
-                                                                    new_v14 =
-                                                                        new_v15 =
-                                                                            new_v16 =
-                                                                                new_v17 =
-                                                                                    new_v18 =
-                                                                                        new_v19 =
-                                                                                            new_v20 =
-                                                                                                new_v21 =
-                                                                                                    new_v22 =
-                                                                                                        new_v23 =
-                                                                                                            new_v24 =
-                                                                                                                new_v25
-                                                                                                                    =
-                                                                                                                    new_v26
-                                                                                                                        =
-                                                                                                                        new_v27
-                                                                                                                            =
-                                                                                                                            new_v28
-                                                                                                                                =
-                                                                                                                                new_v29
-                                                                                                                                    =
-                                                                                                                                    new_v30
-                                                                                                                                        =
-                                                                                                                                        new_v31
-                                                                                                                                            =
-                                                                                                                                            0.0f;
-
-            //	float[] new_v = new float[32]; // new V[0-15] and V[33-48] of Figure 3-A.2 in ISO DIS 11172-3
-            //	float[] p = new float[16];
-            //	float[] pp = new float[16];
 
             float[] s = samples;
 
@@ -722,46 +624,6 @@ namespace MP3Sharp.Decode
             dest[464 + pos] = new_v18;
             dest[480 + pos] = new_v17;
             dest[496 + pos] = new_v16;
-            /*
-			}
-			else
-			{
-			v1[0 + actual_write_pos] = -new_v0;
-			// insert V[33-48] (== new_v[16-31]) into other v:
-			v1[16 + actual_write_pos] = new_v16;
-			v1[32 + actual_write_pos] = new_v17;
-			v1[48 + actual_write_pos] = new_v18;
-			v1[64 + actual_write_pos] = new_v19;
-			v1[80 + actual_write_pos] = new_v20;
-			v1[96 + actual_write_pos] = new_v21;
-			v1[112 + actual_write_pos] = new_v22;
-			v1[128 + actual_write_pos] = new_v23;
-			v1[144 + actual_write_pos] = new_v24;
-			v1[160 + actual_write_pos] = new_v25;
-			v1[176 + actual_write_pos] = new_v26;
-			v1[192 + actual_write_pos] = new_v27;
-			v1[208 + actual_write_pos] = new_v28;
-			v1[224 + actual_write_pos] = new_v29;
-			v1[240 + actual_write_pos] = new_v30;
-			v1[256 + actual_write_pos] = new_v31;
-			
-			// insert V[49-63] (== new_v[30-16]) into other v:
-			v1[272 + actual_write_pos] = new_v30;
-			v1[288 + actual_write_pos] = new_v29;
-			v1[304 + actual_write_pos] = new_v28;
-			v1[320 + actual_write_pos] = new_v27;
-			v1[336 + actual_write_pos] = new_v26;
-			v1[352 + actual_write_pos] = new_v25;
-			v1[368 + actual_write_pos] = new_v24;
-			v1[384 + actual_write_pos] = new_v23;
-			v1[400 + actual_write_pos] = new_v22;
-			v1[416 + actual_write_pos] = new_v21;
-			v1[432 + actual_write_pos] = new_v20;
-			v1[448 + actual_write_pos] = new_v19;
-			v1[464 + actual_write_pos] = new_v18;
-			v1[480 + actual_write_pos] = new_v17;
-			v1[496 + actual_write_pos] = new_v16;	
-			}*/
         }
 
         /// <summary>
@@ -1047,12 +909,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
                 float[] dp = d16[i];
                 pcm_sample =
-                    (float)
-                        (((vp[0 + dvp]*dp[0]) + (vp[15 + dvp]*dp[1]) + (vp[14 + dvp]*dp[2]) + (vp[13 + dvp]*dp[3]) +
-                          (vp[12 + dvp]*dp[4]) + (vp[11 + dvp]*dp[5]) + (vp[10 + dvp]*dp[6]) + (vp[9 + dvp]*dp[7]) +
-                          (vp[8 + dvp]*dp[8]) + (vp[7 + dvp]*dp[9]) + (vp[6 + dvp]*dp[10]) + (vp[5 + dvp]*dp[11]) +
-                          (vp[4 + dvp]*dp[12]) + (vp[3 + dvp]*dp[13]) + (vp[2 + dvp]*dp[14]) + (vp[1 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[0 + dvp]*dp[0]) + (vp[15 + dvp]*dp[1]) + (vp[14 + dvp]*dp[2]) + (vp[13 + dvp]*dp[3]) +
+                     (vp[12 + dvp]*dp[4]) + (vp[11 + dvp]*dp[5]) + (vp[10 + dvp]*dp[6]) + (vp[9 + dvp]*dp[7]) +
+                     (vp[8 + dvp]*dp[8]) + (vp[7 + dvp]*dp[9]) + (vp[6 + dvp]*dp[10]) + (vp[5 + dvp]*dp[11]) +
+                     (vp[4 + dvp]*dp[12]) + (vp[3 + dvp]*dp[13]) + (vp[2 + dvp]*dp[14]) + (vp[1 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1075,12 +936,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[1 + dvp]*dp[0]) + (vp[0 + dvp]*dp[1]) + (vp[15 + dvp]*dp[2]) + (vp[14 + dvp]*dp[3]) +
-                          (vp[13 + dvp]*dp[4]) + (vp[12 + dvp]*dp[5]) + (vp[11 + dvp]*dp[6]) + (vp[10 + dvp]*dp[7]) +
-                          (vp[9 + dvp]*dp[8]) + (vp[8 + dvp]*dp[9]) + (vp[7 + dvp]*dp[10]) + (vp[6 + dvp]*dp[11]) +
-                          (vp[5 + dvp]*dp[12]) + (vp[4 + dvp]*dp[13]) + (vp[3 + dvp]*dp[14]) + (vp[2 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[1 + dvp]*dp[0]) + (vp[0 + dvp]*dp[1]) + (vp[15 + dvp]*dp[2]) + (vp[14 + dvp]*dp[3]) +
+                     (vp[13 + dvp]*dp[4]) + (vp[12 + dvp]*dp[5]) + (vp[11 + dvp]*dp[6]) + (vp[10 + dvp]*dp[7]) +
+                     (vp[9 + dvp]*dp[8]) + (vp[8 + dvp]*dp[9]) + (vp[7 + dvp]*dp[10]) + (vp[6 + dvp]*dp[11]) +
+                     (vp[5 + dvp]*dp[12]) + (vp[4 + dvp]*dp[13]) + (vp[3 + dvp]*dp[14]) + (vp[2 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1104,12 +964,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[2 + dvp]*dp[0]) + (vp[1 + dvp]*dp[1]) + (vp[0 + dvp]*dp[2]) + (vp[15 + dvp]*dp[3]) +
-                          (vp[14 + dvp]*dp[4]) + (vp[13 + dvp]*dp[5]) + (vp[12 + dvp]*dp[6]) + (vp[11 + dvp]*dp[7]) +
-                          (vp[10 + dvp]*dp[8]) + (vp[9 + dvp]*dp[9]) + (vp[8 + dvp]*dp[10]) + (vp[7 + dvp]*dp[11]) +
-                          (vp[6 + dvp]*dp[12]) + (vp[5 + dvp]*dp[13]) + (vp[4 + dvp]*dp[14]) + (vp[3 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[2 + dvp]*dp[0]) + (vp[1 + dvp]*dp[1]) + (vp[0 + dvp]*dp[2]) + (vp[15 + dvp]*dp[3]) +
+                     (vp[14 + dvp]*dp[4]) + (vp[13 + dvp]*dp[5]) + (vp[12 + dvp]*dp[6]) + (vp[11 + dvp]*dp[7]) +
+                     (vp[10 + dvp]*dp[8]) + (vp[9 + dvp]*dp[9]) + (vp[8 + dvp]*dp[10]) + (vp[7 + dvp]*dp[11]) +
+                     (vp[6 + dvp]*dp[12]) + (vp[5 + dvp]*dp[13]) + (vp[4 + dvp]*dp[14]) + (vp[3 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1122,53 +981,39 @@ namespace MP3Sharp.Decode
         {
             float[] vp = actual_v;
 
-            int idx = 0;
-            //int inc = v_inc;
             float[] tmpOut = _tmpOut;
             int dvp = 0;
 
-            // fat chance of having this loop unroll
             for (int i = 0; i < 32; i++)
             {
                 float[] dp = d16[i];
-                float pcm_sample;
-
-                pcm_sample =
-                    (float)
-                        (((vp[3 + dvp]*dp[0]) + (vp[2 + dvp]*dp[1]) + (vp[1 + dvp]*dp[2]) + (vp[0 + dvp]*dp[3]) +
-                          (vp[15 + dvp]*dp[4]) + (vp[14 + dvp]*dp[5]) + (vp[13 + dvp]*dp[6]) + (vp[12 + dvp]*dp[7]) +
-                          (vp[11 + dvp]*dp[8]) + (vp[10 + dvp]*dp[9]) + (vp[9 + dvp]*dp[10]) + (vp[8 + dvp]*dp[11]) +
-                          (vp[7 + dvp]*dp[12]) + (vp[6 + dvp]*dp[13]) + (vp[5 + dvp]*dp[14]) + (vp[4 + dvp]*dp[15]))*
-                         scalefactor);
+                float pcm_sample = ((vp[3 + dvp]*dp[0]) + (vp[2 + dvp]*dp[1]) + (vp[1 + dvp]*dp[2]) + (vp[0 + dvp]*dp[3]) +
+                                    (vp[15 + dvp]*dp[4]) + (vp[14 + dvp]*dp[5]) + (vp[13 + dvp]*dp[6]) + (vp[12 + dvp]*dp[7]) +
+                                    (vp[11 + dvp]*dp[8]) + (vp[10 + dvp]*dp[9]) + (vp[9 + dvp]*dp[10]) + (vp[8 + dvp]*dp[11]) +
+                                    (vp[7 + dvp]*dp[12]) + (vp[6 + dvp]*dp[13]) + (vp[5 + dvp]*dp[14]) + (vp[4 + dvp]*dp[15]))*
+                                   scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
                 dvp += 16;
             }
-            // for
         }
 
         private void compute_pcm_samples4(Obuffer buffer)
         {
             float[] vp = actual_v;
 
-            //int inc = v_inc;
             float[] tmpOut = _tmpOut;
             int dvp = 0;
 
-            // fat chance of having this loop unroll
             for (int i = 0; i < 32; i++)
             {
                 float[] dp = d16[i];
-                float pcm_sample;
-
-                pcm_sample =
-                    (float)
-                        (((vp[4 + dvp]*dp[0]) + (vp[3 + dvp]*dp[1]) + (vp[2 + dvp]*dp[2]) + (vp[1 + dvp]*dp[3]) +
-                          (vp[0 + dvp]*dp[4]) + (vp[15 + dvp]*dp[5]) + (vp[14 + dvp]*dp[6]) + (vp[13 + dvp]*dp[7]) +
-                          (vp[12 + dvp]*dp[8]) + (vp[11 + dvp]*dp[9]) + (vp[10 + dvp]*dp[10]) + (vp[9 + dvp]*dp[11]) +
-                          (vp[8 + dvp]*dp[12]) + (vp[7 + dvp]*dp[13]) + (vp[6 + dvp]*dp[14]) + (vp[5 + dvp]*dp[15]))*
-                         scalefactor);
+                float pcm_sample = ((vp[4 + dvp]*dp[0]) + (vp[3 + dvp]*dp[1]) + (vp[2 + dvp]*dp[2]) + (vp[1 + dvp]*dp[3]) +
+                                    (vp[0 + dvp]*dp[4]) + (vp[15 + dvp]*dp[5]) + (vp[14 + dvp]*dp[6]) + (vp[13 + dvp]*dp[7]) +
+                                    (vp[12 + dvp]*dp[8]) + (vp[11 + dvp]*dp[9]) + (vp[10 + dvp]*dp[10]) + (vp[9 + dvp]*dp[11]) +
+                                    (vp[8 + dvp]*dp[12]) + (vp[7 + dvp]*dp[13]) + (vp[6 + dvp]*dp[14]) + (vp[5 + dvp]*dp[15]))*
+                                   scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1181,23 +1026,17 @@ namespace MP3Sharp.Decode
         {
             float[] vp = actual_v;
 
-            //int inc = v_inc;
             float[] tmpOut = _tmpOut;
             int dvp = 0;
 
-            // fat chance of having this loop unroll
             for (int i = 0; i < 32; i++)
             {
                 float[] dp = d16[i];
-                float pcm_sample;
-
-                pcm_sample =
-                    (float)
-                        (((vp[5 + dvp]*dp[0]) + (vp[4 + dvp]*dp[1]) + (vp[3 + dvp]*dp[2]) + (vp[2 + dvp]*dp[3]) +
-                          (vp[1 + dvp]*dp[4]) + (vp[0 + dvp]*dp[5]) + (vp[15 + dvp]*dp[6]) + (vp[14 + dvp]*dp[7]) +
-                          (vp[13 + dvp]*dp[8]) + (vp[12 + dvp]*dp[9]) + (vp[11 + dvp]*dp[10]) + (vp[10 + dvp]*dp[11]) +
-                          (vp[9 + dvp]*dp[12]) + (vp[8 + dvp]*dp[13]) + (vp[7 + dvp]*dp[14]) + (vp[6 + dvp]*dp[15]))*
-                         scalefactor);
+                float pcm_sample = ((vp[5 + dvp]*dp[0]) + (vp[4 + dvp]*dp[1]) + (vp[3 + dvp]*dp[2]) + (vp[2 + dvp]*dp[3]) +
+                                    (vp[1 + dvp]*dp[4]) + (vp[0 + dvp]*dp[5]) + (vp[15 + dvp]*dp[6]) + (vp[14 + dvp]*dp[7]) +
+                                    (vp[13 + dvp]*dp[8]) + (vp[12 + dvp]*dp[9]) + (vp[11 + dvp]*dp[10]) + (vp[10 + dvp]*dp[11]) +
+                                    (vp[9 + dvp]*dp[12]) + (vp[8 + dvp]*dp[13]) + (vp[7 + dvp]*dp[14]) + (vp[6 + dvp]*dp[15]))*
+                                   scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1209,7 +1048,6 @@ namespace MP3Sharp.Decode
         private void compute_pcm_samples6(Obuffer buffer)
         {
             float[] vp = actual_v;
-            //int inc = v_inc;
             float[] tmpOut = _tmpOut;
             int dvp = 0;
 
@@ -1217,15 +1055,11 @@ namespace MP3Sharp.Decode
             for (int i = 0; i < 32; i++)
             {
                 float[] dp = d16[i];
-                float pcm_sample;
-
-                pcm_sample =
-                    (float)
-                        (((vp[6 + dvp]*dp[0]) + (vp[5 + dvp]*dp[1]) + (vp[4 + dvp]*dp[2]) + (vp[3 + dvp]*dp[3]) +
-                          (vp[2 + dvp]*dp[4]) + (vp[1 + dvp]*dp[5]) + (vp[0 + dvp]*dp[6]) + (vp[15 + dvp]*dp[7]) +
-                          (vp[14 + dvp]*dp[8]) + (vp[13 + dvp]*dp[9]) + (vp[12 + dvp]*dp[10]) + (vp[11 + dvp]*dp[11]) +
-                          (vp[10 + dvp]*dp[12]) + (vp[9 + dvp]*dp[13]) + (vp[8 + dvp]*dp[14]) + (vp[7 + dvp]*dp[15]))*
-                         scalefactor);
+                float pcm_sample = ((vp[6 + dvp]*dp[0]) + (vp[5 + dvp]*dp[1]) + (vp[4 + dvp]*dp[2]) + (vp[3 + dvp]*dp[3]) +
+                                    (vp[2 + dvp]*dp[4]) + (vp[1 + dvp]*dp[5]) + (vp[0 + dvp]*dp[6]) + (vp[15 + dvp]*dp[7]) +
+                                    (vp[14 + dvp]*dp[8]) + (vp[13 + dvp]*dp[9]) + (vp[12 + dvp]*dp[10]) + (vp[11 + dvp]*dp[11]) +
+                                    (vp[10 + dvp]*dp[12]) + (vp[9 + dvp]*dp[13]) + (vp[8 + dvp]*dp[14]) + (vp[7 + dvp]*dp[15]))*
+                                   scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1249,12 +1083,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[7 + dvp]*dp[0]) + (vp[6 + dvp]*dp[1]) + (vp[5 + dvp]*dp[2]) + (vp[4 + dvp]*dp[3]) +
-                          (vp[3 + dvp]*dp[4]) + (vp[2 + dvp]*dp[5]) + (vp[1 + dvp]*dp[6]) + (vp[0 + dvp]*dp[7]) +
-                          (vp[15 + dvp]*dp[8]) + (vp[14 + dvp]*dp[9]) + (vp[13 + dvp]*dp[10]) + (vp[12 + dvp]*dp[11]) +
-                          (vp[11 + dvp]*dp[12]) + (vp[10 + dvp]*dp[13]) + (vp[9 + dvp]*dp[14]) + (vp[8 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[7 + dvp]*dp[0]) + (vp[6 + dvp]*dp[1]) + (vp[5 + dvp]*dp[2]) + (vp[4 + dvp]*dp[3]) +
+                     (vp[3 + dvp]*dp[4]) + (vp[2 + dvp]*dp[5]) + (vp[1 + dvp]*dp[6]) + (vp[0 + dvp]*dp[7]) +
+                     (vp[15 + dvp]*dp[8]) + (vp[14 + dvp]*dp[9]) + (vp[13 + dvp]*dp[10]) + (vp[12 + dvp]*dp[11]) +
+                     (vp[11 + dvp]*dp[12]) + (vp[10 + dvp]*dp[13]) + (vp[9 + dvp]*dp[14]) + (vp[8 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1278,12 +1111,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[8 + dvp]*dp[0]) + (vp[7 + dvp]*dp[1]) + (vp[6 + dvp]*dp[2]) + (vp[5 + dvp]*dp[3]) +
-                          (vp[4 + dvp]*dp[4]) + (vp[3 + dvp]*dp[5]) + (vp[2 + dvp]*dp[6]) + (vp[1 + dvp]*dp[7]) +
-                          (vp[0 + dvp]*dp[8]) + (vp[15 + dvp]*dp[9]) + (vp[14 + dvp]*dp[10]) + (vp[13 + dvp]*dp[11]) +
-                          (vp[12 + dvp]*dp[12]) + (vp[11 + dvp]*dp[13]) + (vp[10 + dvp]*dp[14]) + (vp[9 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[8 + dvp]*dp[0]) + (vp[7 + dvp]*dp[1]) + (vp[6 + dvp]*dp[2]) + (vp[5 + dvp]*dp[3]) +
+                     (vp[4 + dvp]*dp[4]) + (vp[3 + dvp]*dp[5]) + (vp[2 + dvp]*dp[6]) + (vp[1 + dvp]*dp[7]) +
+                     (vp[0 + dvp]*dp[8]) + (vp[15 + dvp]*dp[9]) + (vp[14 + dvp]*dp[10]) + (vp[13 + dvp]*dp[11]) +
+                     (vp[12 + dvp]*dp[12]) + (vp[11 + dvp]*dp[13]) + (vp[10 + dvp]*dp[14]) + (vp[9 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1307,12 +1139,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[9 + dvp]*dp[0]) + (vp[8 + dvp]*dp[1]) + (vp[7 + dvp]*dp[2]) + (vp[6 + dvp]*dp[3]) +
-                          (vp[5 + dvp]*dp[4]) + (vp[4 + dvp]*dp[5]) + (vp[3 + dvp]*dp[6]) + (vp[2 + dvp]*dp[7]) +
-                          (vp[1 + dvp]*dp[8]) + (vp[0 + dvp]*dp[9]) + (vp[15 + dvp]*dp[10]) + (vp[14 + dvp]*dp[11]) +
-                          (vp[13 + dvp]*dp[12]) + (vp[12 + dvp]*dp[13]) + (vp[11 + dvp]*dp[14]) + (vp[10 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[9 + dvp]*dp[0]) + (vp[8 + dvp]*dp[1]) + (vp[7 + dvp]*dp[2]) + (vp[6 + dvp]*dp[3]) +
+                     (vp[5 + dvp]*dp[4]) + (vp[4 + dvp]*dp[5]) + (vp[3 + dvp]*dp[6]) + (vp[2 + dvp]*dp[7]) +
+                     (vp[1 + dvp]*dp[8]) + (vp[0 + dvp]*dp[9]) + (vp[15 + dvp]*dp[10]) + (vp[14 + dvp]*dp[11]) +
+                     (vp[13 + dvp]*dp[12]) + (vp[12 + dvp]*dp[13]) + (vp[11 + dvp]*dp[14]) + (vp[10 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1335,12 +1166,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[10 + dvp]*dp[0]) + (vp[9 + dvp]*dp[1]) + (vp[8 + dvp]*dp[2]) + (vp[7 + dvp]*dp[3]) +
-                          (vp[6 + dvp]*dp[4]) + (vp[5 + dvp]*dp[5]) + (vp[4 + dvp]*dp[6]) + (vp[3 + dvp]*dp[7]) +
-                          (vp[2 + dvp]*dp[8]) + (vp[1 + dvp]*dp[9]) + (vp[0 + dvp]*dp[10]) + (vp[15 + dvp]*dp[11]) +
-                          (vp[14 + dvp]*dp[12]) + (vp[13 + dvp]*dp[13]) + (vp[12 + dvp]*dp[14]) + (vp[11 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[10 + dvp]*dp[0]) + (vp[9 + dvp]*dp[1]) + (vp[8 + dvp]*dp[2]) + (vp[7 + dvp]*dp[3]) +
+                     (vp[6 + dvp]*dp[4]) + (vp[5 + dvp]*dp[5]) + (vp[4 + dvp]*dp[6]) + (vp[3 + dvp]*dp[7]) +
+                     (vp[2 + dvp]*dp[8]) + (vp[1 + dvp]*dp[9]) + (vp[0 + dvp]*dp[10]) + (vp[15 + dvp]*dp[11]) +
+                     (vp[14 + dvp]*dp[12]) + (vp[13 + dvp]*dp[13]) + (vp[12 + dvp]*dp[14]) + (vp[11 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1364,12 +1194,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[11 + dvp]*dp[0]) + (vp[10 + dvp]*dp[1]) + (vp[9 + dvp]*dp[2]) + (vp[8 + dvp]*dp[3]) +
-                          (vp[7 + dvp]*dp[4]) + (vp[6 + dvp]*dp[5]) + (vp[5 + dvp]*dp[6]) + (vp[4 + dvp]*dp[7]) +
-                          (vp[3 + dvp]*dp[8]) + (vp[2 + dvp]*dp[9]) + (vp[1 + dvp]*dp[10]) + (vp[0 + dvp]*dp[11]) +
-                          (vp[15 + dvp]*dp[12]) + (vp[14 + dvp]*dp[13]) + (vp[13 + dvp]*dp[14]) + (vp[12 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[11 + dvp]*dp[0]) + (vp[10 + dvp]*dp[1]) + (vp[9 + dvp]*dp[2]) + (vp[8 + dvp]*dp[3]) +
+                     (vp[7 + dvp]*dp[4]) + (vp[6 + dvp]*dp[5]) + (vp[5 + dvp]*dp[6]) + (vp[4 + dvp]*dp[7]) +
+                     (vp[3 + dvp]*dp[8]) + (vp[2 + dvp]*dp[9]) + (vp[1 + dvp]*dp[10]) + (vp[0 + dvp]*dp[11]) +
+                     (vp[15 + dvp]*dp[12]) + (vp[14 + dvp]*dp[13]) + (vp[13 + dvp]*dp[14]) + (vp[12 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1392,12 +1221,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[12 + dvp]*dp[0]) + (vp[11 + dvp]*dp[1]) + (vp[10 + dvp]*dp[2]) + (vp[9 + dvp]*dp[3]) +
-                          (vp[8 + dvp]*dp[4]) + (vp[7 + dvp]*dp[5]) + (vp[6 + dvp]*dp[6]) + (vp[5 + dvp]*dp[7]) +
-                          (vp[4 + dvp]*dp[8]) + (vp[3 + dvp]*dp[9]) + (vp[2 + dvp]*dp[10]) + (vp[1 + dvp]*dp[11]) +
-                          (vp[0 + dvp]*dp[12]) + (vp[15 + dvp]*dp[13]) + (vp[14 + dvp]*dp[14]) + (vp[13 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[12 + dvp]*dp[0]) + (vp[11 + dvp]*dp[1]) + (vp[10 + dvp]*dp[2]) + (vp[9 + dvp]*dp[3]) +
+                     (vp[8 + dvp]*dp[4]) + (vp[7 + dvp]*dp[5]) + (vp[6 + dvp]*dp[6]) + (vp[5 + dvp]*dp[7]) +
+                     (vp[4 + dvp]*dp[8]) + (vp[3 + dvp]*dp[9]) + (vp[2 + dvp]*dp[10]) + (vp[1 + dvp]*dp[11]) +
+                     (vp[0 + dvp]*dp[12]) + (vp[15 + dvp]*dp[13]) + (vp[14 + dvp]*dp[14]) + (vp[13 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1421,12 +1249,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[13 + dvp]*dp[0]) + (vp[12 + dvp]*dp[1]) + (vp[11 + dvp]*dp[2]) + (vp[10 + dvp]*dp[3]) +
-                          (vp[9 + dvp]*dp[4]) + (vp[8 + dvp]*dp[5]) + (vp[7 + dvp]*dp[6]) + (vp[6 + dvp]*dp[7]) +
-                          (vp[5 + dvp]*dp[8]) + (vp[4 + dvp]*dp[9]) + (vp[3 + dvp]*dp[10]) + (vp[2 + dvp]*dp[11]) +
-                          (vp[1 + dvp]*dp[12]) + (vp[0 + dvp]*dp[13]) + (vp[15 + dvp]*dp[14]) + (vp[14 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[13 + dvp]*dp[0]) + (vp[12 + dvp]*dp[1]) + (vp[11 + dvp]*dp[2]) + (vp[10 + dvp]*dp[3]) +
+                     (vp[9 + dvp]*dp[4]) + (vp[8 + dvp]*dp[5]) + (vp[7 + dvp]*dp[6]) + (vp[6 + dvp]*dp[7]) +
+                     (vp[5 + dvp]*dp[8]) + (vp[4 + dvp]*dp[9]) + (vp[3 + dvp]*dp[10]) + (vp[2 + dvp]*dp[11]) +
+                     (vp[1 + dvp]*dp[12]) + (vp[0 + dvp]*dp[13]) + (vp[15 + dvp]*dp[14]) + (vp[14 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1450,12 +1277,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
 
                 pcm_sample =
-                    (float)
-                        (((vp[14 + dvp]*dp[0]) + (vp[13 + dvp]*dp[1]) + (vp[12 + dvp]*dp[2]) + (vp[11 + dvp]*dp[3]) +
-                          (vp[10 + dvp]*dp[4]) + (vp[9 + dvp]*dp[5]) + (vp[8 + dvp]*dp[6]) + (vp[7 + dvp]*dp[7]) +
-                          (vp[6 + dvp]*dp[8]) + (vp[5 + dvp]*dp[9]) + (vp[4 + dvp]*dp[10]) + (vp[3 + dvp]*dp[11]) +
-                          (vp[2 + dvp]*dp[12]) + (vp[1 + dvp]*dp[13]) + (vp[0 + dvp]*dp[14]) + (vp[15 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[14 + dvp]*dp[0]) + (vp[13 + dvp]*dp[1]) + (vp[12 + dvp]*dp[2]) + (vp[11 + dvp]*dp[3]) +
+                     (vp[10 + dvp]*dp[4]) + (vp[9 + dvp]*dp[5]) + (vp[8 + dvp]*dp[6]) + (vp[7 + dvp]*dp[7]) +
+                     (vp[6 + dvp]*dp[8]) + (vp[5 + dvp]*dp[9]) + (vp[4 + dvp]*dp[10]) + (vp[3 + dvp]*dp[11]) +
+                     (vp[2 + dvp]*dp[12]) + (vp[1 + dvp]*dp[13]) + (vp[0 + dvp]*dp[14]) + (vp[15 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
 
@@ -1478,12 +1304,11 @@ namespace MP3Sharp.Decode
                 float pcm_sample;
                 float[] dp = d16[i];
                 pcm_sample =
-                    (float)
-                        (((vp[15 + dvp]*dp[0]) + (vp[14 + dvp]*dp[1]) + (vp[13 + dvp]*dp[2]) + (vp[12 + dvp]*dp[3]) +
-                          (vp[11 + dvp]*dp[4]) + (vp[10 + dvp]*dp[5]) + (vp[9 + dvp]*dp[6]) + (vp[8 + dvp]*dp[7]) +
-                          (vp[7 + dvp]*dp[8]) + (vp[6 + dvp]*dp[9]) + (vp[5 + dvp]*dp[10]) + (vp[4 + dvp]*dp[11]) +
-                          (vp[3 + dvp]*dp[12]) + (vp[2 + dvp]*dp[13]) + (vp[1 + dvp]*dp[14]) + (vp[0 + dvp]*dp[15]))*
-                         scalefactor);
+                    ((vp[15 + dvp]*dp[0]) + (vp[14 + dvp]*dp[1]) + (vp[13 + dvp]*dp[2]) + (vp[12 + dvp]*dp[3]) +
+                     (vp[11 + dvp]*dp[4]) + (vp[10 + dvp]*dp[5]) + (vp[9 + dvp]*dp[6]) + (vp[8 + dvp]*dp[7]) +
+                     (vp[7 + dvp]*dp[8]) + (vp[6 + dvp]*dp[9]) + (vp[5 + dvp]*dp[10]) + (vp[4 + dvp]*dp[11]) +
+                     (vp[3 + dvp]*dp[12]) + (vp[2 + dvp]*dp[13]) + (vp[1 + dvp]*dp[14]) + (vp[0 + dvp]*dp[15]))*
+                    scalefactor;
 
                 tmpOut[i] = pcm_sample;
                 dvp += 16;

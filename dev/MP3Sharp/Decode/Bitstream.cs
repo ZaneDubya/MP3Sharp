@@ -82,9 +82,10 @@ namespace MP3Sharp.Decode
         //private int 			current_frame_number;
         //private int				last_frame_number;
 
-        private readonly int[] bitmask = new int[]
+        private readonly int[] bitmask =
         {
-            0, 0x00000001, 0x00000003, 0x00000007, 0x0000000F, 0x0000001F, 0x0000003F, 0x0000007F, 0x000000FF, 0x000001FF,
+            0, 0x00000001, 0x00000003, 0x00000007, 0x0000000F, 0x0000001F, 0x0000003F, 0x0000007F, 0x000000FF,
+            0x000001FF,
             0x000003FF, 0x000007FF, 0x00000FFF, 0x00001FFF, 0x00003FFF, 0x00007FFF, 0x0000FFFF, 0x0001FFFF
         };
 
@@ -149,11 +150,11 @@ namespace MP3Sharp.Decode
                 throw new NullReferenceException("in");
 
             source = in_Renamed;
-                // ROB - fuck the SupportClass, let's roll our own. new SupportClass.BackInputStream(in_Renamed, 1024);
+            // ROB - fuck the SupportClass, let's roll our own. new SupportClass.BackInputStream(in_Renamed, 1024);
 
             //_baos = new ByteArrayOutputStream(); // E.B
 
-            closeFrame();
+            CloseFrame();
             //current_frame_number = -1;
             //last_frame_number = -1;
         }
@@ -239,14 +240,14 @@ namespace MP3Sharp.Decode
                     //source.UnRead(SupportClass.ToByteArray(frame_bytes), 0, framesize);
                     source.UnRead(framesize);
                 }
-                catch (System.IO.IOException ex)
+                catch
                 {
                     throw newBitstreamException(BitstreamErrors_Fields.STREAM_ERROR);
                 }
             }
         }
 
-        public void closeFrame()
+        public void CloseFrame()
         {
             framesize = -1;
             wordpointer = -1;
@@ -257,7 +258,7 @@ namespace MP3Sharp.Decode
         ///     Determines if the next 4 bytes of the stream represent a
         ///     frame header.
         /// </summary>
-        public bool isSyncCurrentPosition(int syncmode)
+        public bool IsSyncCurrentPosition(int syncmode)
         {
             int read = readBytes(syncbuf, 0, 4);
             int headerstring = ((syncbuf[0] << 24) & (int) SupportClass.Identity(0xFF000000)) |
@@ -266,11 +267,11 @@ namespace MP3Sharp.Decode
 
             try
             {
-                //source.UnRead(SupportClass.ToByteArray(syncbuf), 0, read);
                 source.UnRead(read);
             }
-            catch (System.IO.IOException ex)
+            catch
             {
+
             }
 
             bool sync = false;
@@ -431,8 +432,6 @@ namespace MP3Sharp.Decode
         /// </summary>
         internal void read_frame_data(int bytesize)
         {
-            int numread = 0;
-
             readFully(frame_bytes, 0, bytesize);
             framesize = bytesize;
             wordpointer = -1;
@@ -451,7 +450,6 @@ namespace MP3Sharp.Decode
 
             for (int k = 0; k < bytesize; k = k + 4)
             {
-                int convert = 0;
                 sbyte b0 = 0;
                 sbyte b1 = 0;
                 sbyte b2 = 0;
@@ -511,7 +509,7 @@ namespace MP3Sharp.Decode
                           ((SupportClass.URShift(Left, 16)) & 0x0000FFFF);
 
             returnvalue = SupportClass.URShift(returnvalue, 48 - sum);
-                // returnvalue >>= 16 - (number_of_bits - (32 - bitindex))
+            // returnvalue >>= 16 - (number_of_bits - (32 - bitindex))
             returnvalue &= bitmask[number_of_bits];
             bitindex = sum - 32;
             return returnvalue;

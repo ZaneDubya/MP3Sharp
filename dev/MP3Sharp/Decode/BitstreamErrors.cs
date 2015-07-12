@@ -20,13 +20,6 @@ namespace MP3Sharp.Decode
     ///     This interface describes all error codes that can be thrown
     ///     in <code>BistreamException</code>s.
     /// </summary>
-    /// <seealso cref="">
-    ///     BitstreamException
-    /// </seealso>
-    /// <author>
-    ///     MDM		12/12/99
-    ///     @since	0.0.6
-    /// </author>
     internal struct BitstreamErrors_Fields
     {
         public static readonly int UNKNOWN_ERROR;

@@ -45,7 +45,6 @@ namespace MP3Sharp.Decode
         private static readonly int BUFSIZE_MASK = BUFSIZE - 1;
 
         private int[] buf;
-        private int buf_bit_idx;
         private int offset, totbit, buf_byte_idx;
 
         internal BitReserve()

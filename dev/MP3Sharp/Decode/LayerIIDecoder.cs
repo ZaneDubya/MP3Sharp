@@ -21,10 +21,6 @@ namespace MP3Sharp.Decode
     /// </summary>
     internal class LayerIIDecoder : LayerIDecoder, IFrameDecoder
     {
-        public LayerIIDecoder()
-        {
-        }
-
         protected internal override void createSubbands()
         {
             int i;
@@ -58,7 +54,7 @@ namespace MP3Sharp.Decode
         {
             // this table contains 3 requantized samples for each legal codeword
             // when grouped in 5 bits, i.e. 3 quantization steps per sample
-            public static readonly float[] grouping_5bits = new float[]
+            public static readonly float[] grouping_5bits =
             {
                 -2.0f/3.0f, -2.0f/3.0f, -2.0f/3.0f, 0.0f, -2.0f/3.0f, -2.0f/3.0f, 2.0f/3.0f, -2.0f/3.0f, -2.0f/3.0f,
                 -2.0f/3.0f, 0.0f, -2.0f/3.0f, 0.0f, 0.0f, -2.0f/3.0f, 2.0f/3.0f, 0.0f, -2.0f/3.0f, -2.0f/3.0f, 2.0f/3.0f,
@@ -72,7 +68,7 @@ namespace MP3Sharp.Decode
 
             // this table contains 3 requantized samples for each legal codeword
             // when grouped in 7 bits, i.e. 5 quantizationsteps per sample
-            public static readonly float[] grouping_7bits = new float[]
+            public static readonly float[] grouping_7bits =
             {
                 -0.8f, -0.8f, -0.8f, -0.4f, -0.8f, -0.8f, 0.0f, -0.8f, -0.8f, 0.4f, -0.8f, -0.8f, 0.8f, -0.8f, -0.8f,
                 -0.8f, -0.4f, -0.8f, -0.4f, -0.4f, -0.8f, 0.0f, -0.4f, -0.8f, 0.4f, -0.4f, -0.8f, 0.8f, -0.4f, -0.8f,
@@ -102,7 +98,7 @@ namespace MP3Sharp.Decode
 
             // this table contains 3 requantized samples for each legal codeword
             // when grouped in 10 bits, i.e. 9 quantizationsteps per sample
-            public static readonly float[] grouping_10bits = new float[]
+            public static readonly float[] grouping_10bits =
             {
                 -8.0f/9.0f, -8.0f/9.0f, -8.0f/9.0f, -6.0f/9.0f, -8.0f/9.0f, -8.0f/9.0f, -4.0f/9.0f, -8.0f/9.0f,
                 -8.0f/9.0f, -2.0f/9.0f, -8.0f/9.0f, -8.0f/9.0f, 0.0f, -8.0f/9.0f, -8.0f/9.0f, 2.0f/9.0f, -8.0f/9.0f,
@@ -359,8 +355,7 @@ namespace MP3Sharp.Decode
             // data taken from ISO/IEC DIS 11172, Annexes 3-B.2[abcd] and 3-B.4:
 
             // subbands 0-2 in tables 3-B.2a and 2b: (index is allocation)
-            public static readonly int[] table_ab1_codelength = new int[]
-            {0, 5, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+            public static readonly int[] table_ab1_codelength = {0, 5, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
             public static readonly float[][] table_ab1_groupingtables =
             {
@@ -368,20 +363,20 @@ namespace MP3Sharp.Decode
                 null, null, null, null, null, null, null, null, null, null
             };
 
-            public static readonly float[] table_ab1_factor = new float[]
+            public static readonly float[] table_ab1_factor =
             {
                 0.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/8.0f, 1.0f/16.0f, 1.0f/32.0f, 1.0f/64.0f, 1.0f/128.0f, 1.0f/256.0f,
                 1.0f/512.0f, 1.0f/1024.0f, 1.0f/2048.0f, 1.0f/4096.0f, 1.0f/8192.0f, 1.0f/16384.0f, 1.0f/32768.0f
             };
 
-            public static readonly float[] table_ab1_c = new float[]
+            public static readonly float[] table_ab1_c =
             {
                 0.0f, 1.33333333333f, 1.14285714286f, 1.06666666666f, 1.03225806452f, 1.01587301587f, 1.00787401575f,
                 1.00392156863f, 1.00195694716f, 1.00097751711f, 1.00048851979f, 1.00024420024f, 1.00012208522f,
                 1.00006103888f, 1.00003051851f, 1.00001525902f
             };
 
-            public static readonly float[] table_ab1_d = new float[]
+            public static readonly float[] table_ab1_d =
             {
                 0.0f, 0.50000000000f, 0.25000000000f, 0.12500000000f, 0.06250000000f, 0.03125000000f, 0.01562500000f,
                 0.00781250000f, 0.00390625000f, 0.00195312500f, 0.00097656250f, 0.00048828125f, 0.00024414063f,
@@ -396,23 +391,22 @@ namespace MP3Sharp.Decode
             };
 
             // subbands 3-10 in tables 3-B.2a and 2b:
-            public static readonly int[] table_ab2_codelength = new int[]
-            {0, 5, 7, 3, 10, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16};
+            public static readonly int[] table_ab2_codelength = {0, 5, 7, 3, 10, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16};
 
-            public static readonly float[] table_ab2_factor = new float[]
+            public static readonly float[] table_ab2_factor =
             {
                 0.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/4.0f, 1.0f/8.0f, 1.0f/8.0f, 1.0f/16.0f, 1.0f/32.0f, 1.0f/64.0f,
                 1.0f/128.0f, 1.0f/256.0f, 1.0f/512.0f, 1.0f/1024.0f, 1.0f/2048.0f, 1.0f/4096.0f, 1.0f/32768.0f
             };
 
-            public static readonly float[] table_ab2_c = new float[]
+            public static readonly float[] table_ab2_c =
             {
                 0.0f, 1.33333333333f, 1.60000000000f, 1.14285714286f, 1.77777777777f, 1.06666666666f, 1.03225806452f,
                 1.01587301587f, 1.00787401575f, 1.00392156863f, 1.00195694716f, 1.00097751711f, 1.00048851979f,
                 1.00024420024f, 1.00012208522f, 1.00001525902f
             };
 
-            public static readonly float[] table_ab2_d = new float[]
+            public static readonly float[] table_ab2_d =
             {
                 0.0f, 0.50000000000f, 0.50000000000f, 0.25000000000f, 0.50000000000f, 0.12500000000f, 0.06250000000f,
                 0.03125000000f, 0.01562500000f, 0.00781250000f, 0.00390625000f, 0.00195312500f, 0.00097656250f,
@@ -420,36 +414,33 @@ namespace MP3Sharp.Decode
             };
 
             // subbands 11-22 in tables 3-B.2a and 2b:
-            public static readonly int[] table_ab3_codelength = new int[] {0, 5, 7, 3, 10, 4, 5, 16};
+            public static readonly int[] table_ab3_codelength = {0, 5, 7, 3, 10, 4, 5, 16};
 
-            public static readonly float[] table_ab3_factor = new float[]
-            {0.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/4.0f, 1.0f/8.0f, 1.0f/8.0f, 1.0f/16.0f, 1.0f/32768.0f};
+            public static readonly float[] table_ab3_factor =
+            {
+                0.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/4.0f, 1.0f/8.0f,
+                1.0f/8.0f, 1.0f/16.0f, 1.0f/32768.0f
+            };
 
-            public static readonly float[] table_ab3_c = new float[]
+            public static readonly float[] table_ab3_c =
             {
                 0.0f, 1.33333333333f, 1.60000000000f, 1.14285714286f, 1.77777777777f, 1.06666666666f, 1.03225806452f,
                 1.00001525902f
             };
 
-            public static readonly float[] table_ab3_d = new float[]
+            public static readonly float[] table_ab3_d =
             {
                 0.0f, 0.50000000000f, 0.50000000000f, 0.25000000000f, 0.50000000000f, 0.12500000000f, 0.06250000000f,
                 0.00003051758f
             };
 
             // subbands 23-... in tables 3-B.2a and 2b:
-            public static readonly int[] table_ab4_codelength = new int[] {0, 5, 7, 16};
-            public static readonly float[] table_ab4_factor = new float[] {0.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/32768.0f};
-
-            public static readonly float[] table_ab4_c = new float[]
-            {0.0f, 1.33333333333f, 1.60000000000f, 1.00001525902f};
-
-            public static readonly float[] table_ab4_d = new float[]
-            {0.0f, 0.50000000000f, 0.50000000000f, 0.00003051758f};
-
+            public static readonly int[] table_ab4_codelength = {0, 5, 7, 16};
+            public static readonly float[] table_ab4_factor = {0.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/32768.0f};
+            public static readonly float[] table_ab4_c = {0.0f, 1.33333333333f, 1.60000000000f, 1.00001525902f};
+            public static readonly float[] table_ab4_d = {0.0f, 0.50000000000f, 0.50000000000f, 0.00003051758f};
             // subbands in tables 3-B.2c and 2d:
-            public static readonly int[] table_cd_codelength = new int[]
-            {0, 5, 7, 10, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+            public static readonly int[] table_cd_codelength = {0, 5, 7, 10, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
             public static readonly float[][] table_cd_groupingtables =
             {
@@ -457,20 +448,20 @@ namespace MP3Sharp.Decode
                 grouping_10bits, null, null, null, null, null, null, null, null, null, null, null, null
             };
 
-            public static readonly float[] table_cd_factor = new float[]
+            public static readonly float[] table_cd_factor =
             {
                 0.0f, 1.0f/2.0f, 1.0f/4.0f, 1.0f/8.0f, 1.0f/8.0f, 1.0f/16.0f, 1.0f/32.0f, 1.0f/64.0f, 1.0f/128.0f,
                 1.0f/256.0f, 1.0f/512.0f, 1.0f/1024.0f, 1.0f/2048.0f, 1.0f/4096.0f, 1.0f/8192.0f, 1.0f/16384.0f
             };
 
-            public static readonly float[] table_cd_c = new float[]
+            public static readonly float[] table_cd_c =
             {
                 0.0f, 1.33333333333f, 1.60000000000f, 1.77777777777f, 1.06666666666f, 1.03225806452f, 1.01587301587f,
                 1.00787401575f, 1.00392156863f, 1.00195694716f, 1.00097751711f, 1.00048851979f, 1.00024420024f,
                 1.00012208522f, 1.00006103888f, 1.00003051851f
             };
 
-            public static readonly float[] table_cd_d = new float[]
+            public static readonly float[] table_cd_d =
             {
                 0.0f, 0.50000000000f, 0.50000000000f, 0.50000000000f, 0.12500000000f, 0.06250000000f, 0.03125000000f,
                 0.01562500000f, 0.00781250000f, 0.00390625000f, 0.00195312500f, 0.00097656250f, 0.00048828125f,
@@ -478,11 +469,11 @@ namespace MP3Sharp.Decode
             };
 
             protected internal int allocation;
-            protected internal float[] c = new float[] {0};
-            protected internal int[] codelength = new int[] {0};
-            protected internal float[] d = new float[] {0};
+            protected internal float[] c = {0};
+            protected internal int[] codelength = {0};
+            protected internal float[] d = {0};
             //protected float[][] 		groupingtable = {{0},{0}} ;
-            protected internal float[] factor = new float[] {0.0f};
+            protected internal float[] factor = {0.0f};
             protected internal float[][] groupingtable;
             protected internal int groupnumber;
             protected internal int samplenumber;
@@ -529,25 +520,20 @@ namespace MP3Sharp.Decode
                         else
                             return 3;
                     // tables 3-B.2a or 3-B.2b
-                    else if (subbandnumber <= 10)
+                    if (subbandnumber <= 10)
                         return 4;
-                    else if (subbandnumber <= 22)
+                    if (subbandnumber <= 22)
                         return 3;
-                    else
-                        return 2;
+                    return 2;
                 }
-                else
-                {
-                    // MPEG-2 LSF -- Jeff
+                // MPEG-2 LSF -- Jeff
 
-                    // table B.1 of ISO/IEC 13818-3
-                    if (subbandnumber <= 3)
-                        return 4;
-                    else if (subbandnumber <= 10)
-                        return 3;
-                    else
-                        return 2;
-                }
+                // table B.1 of ISO/IEC 13818-3
+                if (subbandnumber <= 3)
+                    return 4;
+                if (subbandnumber <= 10)
+                    return 3;
+                return 2;
             }
 
             /// <summary>
@@ -718,8 +704,7 @@ namespace MP3Sharp.Decode
                 samplenumber = 0;
                 if (++groupnumber == 12)
                     return true;
-                else
-                    return false;
+                return false;
             }
 
             /// <summary>
@@ -744,8 +729,7 @@ namespace MP3Sharp.Decode
 
                 if (++samplenumber == 3)
                     return true;
-                else
-                    return false;
+                return false;
             }
         }
 
@@ -887,8 +871,7 @@ namespace MP3Sharp.Decode
 
                 if (++samplenumber == 3)
                     return true;
-                else
-                    return false;
+                return false;
             }
         }
 
@@ -898,12 +881,12 @@ namespace MP3Sharp.Decode
         internal class SubbandLayer2Stereo : SubbandLayer2
         {
             protected internal int channel2_allocation;
-            protected internal float[] channel2_c = new float[] {0};
+            protected internal float[] channel2_c = {0};
             //protected boolean	 	channel2_grouping;  ???? Never used!
-            protected internal int[] channel2_codelength = new int[] {0};
-            protected internal float[] channel2_d = new float[] {0};
+            protected internal int[] channel2_codelength = {0};
+            protected internal float[] channel2_d = {0};
             //protected float[][] 	channel2_groupingtable = {{0},{0}};
-            protected internal float[] channel2_factor = new float[] {0};
+            protected internal float[] channel2_factor = {0};
             protected internal float[] channel2_samples;
             protected internal float channel2_scalefactor1, channel2_scalefactor2, channel2_scalefactor3;
             protected internal int channel2_scfsi;

@@ -92,9 +92,7 @@ namespace MP3Sharp.Decode
 
         public static Params DefaultParams
         {
-            get
-            {
-                return (Params) DEFAULT_PARAMS.Clone(); // MemberwiseClone();
+            get { return (Params) DEFAULT_PARAMS.Clone(); // MemberwiseClone();
             }
         }
 
@@ -301,10 +299,6 @@ namespace MP3Sharp.Decode
         {
             private Equalizer equalizer;
             private OutputChannels outputChannels;
-
-            public Params()
-            {
-            }
 
             public virtual OutputChannels OutputChannels
             {

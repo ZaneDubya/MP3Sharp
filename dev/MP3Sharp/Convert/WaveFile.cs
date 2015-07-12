@@ -24,11 +24,11 @@ namespace MP3Sharp.Convert
     internal class WaveFile : RiffFile
     {
         public const int MAX_WAVE_CHANNELS = 2;
-        private readonly int num_samples = 0;
+        private readonly int num_samples;
         private readonly RiffChunkHeader pcm_data;
         private readonly WaveFormat_Chunk wave_format;
-        private bool JustWriteLengthBytes = false;
-        private long pcm_data_offset = 0; // offset of 'pcm_data' in output file
+        private bool JustWriteLengthBytes;
+        private long pcm_data_offset; // offset of 'pcm_data' in output file
 
         /// <summary>
         ///     Constructs a new WaveFile instance.
@@ -112,7 +112,7 @@ namespace MP3Sharp.Convert
 
             if (retcode == DDC_SUCCESS)
             {
-                sbyte[] theWave = new sbyte[]
+                sbyte[] theWave =
                 {
                     (sbyte) SupportClass.Identity('W'), (sbyte) SupportClass.Identity('A'),
                     (sbyte) SupportClass.Identity('V'), (sbyte) SupportClass.Identity('E')
@@ -401,7 +401,7 @@ namespace MP3Sharp.Convert
         {
             int rc = DDC_SUCCESS;
 
-            if (fmode == RFM_WRITE)
+            if (Fmode == RFM_WRITE)
                 rc = Backpatch(pcm_data_offset, pcm_data, 8);
             if (!JustWriteLengthBytes)
             {
@@ -460,18 +460,18 @@ namespace MP3Sharp.Convert
         internal class WaveFormat_ChunkData
         {
             private WaveFile enclosingInstance;
-            public int nAvgBytesPerSec = 0;
-            public short nBitsPerSample = 0;
-            public short nBlockAlign = 0;
-            public short nChannels = 0; // Number of channels (mono=1, stereo=2)
-            public int nSamplesPerSec = 0; // Sampling rate [Hz]
-            public short wFormatTag = 0; // Format category (PCM=1)
+            public int nAvgBytesPerSec;
+            public short nBitsPerSample;
+            public short nBlockAlign;
+            public short nChannels; // Number of channels (mono=1, stereo=2)
+            public int nSamplesPerSec; // Sampling rate [Hz]
+            public short wFormatTag; // Format category (PCM=1)
 
             public WaveFormat_ChunkData(WaveFile enclosingInstance)
             {
                 InitBlock(enclosingInstance);
                 wFormatTag = 1; // PCM
-                Config(44100, (short) 16, (short) 1);
+                Config(44100, 16, 1);
             }
 
             public WaveFile Enclosing_Instance
@@ -524,10 +524,9 @@ namespace MP3Sharp.Convert
                 bool ret = header.ckID == FourCC("fmt ") && (data.nChannels == 1 || data.nChannels == 2) &&
                            data.nAvgBytesPerSec == (data.nChannels*data.nSamplesPerSec*data.nBitsPerSample)/8 &&
                            data.nBlockAlign == (data.nChannels*data.nBitsPerSample)/8;
-                if (ret == true)
+                if (ret)
                     return 1;
-                else
-                    return 0;
+                return 0;
             }
         }
 

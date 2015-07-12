@@ -350,7 +350,7 @@ namespace MP3Sharp.Decode
                 // read framedata:
                 stream.read_frame_data(framesize);
 
-                if (stream.isSyncCurrentPosition(syncmode))
+                if (stream.IsSyncCurrentPosition(syncmode))
                 {
                     if (syncmode == Bitstream.INITIAL_SYNC)
                     {
@@ -646,27 +646,19 @@ namespace MP3Sharp.Decode
                         return "32 kHz";
                     if (h_version == MPEG2_LSF)
                         return "16 kHz";
-                    // SZD
                     return "8 kHz";
-                    goto case FOURTYFOUR_POINT_ONE;
-
                 case FOURTYFOUR_POINT_ONE:
                     if (h_version == MPEG1)
                         return "44.1 kHz";
                     if (h_version == MPEG2_LSF)
                         return "22.05 kHz";
-                    // SZD
                     return "11.025 kHz";
-                    goto case FOURTYEIGHT;
-
                 case FOURTYEIGHT:
                     if (h_version == MPEG1)
                         return "48 kHz";
                     if (h_version == MPEG2_LSF)
                         return "24 kHz";
-                    // SZD
                     return "12 kHz";
-                    break;
             }
             return (null);
         }

@@ -22,7 +22,7 @@ namespace MP3Sharp.Decode
     internal class LayerIDecoder : IFrameDecoder
     {
         protected internal Obuffer buffer;
-        protected internal Crc16 crc = null;
+        protected internal Crc16 crc;
         protected internal SynthesisFilter filter1, filter2;
         protected internal Header header;
         protected internal int mode;
@@ -138,7 +138,7 @@ namespace MP3Sharp.Decode
 			*      is illegal (to prevent segmentation faults)
 			*/
             // Scalefactors for layer I and II, Annex 3-B.1 in ISO/IEC DIS 11172:
-            public static readonly float[] scalefactors = new float[]
+            public static readonly float[] scalefactors =
             {
                 2.00000000000000f, 1.58740105196820f, 1.25992104989487f, 1.00000000000000f, 0.79370052598410f,
                 0.62996052494744f, 0.50000000000000f, 0.39685026299205f, 0.31498026247372f, 0.25000000000000f,
@@ -172,7 +172,7 @@ namespace MP3Sharp.Decode
         internal class SubbandLayer1 : Subband
         {
             // Factors and offsets for sample requantization
-            public static readonly float[] table_factor = new float[]
+            public static readonly float[] table_factor =
             {
                 0.0f, (1.0f/2.0f)*(4.0f/3.0f), (1.0f/4.0f)*(8.0f/7.0f), (1.0f/8.0f)*(16.0f/15.0f),
                 (1.0f/16.0f)*(32.0f/31.0f), (1.0f/32.0f)*(64.0f/63.0f), (1.0f/64.0f)*(128.0f/127.0f),
@@ -181,7 +181,7 @@ namespace MP3Sharp.Decode
                 (1.0f/8192.0f)*(16384.0f/16383.0f), (1.0f/16384.0f)*(32768.0f/32767.0f)
             };
 
-            public static readonly float[] table_offset = new float[]
+            public static readonly float[] table_offset =
             {
                 0.0f, ((1.0f/2.0f) - 1.0f)*(4.0f/3.0f), ((1.0f/4.0f) - 1.0f)*(8.0f/7.0f),
                 ((1.0f/8.0f) - 1.0f)*(16.0f/15.0f), ((1.0f/16.0f) - 1.0f)*(32.0f/31.0f),
@@ -203,7 +203,7 @@ namespace MP3Sharp.Decode
             /// <summary>
             ///     Construtor.
             /// </summary>
-            public SubbandLayer1(int subbandnumber) : base()
+            public SubbandLayer1(int subbandnumber)
             {
                 this.subbandnumber = subbandnumber;
                 samplenumber = 0;
@@ -245,7 +245,7 @@ namespace MP3Sharp.Decode
             {
                 if (allocation != 0)
                 {
-                    sample = (float) (stream.get_bits(samplelength));
+                    sample = stream.get_bits(samplelength);
                 }
                 if (++samplenumber == 12)
                 {
@@ -403,7 +403,7 @@ namespace MP3Sharp.Decode
                 bool returnvalue = base.read_sampledata(stream);
                 if (channel2_allocation != 0)
                 {
-                    channel2_sample = (float) (stream.get_bits(channel2_samplelength));
+                    channel2_sample = stream.get_bits(channel2_samplelength);
                 }
                 return (returnvalue);
             }

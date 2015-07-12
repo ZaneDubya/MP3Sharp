@@ -22,7 +22,6 @@ namespace MP3Sharp.Decode
     internal interface Control
     {
         bool Playing { get; }
-
         bool RandomAccess { get; }
 
         /// <summary>
