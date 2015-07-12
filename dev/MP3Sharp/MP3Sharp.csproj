@@ -72,6 +72,7 @@
     <Compile Include="Decode\Source.cs" />
     <Compile Include="Buffer16BitStereo.cs" />
     <Compile Include="SoundFormat.cs" />
+    <Compile Include="Support\RandomAccessFileStream.cs" />
     <Compile Include="Support\SupportClass.cs" />
     <Compile Include="Decode\SynthesisFilter.cs" />
     <Compile Include="MP3Stream.cs" />

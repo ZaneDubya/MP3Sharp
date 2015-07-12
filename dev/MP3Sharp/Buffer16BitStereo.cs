@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using MP3Sharp.Decode;
 
 namespace MP3Sharp
 {
@@ -11,8 +12,7 @@ namespace MP3Sharp
     ///     over. --trs
     ///     This class handles stereo 16-bit data! Switch it out if you want mono or something.
     /// </summary>
-    internal class Buffer16BitStereo
-        : Decode.ABuffer
+    internal class Buffer16BitStereo : ABuffer
     {
         // This is stereo!
         private static readonly int CHANNELS = 2;

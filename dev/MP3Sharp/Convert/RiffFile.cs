@@ -78,7 +78,7 @@ namespace MP3Sharp.Convert
                     case RFM_WRITE:
                         try
                         {
-                            m_File = SupportClass.RandomAccessFileSupport.CreateRandomAccessFile(filename, "rw");
+                            m_File = RandomAccessFileStream.CreateRandomAccessFile(filename, "rw");
 
                             try
                             {
@@ -119,7 +119,7 @@ namespace MP3Sharp.Convert
                     case RFM_READ:
                         try
                         {
-                            m_File = SupportClass.RandomAccessFileSupport.CreateRandomAccessFile(filename, "r");
+                            m_File = RandomAccessFileStream.CreateRandomAccessFile(filename, "r");
                             try
                             {
                                 // Try to read the RIFF header...   				   

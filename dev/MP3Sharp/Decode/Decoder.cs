@@ -295,7 +295,6 @@ namespace MP3Sharp.Decode
                 get { return m_Equalizer; }
             }
 
-            //UPGRADE_TODO: The equivalent of method 'java.lang.Object.clone' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
             public object Clone()
             {
                 try

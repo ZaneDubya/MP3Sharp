@@ -18,37 +18,6 @@ using System;
 using System.Diagnostics;
 using MP3Sharp.Support;
 
-/*
-* 12/12/99	 Based on Ibitstream. Exceptions thrown on errors,
-*			 Tempoarily removed seek functionality. mdm@techie.com
-*
-* 02/12/99 : Java Conversion by E.B , ebsp@iname.com , JavaLayer
-*
-*----------------------------------------------------------------------
-*  @(#) ibitstream.h 1.5, last edit: 6/15/94 16:55:34
-*  @(#) Copyright (C) 1993, 1994 Tobias Bading (bading@cs.tu-berlin.de)
-*  @(#) Berlin University of Technology
-*
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*
-*  Changes made by Jeff Tsay :
-*  04/14/97 : Added function prototypes for new syncing and seeking
-*  mechanisms. Also made this file portable.
-*-----------------------------------------------------------------------
-*/
-
 namespace MP3Sharp.Decode
 {
     /// <summary>
