@@ -27,43 +27,42 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Takes a 16 Bit PCM sample.
         /// </summary>
-        public abstract void append(int channel, short valueRenamed);
+        public abstract void Append(int channel, short valueRenamed);
 
         /// <summary>
         ///     Accepts 32 new PCM samples.
         /// </summary>
-        public virtual void appendSamples(int channel, float[] f)
+        public virtual void AppendSamples(int channel, float[] f)
         {
             for (int i = 0; i < 32; i++)
             {
-                append(channel, clip((f[i])));
+                Append(channel, Clip((f[i])));
             }
         }
 
         /// <summary>
         ///     Clip Sample to 16 Bits
         /// </summary>
-        private short clip(float sample)
+        private static short Clip(float sample)
         {
-            //UPGRADE_WARNING: Narrowing conversions may produce unexpected results in C#. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1042"'
             return ((sample > 32767.0f) ? (short) 32767 : ((sample < -32768.0f) ? (short) -32768 : (short) sample));
         }
 
         /// <summary>
         ///     Write the samples to the file or directly to the audio hardware.
         /// </summary>
-        public abstract void write_buffer(int val);
+        public abstract void WriteBuffer(int val);
 
-        public abstract void close();
+        public abstract void Close();
 
         /// <summary>
         ///     Clears all data in the buffer (for seeking).
         /// </summary>
-        public abstract void clear_buffer();
+        public abstract void ClearBuffer();
 
         /// <summary>
         ///     Notify the buffer that the user has stopped the stream.
         /// </summary>
-        public abstract void set_stop_flag();
+        public abstract void SetStopFlag();
     }
 }

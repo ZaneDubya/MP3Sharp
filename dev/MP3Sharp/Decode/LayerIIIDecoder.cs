@@ -906,7 +906,7 @@ namespace MP3Sharp.Decode
             //if (counter <  609)
             //{
             counter++;
-            buffer.write_buffer(1);
+            buffer.WriteBuffer(1);
             //}
             //else if (counter == 609)
             //{

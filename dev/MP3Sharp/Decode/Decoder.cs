@@ -194,13 +194,13 @@ namespace MP3Sharp.Decode
 
             int layer = header.layer();
 
-            output.clear_buffer();
+            output.ClearBuffer();
 
             IFrameDecoder decoder = retrieveDecoder(header, stream, layer);
 
             decoder.decodeFrame();
 
-            output.write_buffer(1);
+            output.WriteBuffer(1);
 
             return output;
         }

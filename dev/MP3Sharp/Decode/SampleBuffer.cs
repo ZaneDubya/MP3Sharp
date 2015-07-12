@@ -64,13 +64,13 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Takes a 16 Bit PCM sample.
         /// </summary>
-        public override void append(int channel, short valueRenamed)
+        public override void Append(int channel, short valueRenamed)
         {
             buffer[bufferp[channel]] = valueRenamed;
             bufferp[channel] += channels;
         }
 
-        public override void appendSamples(int channel, float[] f)
+        public override void AppendSamples(int channel, float[] f)
         {
             int pos = bufferp[channel];
 
@@ -93,20 +93,20 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Write the samples to the file (Random Acces).
         /// </summary>
-        public override void write_buffer(int val)
+        public override void WriteBuffer(int val)
         {
             //for (int i = 0; i < channels; ++i) 
             //	bufferp[i] = (short)i;
         }
 
-        public override void close()
+        public override void Close()
         {
         }
 
         /// <summary>
         ///     *
         /// </summary>
-        public override void clear_buffer()
+        public override void ClearBuffer()
         {
             for (int i = 0; i < channels; ++i)
                 bufferp[i] = (short) i;
@@ -115,7 +115,7 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     *
         /// </summary>
-        public override void set_stop_flag()
+        public override void SetStopFlag()
         {
         }
     }

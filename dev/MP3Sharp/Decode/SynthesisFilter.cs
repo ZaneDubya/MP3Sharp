@@ -1387,7 +1387,7 @@ namespace MP3Sharp.Decode
 
             if (buffer != null)
             {
-                buffer.appendSamples(channel, _tmpOut);
+                buffer.AppendSamples(channel, _tmpOut);
             }
 
             /*

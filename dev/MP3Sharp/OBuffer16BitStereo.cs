@@ -28,7 +28,7 @@ namespace MP3Sharp
         public OBuffer16BitStereo()
         {
             // Initialize the buffer pointers
-            clear_buffer();
+            ClearBuffer();
         }
 
         public int BytesLeft
@@ -63,7 +63,7 @@ namespace MP3Sharp
         }
 
         // Inefficiently write one sample value
-        public override void append(int channel, short valueRenamed)
+        public override void Append(int channel, short valueRenamed)
         {
             m_Buffer[m_Bufferp[channel]] = (byte)(valueRenamed & 0xff);
             m_Buffer[m_Bufferp[channel] + 1] = (byte)(valueRenamed >> 8);
@@ -72,7 +72,7 @@ namespace MP3Sharp
         }
 
         // efficiently write 32 samples
-        public override void appendSamples(int channel, float[] f)
+        public override void AppendSamples(int channel, float[] f)
         {
             // Always, 32 samples are appended
             int pos = m_Bufferp[channel];
@@ -98,7 +98,7 @@ namespace MP3Sharp
         /// <summary>
         ///     This implementation does not clear the buffer.
         /// </summary>
-        public override sealed void clear_buffer()
+        public override sealed void ClearBuffer()
         {
             m_Offset = 0;
             m_End = 0;
@@ -107,11 +107,11 @@ namespace MP3Sharp
                 m_Bufferp[i] = i * 2; // two bytes per channel
         }
 
-        public override void set_stop_flag()
+        public override void SetStopFlag()
         {
         }
 
-        public override void write_buffer(int val)
+        public override void WriteBuffer(int val)
         {
             m_Offset = 0;
 
@@ -122,7 +122,7 @@ namespace MP3Sharp
             m_End = m_Bufferp[0];
         }
 
-        public override void close()
+        public override void Close()
         {
         }
     }
