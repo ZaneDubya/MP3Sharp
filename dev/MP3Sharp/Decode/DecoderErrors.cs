@@ -39,7 +39,6 @@ namespace javazoom.jl.decoder
 	}
 	internal interface DecoderErrors : JavaLayerErrors
 		{
-			//UPGRADE_NOTE: Members of interface 'DecoderErrors' were extracted into structure 'DecoderErrors_Fields'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1045"'
 			/// <summary> Layer not supported by the decoder. 
 			/// </summary>
 		}

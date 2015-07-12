@@ -43,12 +43,9 @@ namespace javazoom.jl.decoder
 		/// <summary> Mask that can be used to quickly implement the
 		/// modulus operation on BUFSIZE.
 		/// </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'BUFSIZE_MASK '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly int BUFSIZE_MASK = BUFSIZE - 1;
 		
 		private int offset, totbit, buf_byte_idx;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'buf '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'buf' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private int[] buf;
 		private int buf_bit_idx;
 		

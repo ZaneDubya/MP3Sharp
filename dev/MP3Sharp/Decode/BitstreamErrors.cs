@@ -50,7 +50,6 @@ namespace javazoom.jl.decoder
 	}
 	internal interface BitstreamErrors : JavaLayerErrors
 		{
-			//UPGRADE_NOTE: Members of interface 'BitstreamErrors' were extracted into structure 'BitstreamErrors_Fields'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1045"'
 			/// <summary> An undeterminable error occurred. 
 			/// </summary>
 			/// <summary> The header describes an unknown sample rate.

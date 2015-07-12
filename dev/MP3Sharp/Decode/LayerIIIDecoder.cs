@@ -251,9 +251,7 @@ namespace javazoom.jl.decoder
 		
 		// subband samples are buffered and passed to the
 		// SynthesisFilter in one go.
-		//UPGRADE_NOTE: The initialization of  'samples1' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private float[] samples1;
-		//UPGRADE_NOTE: The initialization of  'samples2' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private float[] samples2;
 		
 		public void  decode()
@@ -657,8 +655,6 @@ namespace javazoom.jl.decoder
 		/// </summary>
 		// MDM: new_slen is fully initialized before use, no need
 		// to reallocate array.
-		//UPGRADE_NOTE: Final was removed from the declaration of 'new_slen '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'new_slen' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private int[] new_slen;
 		
 		private void  get_LSF_scale_data(int ch, int gr)
@@ -1215,9 +1211,7 @@ namespace javazoom.jl.decoder
 		/// <summary>*
 		/// </summary>
 		
-		//UPGRADE_NOTE: The initialization of  'is_pos' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		internal int[] is_pos;
-		//UPGRADE_NOTE: The initialization of  'is_ratio' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		internal float[] is_ratio;
 		
 		private void  stereo(int gr)
@@ -1614,9 +1608,7 @@ namespace javazoom.jl.decoder
 		
 		// MDM: tsOutCopy and rawout do not need initializing, so the arrays
 		// can be reused.
-		//UPGRADE_NOTE: The initialization of  'tsOutCopy' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		internal float[] tsOutCopy;
-		//UPGRADE_NOTE: The initialization of  'rawout' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		internal float[] rawout;
 		
 		private void  hybrid(int ch, int gr)
@@ -2115,14 +2107,11 @@ namespace javazoom.jl.decoder
 		public static readonly float[] two_to_negative_half_pow = new float[]{1.0000000000e+00f, 7.0710678119e-01f, 5.0000000000e-01f, 3.5355339059e-01f, 2.5000000000e-01f, 1.7677669530e-01f, 1.2500000000e-01f, 8.8388347648e-02f, 6.2500000000e-02f, 4.4194173824e-02f, 3.1250000000e-02f, 2.2097086912e-02f, 1.5625000000e-02f, 1.1048543456e-02f, 7.8125000000e-03f, 5.5242717280e-03f, 3.9062500000e-03f, 2.7621358640e-03f, 1.9531250000e-03f, 1.3810679320e-03f, 9.7656250000e-04f, 6.9053396600e-04f, 4.8828125000e-04f, 3.4526698300e-04f, 2.4414062500e-04f, 1.7263349150e-04f, 1.2207031250e-04f, 8.6316745750e-05f, 6.1035156250e-05f, 4.3158372875e-05f, 3.0517578125e-05f, 2.1579186438e-05f, 1.5258789062e-05f, 1.0789593219e-05f, 7.6293945312e-06f, 5.3947966094e-06f, 3.8146972656e-06f, 2.6973983047e-06f, 1.9073486328e-06f, 1.3486991523e-06f, 9.5367431641e-07f, 6.7434957617e-07f, 4.7683715820e-07f, 3.3717478809e-07f, 2.3841857910e-07f, 1.6858739404e-07f, 1.1920928955e-07f, 8.4293697022e-08f, 5.9604644775e-08f, 4.2146848511e-08f, 2.9802322388e-08f, 2.1073424255e-08f, 1.4901161194e-08f, 1.0536712128e-08f, 7.4505805969e-09f, 5.2683560639e-09f, 3.7252902985e-09f, 2.6341780319e-09f, 1.8626451492e-09f, 1.3170890160e-09f, 9.3132257462e-10f, 6.5854450798e-10f, 4.6566128731e-10f, 3.2927225399e-10f};
 		
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 't_43 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  't_43' was moved to static method 'javazoom.jl.decoder.LayerIIIDecoder'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		public static readonly float[] t_43;
 		
 		static private float[] create_t_43()
 		{
 			float[] t43 = new float[8192];
-			//UPGRADE_NOTE: Final was removed from the declaration of 'd43 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			double d43 = (4.0 / 3.0);
 			
 			for (int i = 0; i < 8192; i++)
@@ -2505,7 +2494,6 @@ namespace javazoom.jl.decoder
 		/// <summary>***********************************************************
 		/// </summary>
 		
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'Sftable' to access its enclosing instance. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1019"'
 		internal class Sftable
 		{
 			private void  InitBlock(LayerIIIDecoder enclosingInstance)

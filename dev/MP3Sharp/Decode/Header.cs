@@ -79,7 +79,6 @@ namespace javazoom.jl.decoder
 		private int h_sample_frequency;
 		private int h_number_of_subbands, h_intensity_stereo_bound;
 		private bool h_copyright, h_original;
-		//UPGRADE_NOTE: The initialization of  'syncmode' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private sbyte syncmode;
 		private Crc16 crc;
 		

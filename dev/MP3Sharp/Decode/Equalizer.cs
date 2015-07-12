@@ -124,16 +124,12 @@ namespace javazoom.jl.decoder
 		/// <summary> Equalizer setting to denote that a given band will not be
 		/// present in the output signal.
 		/// </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'BAND_NOT_PRESENT '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		public static readonly float BAND_NOT_PRESENT = System.Single.NegativeInfinity;
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'PASS_THRU_EQ '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		public static readonly Equalizer PASS_THRU_EQ = new Equalizer();
 		
 		private const int BANDS = 32;
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'settings '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'settings' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private float[] settings;
 		
 		/// <summary> Creates a new <code>Equalizer</code> instance. 

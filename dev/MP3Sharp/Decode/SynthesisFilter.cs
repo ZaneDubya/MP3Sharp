@@ -1,30 +1,19 @@
-/*
-* 04/01/00 Fixes for running under build 23xx Microsoft JVM. mdm.
-* 19/12/99 Performance improvements to compute_pcm_samples().  
-*			Mat McGowan. mdm@techie.com. 
-*-----------------------------------------------------------------------
-* 16/02/99 Java Conversion by E.B , ebsp@iname.com, JavaLayer
-*
-*-----------------------------------------------------------------------
-*  @(#) synthesis_filter.h 1.8, last edit: 6/15/94 16:52:00
-*  @(#) Copyright (C) 1993, 1994 Tobias Bading (bading@cs.tu-berlin.de)
-*  @(#) Berlin University of Technology
-*
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with this program; if not, write to the Free Software
-*  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*----------------------------------------------------------------------
-*/
+/***************************************************************************
+ *   $FILENAME$.cs
+ *   Copyright (c) 2015 Zane Wagner, Robert Burke,
+ *   the JavaZoom team, and others.
+ * 
+ *   All rights reserved. This program and the accompanying materials
+ *   are made available under the terms of the GNU Lesser General Public License
+ *   (LGPL) version 2.1 which accompanies this distribution, and is available at
+ *   http://www.gnu.org/licenses/lgpl-2.1.html
+ *
+ *   This library is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *   Lesser General Public License for more details.
+ *
+ ***************************************************************************/
 namespace javazoom.jl.decoder
 {
 	using System;
@@ -841,16 +830,13 @@ namespace javazoom.jl.decoder
 		/// <summary> Compute PCM Samples.
 		/// </summary>
 		
-		//UPGRADE_NOTE: The initialization of  '_tmpOut' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private float[] _tmpOut;
 		
 		
 		private void  compute_pcm_samples0(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
@@ -858,7 +844,6 @@ namespace javazoom.jl.decoder
 			for (int i = 0; i < 32; i++)
 			{
 				float pcm_sample;
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				pcm_sample = (float) (((vp[0 + dvp] * dp[0]) + (vp[15 + dvp] * dp[1]) + (vp[14 + dvp] * dp[2]) + (vp[13 + dvp] * dp[3]) + (vp[12 + dvp] * dp[4]) + (vp[11 + dvp] * dp[5]) + (vp[10 + dvp] * dp[6]) + (vp[9 + dvp] * dp[7]) + (vp[8 + dvp] * dp[8]) + (vp[7 + dvp] * dp[9]) + (vp[6 + dvp] * dp[10]) + (vp[5 + dvp] * dp[11]) + (vp[4 + dvp] * dp[12]) + (vp[3 + dvp] * dp[13]) + (vp[2 + dvp] * dp[14]) + (vp[1 + dvp] * dp[15])) * scalefactor);
 				
@@ -871,17 +856,14 @@ namespace javazoom.jl.decoder
 		
 		private void  compute_pcm_samples1(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -895,18 +877,15 @@ namespace javazoom.jl.decoder
 		}
 		private void  compute_pcm_samples2(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -921,19 +900,16 @@ namespace javazoom.jl.decoder
 		
 		private void  compute_pcm_samples3(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			int idx = 0;
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -948,18 +924,15 @@ namespace javazoom.jl.decoder
 		
 		private void  compute_pcm_samples4(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -974,18 +947,15 @@ namespace javazoom.jl.decoder
 		
 		private void  compute_pcm_samples5(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1000,17 +970,14 @@ namespace javazoom.jl.decoder
 		
 		private void  compute_pcm_samples6(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1025,18 +992,15 @@ namespace javazoom.jl.decoder
 		
 		private void  compute_pcm_samples7(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1050,18 +1014,15 @@ namespace javazoom.jl.decoder
 		}
 		private void  compute_pcm_samples8(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1076,18 +1037,15 @@ namespace javazoom.jl.decoder
 		
 		private void  compute_pcm_samples9(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1102,17 +1060,14 @@ namespace javazoom.jl.decoder
 		
 		private void  compute_pcm_samples10(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1126,18 +1081,15 @@ namespace javazoom.jl.decoder
 		}
 		private void  compute_pcm_samples11(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1151,17 +1103,14 @@ namespace javazoom.jl.decoder
 		}
 		private void  compute_pcm_samples12(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1175,18 +1124,15 @@ namespace javazoom.jl.decoder
 		}
 		private void  compute_pcm_samples13(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1200,18 +1146,15 @@ namespace javazoom.jl.decoder
 		}
 		private void  compute_pcm_samples14(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
 			// fat chance of having this loop unroll
 			for (int i = 0; i < 32; i++)
 			{
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				float pcm_sample;
 				
@@ -1225,11 +1168,9 @@ namespace javazoom.jl.decoder
 		}
 		private void  compute_pcm_samples15(Obuffer buffer)
 		{
-			//UPGRADE_NOTE: Final was removed from the declaration of 'vp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] vp = actual_v;
 			
 			//int inc = v_inc;
-			//UPGRADE_NOTE: Final was removed from the declaration of 'tmpOut '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 			float[] tmpOut = _tmpOut;
 			int dvp = 0;
 			
@@ -1237,7 +1178,6 @@ namespace javazoom.jl.decoder
 			for (int i = 0; i < 32; i++)
 			{
 				float pcm_sample;
-				//UPGRADE_NOTE: Final was removed from the declaration of 'dp '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 				float[] dp = d16[i];
 				pcm_sample = (float) (((vp[15 + dvp] * dp[0]) + (vp[14 + dvp] * dp[1]) + (vp[13 + dvp] * dp[2]) + (vp[12 + dvp] * dp[3]) + (vp[11 + dvp] * dp[4]) + (vp[10 + dvp] * dp[5]) + (vp[9 + dvp] * dp[6]) + (vp[8 + dvp] * dp[7]) + (vp[7 + dvp] * dp[8]) + (vp[6 + dvp] * dp[9]) + (vp[5 + dvp] * dp[10]) + (vp[4 + dvp] * dp[11]) + (vp[3 + dvp] * dp[12]) + (vp[2 + dvp] * dp[13]) + (vp[1 + dvp] * dp[14]) + (vp[0 + dvp] * dp[15])) * scalefactor);
 				
@@ -1375,67 +1315,36 @@ namespace javazoom.jl.decoder
 		
 		
 		private const double MY_PI = 3.14159265358979323846;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos1_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos1_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos3_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos3_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 3.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos5_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos5_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 5.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos7_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos7_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 7.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos9_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos9_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 9.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos11_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos11_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 11.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos13_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos13_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 13.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos15_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos15_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 15.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos17_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos17_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 17.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos19_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos19_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 19.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos21_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos21_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 21.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos23_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos23_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 23.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos25_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos25_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 25.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos27_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos27_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 27.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos29_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos29_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 29.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos31_64 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos31_64 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 31.0 / 64.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos1_32 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos1_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 32.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos3_32 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos3_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 3.0 / 32.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos5_32 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos5_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 5.0 / 32.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos7_32 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos7_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 7.0 / 32.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos9_32 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos9_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 9.0 / 32.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos11_32 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos11_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 11.0 / 32.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos13_32 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos13_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 13.0 / 32.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos15_32 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos15_32 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 15.0 / 32.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos1_16 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos1_16 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 16.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos3_16 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos3_16 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 3.0 / 16.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos5_16 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos5_16 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 5.0 / 16.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos7_16 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos7_16 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 7.0 / 16.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos1_8 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos1_8 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 8.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos3_8 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos3_8 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI * 3.0 / 8.0)));
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cos1_4 '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly float cos1_4 = (float) (1.0 / (2.0 * System.Math.Cos(MY_PI / 4.0)));
 		
 		// Note: These values are not in the same order

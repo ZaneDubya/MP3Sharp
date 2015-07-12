@@ -40,7 +40,6 @@ namespace javazoom.jl.decoder
 			}
 			
 		}
-		//UPGRADE_NOTE: Final was removed from the declaration of 'in '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private System.IO.Stream in_Renamed;
 		
 		public InputStreamSource(System.IO.Stream in_Renamed)

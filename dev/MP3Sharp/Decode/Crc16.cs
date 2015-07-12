@@ -30,7 +30,6 @@ namespace javazoom.jl.decoder
 	/// </summary>
 	internal sealed class Crc16
 	{
-		//UPGRADE_NOTE: The initialization of  'polynomial' was moved to static method 'javazoom.jl.decoder.Crc16'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private static short polynomial;
 		private short crc;
 		

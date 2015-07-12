@@ -32,7 +32,6 @@ namespace Mp3Sharp
 	/// </author>
 	public class Mp3SharpException:System.Exception
 	{
-		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 		virtual public System.Exception Exception
 		{
 			get
@@ -42,7 +41,6 @@ namespace Mp3Sharp
 			
 		}
 		
-		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 		private System.Exception exception;
 		
 		
@@ -54,7 +52,6 @@ namespace Mp3Sharp
 		{
 		}
 		
-		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 		public Mp3SharpException(System.String msg, System.Exception t):base(msg)
 		{
 			exception = t;

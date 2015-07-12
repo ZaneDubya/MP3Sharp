@@ -43,16 +43,13 @@ namespace javazoom.jl.decoder
 			}
 			
 		}
-		//UPGRADE_NOTE: The initialization of  'errorcode' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private int errorcode;
 		
-		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 		public DecoderException(System.String msg, System.Exception t):base(msg, t)
 		{
 			InitBlock();
 		}
 		
-		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 		public DecoderException(int errorcode, System.Exception t):this(getErrorString(errorcode), t)
 		{
 			InitBlock();

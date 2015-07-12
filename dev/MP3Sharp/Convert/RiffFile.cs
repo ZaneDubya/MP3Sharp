@@ -22,7 +22,6 @@ namespace javazoom.jl.converter
 	/// </summary>
 	internal class RiffFile
 	{
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'RiffChunkHeader' to access its enclosing instance. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1019"'
 		internal class RiffChunkHeader
 		{
 			private void  InitBlock(RiffFile enclosingInstance)

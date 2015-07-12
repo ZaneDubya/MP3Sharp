@@ -71,8 +71,6 @@ namespace javazoom.jl.decoder
 		
 		/// <summary> The frame buffer that holds the data for the current frame.
 		/// </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'framebuffer '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'framebuffer' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private int[] framebuffer;
 		
 		/// <summary> Number of valid bytes in the frame buffer.
@@ -81,7 +79,6 @@ namespace javazoom.jl.decoder
 		
 		/// <summary> The bytes read from the stream.
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'frame_bytes' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private sbyte[] frame_bytes;
 		
 		/// <summary> Index into <code>framebuffer</code> where the next bits are
@@ -103,21 +100,14 @@ namespace javazoom.jl.decoder
 		//private int 			current_frame_number;
 		//private int				last_frame_number;
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'bitmask '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private int[] bitmask = new int[]{0, 0x00000001, 0x00000003, 0x00000007, 0x0000000F, 0x0000001F, 0x0000003F, 0x0000007F, 0x000000FF, 0x000001FF, 0x000003FF, 0x000007FF, 0x00000FFF, 0x00001FFF, 0x00003FFF, 0x00007FFF, 0x0000FFFF, 0x0001FFFF};
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'source '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private BackStream source;
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'header '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'header' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Header header;
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'syncbuf '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
-		//UPGRADE_NOTE: The initialization of  'syncbuf' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private sbyte[] syncbuf;
 		
-		//UPGRADE_NOTE: The initialization of  'crc' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Crc16[] crc;
 		
 		//private ByteArrayOutputStream	_baos = null; // E.B
@@ -282,7 +272,6 @@ namespace javazoom.jl.decoder
 		{
 			return new BitstreamException(errorcode, null);
 		}
-		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 		internal BitstreamException newBitstreamException(int errorcode, System.Exception throwable)
 		{
 			return new BitstreamException(errorcode, throwable);

@@ -29,10 +29,8 @@ namespace javazoom.jl.decoder
 	
 	internal class JavaLayerUtils
 	{
-		//UPGRADE_NOTE: Synchronized keyword was removed from method 'getHook'. Lock expression was added. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1027"'
 		/// <summary> Sets the system-wide JavaLayer hook.
 		/// </summary>
-		//UPGRADE_NOTE: Synchronized keyword was removed from method 'setHook'. Lock expression was added. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1027"'
 		static public JavaLayerHook Hook
 		{
 			get
@@ -103,7 +101,6 @@ namespace javazoom.jl.decoder
 			
 			System.Object obj;
 			
-			//UPGRADE_NOTE: Exception 'java.lang.ClassNotFoundException' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 			try
 			{
 				//UPGRADE_WARNING: Method 'java.io.ObjectInputStream.readObject' was converted to 'SupportClass.Deserialize' which may throw an exception. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1101"'
@@ -187,7 +184,6 @@ namespace javazoom.jl.decoder
 		
 		
 		
-		//UPGRADE_NOTE: Synchronized keyword was removed from method 'getResourceAsStream'. Lock expression was added. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1027"'
 		/// <summary> Retrieves an InputStream for a named resource. 
 		/// 
 		/// </summary>

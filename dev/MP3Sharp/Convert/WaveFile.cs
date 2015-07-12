@@ -25,7 +25,6 @@ namespace javazoom.jl.converter
 	{
 		public const int MAX_WAVE_CHANNELS = 2;
 		
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'WaveFormat_ChunkData' to access its enclosing instance. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1019"'
 		internal class WaveFormat_ChunkData
 		{
 			private void  InitBlock(WaveFile enclosingInstance)
@@ -66,7 +65,6 @@ namespace javazoom.jl.converter
 		}
 		
 		
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'WaveFormat_Chunk' to access its enclosing instance. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1019"'
 		internal class WaveFormat_Chunk
 		{
 			private void  InitBlock(WaveFile enclosingInstance)
@@ -104,7 +102,6 @@ namespace javazoom.jl.converter
 			}
 		}
 		
-		//UPGRADE_NOTE: Field 'EnclosingInstance' was added to class 'WaveFileSample' to access its enclosing instance. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1019"'
 		internal class WaveFileSample
 		{
 			private void  InitBlock(WaveFile enclosingInstance)

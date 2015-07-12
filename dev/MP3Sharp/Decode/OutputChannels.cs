@@ -94,13 +94,9 @@ namespace javazoom.jl.decoder
 		public static int DOWNMIX_CHANNELS = 3;
 		
 		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'LEFT '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		public static readonly OutputChannels LEFT = new OutputChannels(LEFT_CHANNEL);
-		//UPGRADE_NOTE: Final was removed from the declaration of 'RIGHT '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		public static readonly OutputChannels RIGHT = new OutputChannels(RIGHT_CHANNEL);
-		//UPGRADE_NOTE: Final was removed from the declaration of 'BOTH '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		public static readonly OutputChannels BOTH = new OutputChannels(BOTH_CHANNELS);
-		//UPGRADE_NOTE: Final was removed from the declaration of 'DOWNMIX '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		public static readonly OutputChannels DOWNMIX = new OutputChannels(DOWNMIX_CHANNELS);
 		
 		

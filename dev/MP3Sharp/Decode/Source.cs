@@ -28,7 +28,6 @@ namespace javazoom.jl.decoder
 	}
 	internal interface Source
 		{
-			//UPGRADE_NOTE: Members of interface 'Source' were extracted into structure 'Source_Fields'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1045"'
 			bool Seekable
 			{
 				get;

@@ -128,7 +128,6 @@ namespace javazoom.jl.decoder
 			}
 			
 		}
-		//UPGRADE_NOTE: Final was removed from the declaration of 'DEFAULT_PARAMS '. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1003"'
 		private static readonly Params DEFAULT_PARAMS = new Params();
 		
 		/// <summary> The Bistream from which the MPEG audio frames are read.
@@ -157,7 +156,6 @@ namespace javazoom.jl.decoder
 		private int outputFrequency;
 		private int outputChannels;
 		
-		//UPGRADE_NOTE: The initialization of  'equalizer' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		private Equalizer equalizer;
 		
 		private Params params_Renamed;
@@ -240,7 +238,6 @@ namespace javazoom.jl.decoder
 			return new DecoderException(errorcode, null);
 		}
 		
-		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 		protected internal virtual DecoderException newDecoderException(int errorcode, System.Exception throwable)
 		{
 			return new DecoderException(errorcode, throwable);
@@ -371,10 +368,8 @@ namespace javazoom.jl.decoder
 				}
 				
 			}
-			//UPGRADE_NOTE: The initialization of  'outputChannels' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 			private OutputChannels outputChannels;
 			
-			//UPGRADE_NOTE: The initialization of  'equalizer' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 			private Equalizer equalizer;
 			
 			public Params()
@@ -384,7 +379,6 @@ namespace javazoom.jl.decoder
 			//UPGRADE_TODO: The equivalent of method 'java.lang.Object.clone' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
 			public System.Object Clone()
 			{
-				//UPGRADE_NOTE: Exception 'java.lang.CloneNotSupportedException' was converted to 'System.Exception' which has different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1100"'
 				try
 				{
 					return base.MemberwiseClone();

@@ -29,7 +29,6 @@ namespace javazoom.jl.decoder
 	}
 	internal interface JavaLayerErrors
 		{
-			//UPGRADE_NOTE: Members of interface 'JavaLayerErrors' were extracted into structure 'JavaLayerErrors_Fields'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1045"'
 			/// <summary> The first bitstream error code. See the {@link DecoderErrors DecoderErrors}
 			/// interface for other bitstream error codes.
 			/// </summary>

@@ -85,7 +85,6 @@ namespace javazoom.jl.converter
 		
 		/// <summary> Write the samples to the file (Random Acces).
 		/// </summary>
-		//UPGRADE_NOTE: The initialization of  'myBuffer' was moved to method 'InitBlock'. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1005"'
 		internal short[] myBuffer;
 		public override void  write_buffer(int val)
 		{
