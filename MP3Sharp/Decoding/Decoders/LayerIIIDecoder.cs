@@ -590,10 +590,10 @@ namespace MP3Sharp.Decoding.Decoders
 
                 for (ch = 0; ch < channels; ch++)
                 {
-                    m_SideInfo.Channels[ch].scfsi[0] = stream.GetBitsFromBuffer(1);
-                    m_SideInfo.Channels[ch].scfsi[1] = stream.GetBitsFromBuffer(1);
-                    m_SideInfo.Channels[ch].scfsi[2] = stream.GetBitsFromBuffer(1);
-                    m_SideInfo.Channels[ch].scfsi[3] = stream.GetBitsFromBuffer(1);
+                    m_SideInfo.Channels[ch].ScaleFactorBits[0] = stream.GetBitsFromBuffer(1);
+                    m_SideInfo.Channels[ch].ScaleFactorBits[1] = stream.GetBitsFromBuffer(1);
+                    m_SideInfo.Channels[ch].ScaleFactorBits[2] = stream.GetBitsFromBuffer(1);
+                    m_SideInfo.Channels[ch].ScaleFactorBits[3] = stream.GetBitsFromBuffer(1);
                 }
 
                 for (gr = 0; gr < 2; gr++)
@@ -791,7 +791,7 @@ namespace MP3Sharp.Decoding.Decoders
             {
                 // LONG types 0,1,3
 
-                if ((m_SideInfo.Channels[ch].scfsi[0] == 0) || (gr == 0))
+                if ((m_SideInfo.Channels[ch].ScaleFactorBits[0] == 0) || (gr == 0))
                 {
                     scalefac[ch].l[0] = m_BitReserve.ReadBits(length0);
                     scalefac[ch].l[1] = m_BitReserve.ReadBits(length0);
@@ -800,7 +800,7 @@ namespace MP3Sharp.Decoding.Decoders
                     scalefac[ch].l[4] = m_BitReserve.ReadBits(length0);
                     scalefac[ch].l[5] = m_BitReserve.ReadBits(length0);
                 }
-                if ((m_SideInfo.Channels[ch].scfsi[1] == 0) || (gr == 0))
+                if ((m_SideInfo.Channels[ch].ScaleFactorBits[1] == 0) || (gr == 0))
                 {
                     scalefac[ch].l[6] = m_BitReserve.ReadBits(length0);
                     scalefac[ch].l[7] = m_BitReserve.ReadBits(length0);
@@ -808,7 +808,7 @@ namespace MP3Sharp.Decoding.Decoders
                     scalefac[ch].l[9] = m_BitReserve.ReadBits(length0);
                     scalefac[ch].l[10] = m_BitReserve.ReadBits(length0);
                 }
-                if ((m_SideInfo.Channels[ch].scfsi[2] == 0) || (gr == 0))
+                if ((m_SideInfo.Channels[ch].ScaleFactorBits[2] == 0) || (gr == 0))
                 {
                     scalefac[ch].l[11] = m_BitReserve.ReadBits(length1);
                     scalefac[ch].l[12] = m_BitReserve.ReadBits(length1);
@@ -816,7 +816,7 @@ namespace MP3Sharp.Decoding.Decoders
                     scalefac[ch].l[14] = m_BitReserve.ReadBits(length1);
                     scalefac[ch].l[15] = m_BitReserve.ReadBits(length1);
                 }
-                if ((m_SideInfo.Channels[ch].scfsi[3] == 0) || (gr == 0))
+                if ((m_SideInfo.Channels[ch].ScaleFactorBits[3] == 0) || (gr == 0))
                 {
                     scalefac[ch].l[16] = m_BitReserve.ReadBits(length1);
                     scalefac[ch].l[17] = m_BitReserve.ReadBits(length1);
