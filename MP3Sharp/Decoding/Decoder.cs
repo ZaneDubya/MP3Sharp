@@ -221,7 +221,7 @@ namespace MP3Sharp.Decoding
 
             if (decoder == null)
             {
-                throw NewDecoderException(DecoderErrors_Fields.UNSUPPORTED_LAYER, null);
+                throw NewDecoderException(DecoderErrors.UNSUPPORTED_LAYER, null);
             }
 
             return decoder;

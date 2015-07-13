@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Decoding\DecoderErrors.cs" />
     <Compile Include="Decoding\PushbackStream.cs" />
     <Compile Include="Decoding\BitReserve.cs" />
     <Compile Include="Decoding\Bitstream.cs" />
@@ -51,7 +52,6 @@
     <Compile Include="Decoding\CircularByteBuffer.cs" />
     <Compile Include="Decoding\Crc16.cs" />
     <Compile Include="Decoding\Decoder.cs" />
-    <Compile Include="Decoding\DecoderErrors.cs" />
     <Compile Include="Decoding\DecoderException.cs" />
     <Compile Include="Decoding\Decoders\LayerIIISupport.cs" />
     <Compile Include="Decoding\Decoders\Subbands\ASubband.cs" />

@@ -20,12 +20,12 @@ namespace MP3Sharp.Decoding
     ///     This interface provides constants describing the error
     ///     codes used by the Decoder to indicate errors.
     /// </summary>
-    internal struct DecoderErrors_Fields
+    internal struct DecoderErrors
     {
         public static readonly int UNKNOWN_ERROR;
         public static readonly int UNSUPPORTED_LAYER;
 
-        static DecoderErrors_Fields()
+        static DecoderErrors()
         {
             UNKNOWN_ERROR = BitstreamErrors.DECODER_ERROR + 0;
             UNSUPPORTED_LAYER = BitstreamErrors.DECODER_ERROR + 1;

@@ -24,6 +24,8 @@ namespace MP3Sharp.Decoding
     /// </summary>
     internal class DecoderException : MP3SharpException
     {
+        
+
         private int m_ErrorCode;
 
         public DecoderException(string msg, Exception ex) : base(msg, ex)
@@ -44,7 +46,7 @@ namespace MP3Sharp.Decoding
 
         private void InitBlock()
         {
-            m_ErrorCode = DecoderErrors_Fields.UNKNOWN_ERROR;
+            m_ErrorCode = DecoderErrors.UNKNOWN_ERROR;
         }
 
         public static string GetErrorString(int errorcode)
