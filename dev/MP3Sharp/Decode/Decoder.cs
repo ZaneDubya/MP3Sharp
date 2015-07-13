@@ -149,7 +149,7 @@ namespace MP3Sharp.Decode
         /// <returns>
         ///     A SampleBuffer containing the decoded samples.
         /// </returns>
-        public virtual ABuffer decodeFrame(Header header, Bitstream stream)
+        public virtual ABuffer DecodeFrame(Header header, Bitstream stream)
         {
             if (!m_IsInitialized)
             {

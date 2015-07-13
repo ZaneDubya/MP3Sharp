@@ -232,7 +232,7 @@ namespace MP3Sharp.Decode
             ABuffer buffer0, int which_ch0)
         {
             InitBlock();
-            HuffmanDecoder.inithuff();
+            Huffman.inithuff();
             is_1d = new int[SBLIMIT*SSLIMIT + 4];
             ro = new float[2][][];
             for (int i = 0; i < 2; i++)
@@ -1014,7 +1014,7 @@ namespace MP3Sharp.Decode
 
             int buf, buf1;
 
-            HuffmanDecoder h;
+            Huffman h;
 
             // Find region boundary for short block case
 
@@ -1044,13 +1044,13 @@ namespace MP3Sharp.Decode
             for (int i = 0; i < (si.ch[ch].gr[gr].big_values << 1); i += 2)
             {
                 if (i < region1Start)
-                    h = HuffmanDecoder.ht[si.ch[ch].gr[gr].table_select[0]];
+                    h = Huffman.ht[si.ch[ch].gr[gr].table_select[0]];
                 else if (i < region2Start)
-                    h = HuffmanDecoder.ht[si.ch[ch].gr[gr].table_select[1]];
+                    h = Huffman.ht[si.ch[ch].gr[gr].table_select[1]];
                 else
-                    h = HuffmanDecoder.ht[si.ch[ch].gr[gr].table_select[2]];
+                    h = Huffman.ht[si.ch[ch].gr[gr].table_select[2]];
 
-                HuffmanDecoder.Decode(h, x, y, v, w, m_BitReserve);
+                Huffman.Decode(h, x, y, v, w, m_BitReserve);
 
                 is_1d[index++] = x[0];
                 is_1d[index++] = y[0];
@@ -1059,12 +1059,12 @@ namespace MP3Sharp.Decode
             }
 
             // Read count1 area
-            h = HuffmanDecoder.ht[si.ch[ch].gr[gr].count1table_select + 32];
+            h = Huffman.ht[si.ch[ch].gr[gr].count1table_select + 32];
             num_bits = m_BitReserve.hsstell();
 
             while ((num_bits < part2_3_end) && (index < 576))
             {
-                HuffmanDecoder.Decode(h, x, y, v, w, m_BitReserve);
+                Huffman.Decode(h, x, y, v, w, m_BitReserve);
 
                 is_1d[index++] = v[0];
                 is_1d[index++] = w[0];

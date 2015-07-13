@@ -257,7 +257,7 @@ namespace MP3Sharp
                 m_FrequencyRep = header.frequency();
 
                 // Decode the frame.
-                ABuffer decoderOutput = m_Decoder.decodeFrame(header, m_BitStream);
+                ABuffer decoderOutput = m_Decoder.DecodeFrame(header, m_BitStream);
 
                 // Apparently, the way JavaZoom sets the output buffer 
                 // on the decoder is a bit dodgy. Even though
