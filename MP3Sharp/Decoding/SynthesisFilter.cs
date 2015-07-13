@@ -1389,34 +1389,6 @@ namespace MP3Sharp.Decoding
             {
                 buffer.AppendSamples(channel, _tmpOut);
             }
-
-            /*
-			// MDM: I was considering putting in quality control for
-			// low-spec CPUs, but the performance gain (about 10-15%) 
-			// did not justify the considerable drop in audio quality.
-			switch (inc)
-			{
-			case 16:		 
-			buffer.appendSamples(channel, tmpOut);
-			break;
-			case 32:
-			for (int i=0; i<16; i++)
-			{
-			buffer.append(channel, (short)tmpOut[i]);
-			buffer.append(channel, (short)tmpOut[i]); 
-			}
-			break;			
-			case 64:
-			for (int i=0; i<8; i++)
-			{
-			buffer.append(channel, (short)tmpOut[i]);
-			buffer.append(channel, (short)tmpOut[i]);
-			buffer.append(channel, (short)tmpOut[i]);
-			buffer.append(channel, (short)tmpOut[i]); 
-			}
-			break;			
-			
-			}*/
         }
 
         /// <summary>
@@ -1481,22 +1453,6 @@ namespace MP3Sharp.Decoding
             return split;
         }
 
-        /// <summary>
-        ///     Returns a subarray of an existing array.
-        /// </summary>
-        /// <param name="array	The">
-        ///     array to retrieve a subarra from.
-        /// </param>
-        /// <param name="offs	The">
-        ///     offset in the array that corresponds to
-        ///     the first index of the subarray.
-        /// </param>
-        /// <param name="len	The">
-        ///     number of indeces in the subarray.
-        /// </param>
-        /// <returns>
-        ///     The subarray, which may be of length 0.
-        /// </returns>
         private static float[] subArray(float[] array, int offs, int len)
         {
             if (offs + len > array.Length)

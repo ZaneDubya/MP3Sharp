@@ -117,6 +117,7 @@ namespace MP3Sharp.Decoding
         /// </summary>
         public override void SetStopFlag()
         {
+
         }
     }
 }

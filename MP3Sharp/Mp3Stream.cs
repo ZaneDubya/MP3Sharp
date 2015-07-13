@@ -14,10 +14,9 @@
 //  *
 //  ***************************************************************************/
 
-using System;
-using System.Diagnostics;
-using System.IO;
 using MP3Sharp.Decoding;
+using System;
+using System.IO;
 
 namespace MP3Sharp
 {
