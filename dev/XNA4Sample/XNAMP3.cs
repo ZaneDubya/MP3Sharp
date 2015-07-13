@@ -31,7 +31,16 @@ namespace XNA4Sample
             int bytesReturned = m_Stream.Read(m_WaveBuffer, 0, m_WaveBuffer.Length);
             if (bytesReturned != NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK)
             {
-
+                bool repeat = true;
+                if (repeat)
+                {
+                    m_Stream.Position = 0;
+                    m_Stream.Read(m_WaveBuffer, bytesReturned, m_WaveBuffer.Length - bytesReturned);
+                }
+                else
+                {
+                    // play final buffer and end.
+                }
             }
         }
 
