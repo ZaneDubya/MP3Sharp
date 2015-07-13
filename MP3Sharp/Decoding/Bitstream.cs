@@ -18,7 +18,7 @@ using System;
 using System.Diagnostics;
 using MP3Sharp.Support;
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     The Bistream class is responsible for parsing an MPEG audio bitstream.

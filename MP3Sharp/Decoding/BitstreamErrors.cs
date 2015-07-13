@@ -1,5 +1,5 @@
 // /***************************************************************************
-//  * DecoderErrors.cs
+//  * BitstreamErrors.cs
 //  * Copyright (c) 2015 the authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
@@ -14,21 +14,31 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     /// <summary>
-    ///     This interface provides constants describing the error
-    ///     codes used by the Decoder to indicate errors.
+    ///     This struct describes all error codes that can be thrown
+    ///     in <code>BistreamException</code>s.
     /// </summary>
-    internal struct DecoderErrors_Fields
+    internal struct BitstreamErrors
     {
         public static readonly int UNKNOWN_ERROR;
-        public static readonly int UNSUPPORTED_LAYER;
+        public static readonly int UNKNOWN_SAMPLE_RATE;
+        public static readonly int STREAM_ERROR;
+        public static readonly int UNEXPECTED_EOF;
+        public static readonly int STREAM_EOF;
+        public static readonly int BITSTREAM_LAST = 0x1ff;
 
-        static DecoderErrors_Fields()
+        public static readonly int BITSTREAM_ERROR = 0x100;
+        public static readonly int DECODER_ERROR = 0x200;
+
+        static BitstreamErrors()
         {
-            UNKNOWN_ERROR = BitstreamErrors.DECODER_ERROR + 0;
-            UNSUPPORTED_LAYER = BitstreamErrors.DECODER_ERROR + 1;
+            UNKNOWN_ERROR = BITSTREAM_ERROR + 0;
+            UNKNOWN_SAMPLE_RATE = BITSTREAM_ERROR + 1;
+            STREAM_ERROR = BITSTREAM_ERROR + 2;
+            UNEXPECTED_EOF = BITSTREAM_ERROR + 3;
+            STREAM_EOF = BITSTREAM_ERROR + 4;
         }
     }
 }

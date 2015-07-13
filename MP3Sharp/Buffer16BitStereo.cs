@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using MP3Sharp.Decode;
+using MP3Sharp.Decoding;
 
 namespace MP3Sharp
 {

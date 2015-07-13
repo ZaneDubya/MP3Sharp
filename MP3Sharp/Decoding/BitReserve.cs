@@ -14,7 +14,7 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     Implementation of Bit Reservoir for Layer III.

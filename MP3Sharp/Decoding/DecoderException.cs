@@ -16,7 +16,7 @@
 
 using System;
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     The <code>DecoderException</code> represents the class of

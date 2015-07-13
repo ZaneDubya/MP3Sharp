@@ -14,7 +14,7 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding.Decoders
 {
     /// <summary>
     ///     Implementations of FrameDecoder are responsible for decoding

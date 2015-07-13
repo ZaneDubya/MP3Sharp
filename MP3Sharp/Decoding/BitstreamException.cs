@@ -15,7 +15,7 @@
 //  ***************************************************************************/
 
 using System;
-using MP3Sharp.Decode;
+using MP3Sharp.Decoding;
 
 namespace MP3Sharp
 {

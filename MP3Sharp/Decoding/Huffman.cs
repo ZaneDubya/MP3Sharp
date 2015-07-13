@@ -16,7 +16,7 @@
 
 using MP3Sharp.Support;
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     Class to implements Huffman decoder.

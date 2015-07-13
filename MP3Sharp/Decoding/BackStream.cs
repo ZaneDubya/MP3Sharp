@@ -17,7 +17,7 @@
 using System;
 using System.IO;
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     internal class BackStream
     {

@@ -16,7 +16,7 @@
 
 using System;
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     internal enum OutputChannelsEnum
     {

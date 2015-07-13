@@ -14,7 +14,7 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     The <code>SampleBuffer</code> class implements an output buffer

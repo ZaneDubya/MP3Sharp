@@ -15,8 +15,9 @@
 //  ***************************************************************************/
 
 using System;
+using MP3Sharp.Decoding.Decoders;
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     Encapsulates the details of decoding an MPEG audio frame.

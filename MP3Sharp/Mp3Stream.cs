@@ -17,7 +17,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using MP3Sharp.Decode;
+using MP3Sharp.Decoding;
 
 namespace MP3Sharp
 {
@@ -28,7 +28,7 @@ namespace MP3Sharp
     public class MP3Stream : Stream
     {
         // Used to interface with JavaZoom code.
-        private readonly Decode.Bitstream m_BitStream;
+        private readonly Decoding.Bitstream m_BitStream;
         private readonly Decoder m_Decoder = new Decoder(Decoder.DefaultParams);
         // local variables.
         private readonly Buffer16BitStereo m_QueueOBuffer;
@@ -238,7 +238,7 @@ namespace MP3Sharp
         private bool ReadFrame()
         {
             // Read a frame from the bitstream.
-            Decode.Header header = m_BitStream.readFrame();
+            Decoding.Header header = m_BitStream.readFrame();
             if (header == null)
                 return false;
 

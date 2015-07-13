@@ -17,7 +17,7 @@
 using MP3Sharp.Support;
 using System.Text;
 
-namespace MP3Sharp.Decode
+namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     Class for extracting information from a frame header.
