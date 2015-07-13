@@ -37,6 +37,11 @@ namespace MP3Sharp
         protected SoundFormat FormatRep;
         private int m_FrequencyRep = -1;
 
+        public bool IsEOF
+        {
+            get; 
+            protected set; }
+
         /// <summary>
         ///     Creates a new stream instance using the provided filename, and the default chunk size of 4096 bytes.
         /// </summary>
@@ -63,16 +68,15 @@ namespace MP3Sharp
 
         /// <summary>
         ///     Creates a new stream instance using the provided stream as a source.
-        ///     TODO: allow selecting stereo or mono in the constructor (note that
-        ///     this also requires "implementing" the stereo format).
+        ///     TODO: allow selecting stereo or mono in the constructor (note that this also requires "implementing" the stereo format).
         /// </summary>
         public MP3Stream(Stream sourceStream, int chunkSize)
         {
+            IsEOF = false;
             FormatRep = SoundFormat.Pcm16BitStereo;
             m_SourceStream = sourceStream;
             m_BitStream = new Bitstream(new PushbackStream(m_SourceStream, chunkSize));
             m_Buffer = new Buffer16BitStereo();
-
             m_Decoder.OutputBuffer = m_Buffer;
         }
 
@@ -207,7 +211,10 @@ namespace MP3Sharp
                 if (m_Buffer.BytesLeft <= 0)
                 {
                     if (!ReadFrame()) // out of frames or end of stream?
+                    {
+                        IsEOF = true;
                         break;
+                    }
                 }
 
                 // Copy as much as we can from the current buffer:
