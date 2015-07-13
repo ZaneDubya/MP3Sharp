@@ -12,13 +12,15 @@ namespace XNA4Sample
         /// </summary>
         static void Main(string[] args)
         {
+            // ExampleReadMP3File();
+
             using (BaseGame game = new BaseGame())
             {
                 game.Run();
             }
         }
 
-        public static void ReadAllTheWayThroughMp3File()
+        public static void ExampleReadMP3File()
         {
             MP3Stream stream = new MP3Stream(@"sample.mp3");
             XNAMP3 mp3 = new XNAMP3(stream);

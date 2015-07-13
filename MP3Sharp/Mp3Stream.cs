@@ -136,7 +136,7 @@ namespace MP3Sharp
         }
 
         /// <summary>
-        ///     Gets or sets the PCM output format of this stream.
+        ///     Gets the PCM output format of this stream.
         /// </summary>
         public SoundFormat Format
         {
@@ -223,16 +223,12 @@ namespace MP3Sharp
         }
 
         /// <summary>
-        ///     Reads a single byte of the PCM-encoded stream.
-        /// </summary>
-        /// <summary>
         ///     Closes the source stream and releases any associated resources.
         ///     If you don't call this, you may be leaking file descriptors.
         /// </summary>
         public override void Close()
         {
             m_BitStream.close(); // This should close SourceStream as well.
-            // SourceStream.Close();
         }
 
         /// <summary>
@@ -275,8 +271,4 @@ namespace MP3Sharp
             return true;
         }
     }
-
-
-
-
 }
