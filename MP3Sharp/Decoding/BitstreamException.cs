@@ -15,9 +15,8 @@
 //  ***************************************************************************/
 
 using System;
-using MP3Sharp.Decoding;
 
-namespace MP3Sharp
+namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     Instances of BitstreamException are thrown
@@ -39,34 +38,31 @@ namespace MP3Sharp
     /// </summary>
     public class BitstreamException : MP3SharpException
     {
-        private int errorcode;
+        private int m_Errorcode;
 
         public BitstreamException(string msg, Exception t) : base(msg, t)
         {
             InitBlock();
         }
 
-        public BitstreamException(int errorcode, Exception t) : this(getErrorString(errorcode), t)
+        public BitstreamException(int errorcode, Exception t) : this(GetErrorString(errorcode), t)
         {
             InitBlock();
-            this.errorcode = errorcode;
+            m_Errorcode = errorcode;
         }
 
         public virtual int ErrorCode
         {
-            get { return errorcode; }
+            get { return m_Errorcode; }
         }
 
         private void InitBlock()
         {
-            errorcode = BitstreamErrors.UNKNOWN_ERROR;
+            m_Errorcode = BitstreamErrors.UNKNOWN_ERROR;
         }
 
-        public static string getErrorString(int errorcode)
+        public static string GetErrorString(int errorcode)
         {
-            // REVIEW: use resource bundle to map error codes
-            // to locale-sensitive strings.
-
             return "Bitstream errorcode " + System.Convert.ToString(errorcode, 16);
         }
     }

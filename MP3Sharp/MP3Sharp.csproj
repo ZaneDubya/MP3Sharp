@@ -50,6 +50,7 @@
     <Compile Include="Decoding\Decoders\LayerIII\SBI.cs" />
     <Compile Include="Decoding\Decoders\LayerIII\ScaleFactorData.cs" />
     <Compile Include="Decoding\Decoders\LayerIII\ScaleFactorTable.cs" />
+    <Compile Include="Decoding\OutputChannelsEnum.cs" />
     <Compile Include="Decoding\PushbackStream.cs" />
     <Compile Include="Decoding\BitReserve.cs" />
     <Compile Include="Decoding\Bitstream.cs" />
