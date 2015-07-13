@@ -58,8 +58,6 @@
     <Compile Include="Decode\HuffmanDecoder.cs" />
     <Compile Include="Decode\IFrameDecoder.cs" />
     <Compile Include="Decode\MP3SharpException.cs" />
-    <Compile Include="Decode\JavaLayerHook.cs" />
-    <Compile Include="Decode\JavaLayerUtils.cs" />
     <Compile Include="Decode\LayerIDecoder.cs" />
     <Compile Include="Decode\LayerIIDecoder.cs" />
     <Compile Include="Decode\LayerIIIDecoder.cs" />
