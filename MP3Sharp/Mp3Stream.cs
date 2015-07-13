@@ -71,7 +71,7 @@ namespace MP3Sharp
         {
             FormatRep = SoundFormat.Pcm16BitStereo;
             m_SourceStream = sourceStream;
-            m_BitStream = new Bitstream(new BackStream(m_SourceStream, chunkSize));
+            m_BitStream = new Bitstream(new PushbackStream(m_SourceStream, chunkSize));
             m_QueueOBuffer = new Buffer16BitStereo();
 
             m_Decoder.OutputBuffer = m_QueueOBuffer;

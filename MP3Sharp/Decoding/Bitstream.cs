@@ -52,7 +52,7 @@ namespace MP3Sharp.Decoding
             0x0000FFFF, 0x0001FFFF
         };
 
-        private readonly BackStream m_SourceStream;
+        private readonly PushbackStream m_SourceStream;
 
         /// <summary>
         ///     Number (0-31, from MSB to LSB) of next bit for get_bits()
@@ -96,7 +96,7 @@ namespace MP3Sharp.Decoding
         /// <summary>
         ///     Construct a IBitstream that reads data from a given InputStream.
         /// </summary>
-        internal Bitstream(BackStream stream)
+        internal Bitstream(PushbackStream stream)
         {
             InitBlock();
             if (stream == null)

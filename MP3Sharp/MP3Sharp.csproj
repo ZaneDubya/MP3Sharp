@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Decoding\BackStream.cs" />
+    <Compile Include="Decoding\PushbackStream.cs" />
     <Compile Include="Decoding\BitReserve.cs" />
     <Compile Include="Decoding\Bitstream.cs" />
     <Compile Include="Decoding\BitstreamErrors.cs" />
