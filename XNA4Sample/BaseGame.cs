@@ -29,9 +29,8 @@ namespace XNA4Sample
             m_SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            MP3Stream stream = new MP3Stream(@"sample.mp3");
-            XNAMP3 mp3 = new XNAMP3(stream);
-            mp3.Play();
+            XNAMP3 mp3 = new XNAMP3(@"sample.mp3");
+            mp3.Play(false);
         }
 
         /// <summary>
