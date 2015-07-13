@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="sample.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
