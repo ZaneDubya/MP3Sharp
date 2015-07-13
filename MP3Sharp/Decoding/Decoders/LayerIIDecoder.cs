@@ -14,7 +14,7 @@
 //  *
 //  ***************************************************************************/
 
-using MP3Sharp.Decoding.Decoders.Subbands;
+using MP3Sharp.Decoding.Decoders.LayerII;
 
 namespace MP3Sharp.Decoding.Decoders
 {

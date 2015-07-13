@@ -780,7 +780,7 @@ namespace MP3Sharp.Decoding
 				}
 				*/
                 //if (bits[bitIndex++]!=0)
-                if (br.hget1bit() != 0)
+                if (br.ReadOneBit() != 0)
                 {
                     while (h.val[point][1] >= MXOFF)
                         point += h.val[point][1];
@@ -815,16 +815,16 @@ namespace MP3Sharp.Decoding
 				switch them around to make test bistream work. */
 
                 if (v[0] != 0)
-                    if (br.hget1bit() != 0)
+                    if (br.ReadOneBit() != 0)
                         v[0] = -v[0];
                 if (w[0] != 0)
-                    if (br.hget1bit() != 0)
+                    if (br.ReadOneBit() != 0)
                         w[0] = -w[0];
                 if (x[0] != 0)
-                    if (br.hget1bit() != 0)
+                    if (br.ReadOneBit() != 0)
                         x[0] = -x[0];
                 if (y[0] != 0)
-                    if (br.hget1bit() != 0)
+                    if (br.ReadOneBit() != 0)
                         y[0] = -y[0];
             }
             else
@@ -835,15 +835,15 @@ namespace MP3Sharp.Decoding
 
                 if (h.linbits != 0)
                     if ((h.xlen - 1) == x[0])
-                        x[0] += br.hgetbits(h.linbits);
+                        x[0] += br.ReadBits(h.linbits);
                 if (x[0] != 0)
-                    if (br.hget1bit() != 0)
+                    if (br.ReadOneBit() != 0)
                         x[0] = -x[0];
                 if (h.linbits != 0)
                     if ((h.ylen - 1) == y[0])
-                        y[0] += br.hgetbits(h.linbits);
+                        y[0] += br.ReadBits(h.linbits);
                 if (y[0] != 0)
-                    if (br.hget1bit() != 0)
+                    if (br.ReadOneBit() != 0)
                         y[0] = -y[0];
             }
             return error;

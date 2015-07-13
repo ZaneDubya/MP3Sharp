@@ -16,6 +16,7 @@
 
 using System;
 using MP3Sharp.Support;
+using MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace MP3Sharp.Decoding.Decoders
 {
@@ -454,7 +455,7 @@ namespace MP3Sharp.Decoding.Decoders
 
             if ((flush_main = (m_BitReserve.hsstell() & 7)) != 0)
             {
-                m_BitReserve.hgetbits(8 - flush_main);
+                m_BitReserve.ReadBits(8 - flush_main);
                 main_data_end++;
             }
 
@@ -472,7 +473,7 @@ namespace MP3Sharp.Decoding.Decoders
             }
 
             for (; bytes_to_discard > 0; bytes_to_discard--)
-                m_BitReserve.hgetbits(8);
+                m_BitReserve.ReadBits(8);
 
             for (gr = 0; gr < max_gr; gr++)
             {
@@ -599,52 +600,52 @@ namespace MP3Sharp.Decoding.Decoders
                 {
                     for (ch = 0; ch < channels; ch++)
                     {
-                        m_SideInfo.Channels[ch].gr[gr].Part23Length = stream.GetBitsFromBuffer(12);
-                        m_SideInfo.Channels[ch].gr[gr].BigValues = stream.GetBitsFromBuffer(9);
-                        m_SideInfo.Channels[ch].gr[gr].GlobalGain = stream.GetBitsFromBuffer(8);
-                        m_SideInfo.Channels[ch].gr[gr].ScaleFacCompress = stream.GetBitsFromBuffer(4);
-                        m_SideInfo.Channels[ch].gr[gr].WindowSwitchingFlag = stream.GetBitsFromBuffer(1);
-                        if ((m_SideInfo.Channels[ch].gr[gr].WindowSwitchingFlag) != 0)
+                        m_SideInfo.Channels[ch].Granules[gr].Part23Length = stream.GetBitsFromBuffer(12);
+                        m_SideInfo.Channels[ch].Granules[gr].BigValues = stream.GetBitsFromBuffer(9);
+                        m_SideInfo.Channels[ch].Granules[gr].GlobalGain = stream.GetBitsFromBuffer(8);
+                        m_SideInfo.Channels[ch].Granules[gr].ScaleFacCompress = stream.GetBitsFromBuffer(4);
+                        m_SideInfo.Channels[ch].Granules[gr].WindowSwitchingFlag = stream.GetBitsFromBuffer(1);
+                        if ((m_SideInfo.Channels[ch].Granules[gr].WindowSwitchingFlag) != 0)
                         {
-                            m_SideInfo.Channels[ch].gr[gr].BlockType = stream.GetBitsFromBuffer(2);
-                            m_SideInfo.Channels[ch].gr[gr].MixedBlockFlag = stream.GetBitsFromBuffer(1);
+                            m_SideInfo.Channels[ch].Granules[gr].BlockType = stream.GetBitsFromBuffer(2);
+                            m_SideInfo.Channels[ch].Granules[gr].MixedBlockFlag = stream.GetBitsFromBuffer(1);
 
-                            m_SideInfo.Channels[ch].gr[gr].TableSelect[0] = stream.GetBitsFromBuffer(5);
-                            m_SideInfo.Channels[ch].gr[gr].TableSelect[1] = stream.GetBitsFromBuffer(5);
+                            m_SideInfo.Channels[ch].Granules[gr].TableSelect[0] = stream.GetBitsFromBuffer(5);
+                            m_SideInfo.Channels[ch].Granules[gr].TableSelect[1] = stream.GetBitsFromBuffer(5);
 
-                            m_SideInfo.Channels[ch].gr[gr].SubblockGain[0] = stream.GetBitsFromBuffer(3);
-                            m_SideInfo.Channels[ch].gr[gr].SubblockGain[1] = stream.GetBitsFromBuffer(3);
-                            m_SideInfo.Channels[ch].gr[gr].SubblockGain[2] = stream.GetBitsFromBuffer(3);
+                            m_SideInfo.Channels[ch].Granules[gr].SubblockGain[0] = stream.GetBitsFromBuffer(3);
+                            m_SideInfo.Channels[ch].Granules[gr].SubblockGain[1] = stream.GetBitsFromBuffer(3);
+                            m_SideInfo.Channels[ch].Granules[gr].SubblockGain[2] = stream.GetBitsFromBuffer(3);
 
                             // Set region_count parameters since they are implicit in this case.
 
-                            if (m_SideInfo.Channels[ch].gr[gr].BlockType == 0)
+                            if (m_SideInfo.Channels[ch].Granules[gr].BlockType == 0)
                             {
                                 //	 Side info bad: block_type == 0 in split block
                                 return false;
                             }
-                            if (m_SideInfo.Channels[ch].gr[gr].BlockType == 2 && m_SideInfo.Channels[ch].gr[gr].MixedBlockFlag == 0)
+                            if (m_SideInfo.Channels[ch].Granules[gr].BlockType == 2 && m_SideInfo.Channels[ch].Granules[gr].MixedBlockFlag == 0)
                             {
-                                m_SideInfo.Channels[ch].gr[gr].Region0Count = 8;
+                                m_SideInfo.Channels[ch].Granules[gr].Region0Count = 8;
                             }
                             else
                             {
-                                m_SideInfo.Channels[ch].gr[gr].Region0Count = 7;
+                                m_SideInfo.Channels[ch].Granules[gr].Region0Count = 7;
                             }
-                            m_SideInfo.Channels[ch].gr[gr].Region1Count = 20 - m_SideInfo.Channels[ch].gr[gr].Region0Count;
+                            m_SideInfo.Channels[ch].Granules[gr].Region1Count = 20 - m_SideInfo.Channels[ch].Granules[gr].Region0Count;
                         }
                         else
                         {
-                            m_SideInfo.Channels[ch].gr[gr].TableSelect[0] = stream.GetBitsFromBuffer(5);
-                            m_SideInfo.Channels[ch].gr[gr].TableSelect[1] = stream.GetBitsFromBuffer(5);
-                            m_SideInfo.Channels[ch].gr[gr].TableSelect[2] = stream.GetBitsFromBuffer(5);
-                            m_SideInfo.Channels[ch].gr[gr].Region0Count = stream.GetBitsFromBuffer(4);
-                            m_SideInfo.Channels[ch].gr[gr].Region1Count = stream.GetBitsFromBuffer(3);
-                            m_SideInfo.Channels[ch].gr[gr].BlockType = 0;
+                            m_SideInfo.Channels[ch].Granules[gr].TableSelect[0] = stream.GetBitsFromBuffer(5);
+                            m_SideInfo.Channels[ch].Granules[gr].TableSelect[1] = stream.GetBitsFromBuffer(5);
+                            m_SideInfo.Channels[ch].Granules[gr].TableSelect[2] = stream.GetBitsFromBuffer(5);
+                            m_SideInfo.Channels[ch].Granules[gr].Region0Count = stream.GetBitsFromBuffer(4);
+                            m_SideInfo.Channels[ch].Granules[gr].Region1Count = stream.GetBitsFromBuffer(3);
+                            m_SideInfo.Channels[ch].Granules[gr].BlockType = 0;
                         }
-                        m_SideInfo.Channels[ch].gr[gr].Preflag = stream.GetBitsFromBuffer(1);
-                        m_SideInfo.Channels[ch].gr[gr].ScaleFacScale = stream.GetBitsFromBuffer(1);
-                        m_SideInfo.Channels[ch].gr[gr].Count1TableSelect = stream.GetBitsFromBuffer(1);
+                        m_SideInfo.Channels[ch].Granules[gr].Preflag = stream.GetBitsFromBuffer(1);
+                        m_SideInfo.Channels[ch].Granules[gr].ScaleFacScale = stream.GetBitsFromBuffer(1);
+                        m_SideInfo.Channels[ch].Granules[gr].Count1TableSelect = stream.GetBitsFromBuffer(1);
                     }
                 }
             }
@@ -660,52 +661,52 @@ namespace MP3Sharp.Decoding.Decoders
 
                 for (ch = 0; ch < channels; ch++)
                 {
-                    m_SideInfo.Channels[ch].gr[0].Part23Length = stream.GetBitsFromBuffer(12);
-                    m_SideInfo.Channels[ch].gr[0].BigValues = stream.GetBitsFromBuffer(9);
-                    m_SideInfo.Channels[ch].gr[0].GlobalGain = stream.GetBitsFromBuffer(8);
-                    m_SideInfo.Channels[ch].gr[0].ScaleFacCompress = stream.GetBitsFromBuffer(9);
-                    m_SideInfo.Channels[ch].gr[0].WindowSwitchingFlag = stream.GetBitsFromBuffer(1);
+                    m_SideInfo.Channels[ch].Granules[0].Part23Length = stream.GetBitsFromBuffer(12);
+                    m_SideInfo.Channels[ch].Granules[0].BigValues = stream.GetBitsFromBuffer(9);
+                    m_SideInfo.Channels[ch].Granules[0].GlobalGain = stream.GetBitsFromBuffer(8);
+                    m_SideInfo.Channels[ch].Granules[0].ScaleFacCompress = stream.GetBitsFromBuffer(9);
+                    m_SideInfo.Channels[ch].Granules[0].WindowSwitchingFlag = stream.GetBitsFromBuffer(1);
 
-                    if ((m_SideInfo.Channels[ch].gr[0].WindowSwitchingFlag) != 0)
+                    if ((m_SideInfo.Channels[ch].Granules[0].WindowSwitchingFlag) != 0)
                     {
-                        m_SideInfo.Channels[ch].gr[0].BlockType = stream.GetBitsFromBuffer(2);
-                        m_SideInfo.Channels[ch].gr[0].MixedBlockFlag = stream.GetBitsFromBuffer(1);
-                        m_SideInfo.Channels[ch].gr[0].TableSelect[0] = stream.GetBitsFromBuffer(5);
-                        m_SideInfo.Channels[ch].gr[0].TableSelect[1] = stream.GetBitsFromBuffer(5);
+                        m_SideInfo.Channels[ch].Granules[0].BlockType = stream.GetBitsFromBuffer(2);
+                        m_SideInfo.Channels[ch].Granules[0].MixedBlockFlag = stream.GetBitsFromBuffer(1);
+                        m_SideInfo.Channels[ch].Granules[0].TableSelect[0] = stream.GetBitsFromBuffer(5);
+                        m_SideInfo.Channels[ch].Granules[0].TableSelect[1] = stream.GetBitsFromBuffer(5);
 
-                        m_SideInfo.Channels[ch].gr[0].SubblockGain[0] = stream.GetBitsFromBuffer(3);
-                        m_SideInfo.Channels[ch].gr[0].SubblockGain[1] = stream.GetBitsFromBuffer(3);
-                        m_SideInfo.Channels[ch].gr[0].SubblockGain[2] = stream.GetBitsFromBuffer(3);
+                        m_SideInfo.Channels[ch].Granules[0].SubblockGain[0] = stream.GetBitsFromBuffer(3);
+                        m_SideInfo.Channels[ch].Granules[0].SubblockGain[1] = stream.GetBitsFromBuffer(3);
+                        m_SideInfo.Channels[ch].Granules[0].SubblockGain[2] = stream.GetBitsFromBuffer(3);
 
                         // Set region_count parameters since they are implicit in this case.
 
-                        if (m_SideInfo.Channels[ch].gr[0].BlockType == 0)
+                        if (m_SideInfo.Channels[ch].Granules[0].BlockType == 0)
                         {
                             // Side info bad: block_type == 0 in split block
                             return false;
                         }
-                        if (m_SideInfo.Channels[ch].gr[0].BlockType == 2 && m_SideInfo.Channels[ch].gr[0].MixedBlockFlag == 0)
+                        if (m_SideInfo.Channels[ch].Granules[0].BlockType == 2 && m_SideInfo.Channels[ch].Granules[0].MixedBlockFlag == 0)
                         {
-                            m_SideInfo.Channels[ch].gr[0].Region0Count = 8;
+                            m_SideInfo.Channels[ch].Granules[0].Region0Count = 8;
                         }
                         else
                         {
-                            m_SideInfo.Channels[ch].gr[0].Region0Count = 7;
-                            m_SideInfo.Channels[ch].gr[0].Region1Count = 20 - m_SideInfo.Channels[ch].gr[0].Region0Count;
+                            m_SideInfo.Channels[ch].Granules[0].Region0Count = 7;
+                            m_SideInfo.Channels[ch].Granules[0].Region1Count = 20 - m_SideInfo.Channels[ch].Granules[0].Region0Count;
                         }
                     }
                     else
                     {
-                        m_SideInfo.Channels[ch].gr[0].TableSelect[0] = stream.GetBitsFromBuffer(5);
-                        m_SideInfo.Channels[ch].gr[0].TableSelect[1] = stream.GetBitsFromBuffer(5);
-                        m_SideInfo.Channels[ch].gr[0].TableSelect[2] = stream.GetBitsFromBuffer(5);
-                        m_SideInfo.Channels[ch].gr[0].Region0Count = stream.GetBitsFromBuffer(4);
-                        m_SideInfo.Channels[ch].gr[0].Region1Count = stream.GetBitsFromBuffer(3);
-                        m_SideInfo.Channels[ch].gr[0].BlockType = 0;
+                        m_SideInfo.Channels[ch].Granules[0].TableSelect[0] = stream.GetBitsFromBuffer(5);
+                        m_SideInfo.Channels[ch].Granules[0].TableSelect[1] = stream.GetBitsFromBuffer(5);
+                        m_SideInfo.Channels[ch].Granules[0].TableSelect[2] = stream.GetBitsFromBuffer(5);
+                        m_SideInfo.Channels[ch].Granules[0].Region0Count = stream.GetBitsFromBuffer(4);
+                        m_SideInfo.Channels[ch].Granules[0].Region1Count = stream.GetBitsFromBuffer(3);
+                        m_SideInfo.Channels[ch].Granules[0].BlockType = 0;
                     }
 
-                    m_SideInfo.Channels[ch].gr[0].ScaleFacScale = stream.GetBitsFromBuffer(1);
-                    m_SideInfo.Channels[ch].gr[0].Count1TableSelect = stream.GetBitsFromBuffer(1);
+                    m_SideInfo.Channels[ch].Granules[0].ScaleFacScale = stream.GetBitsFromBuffer(1);
+                    m_SideInfo.Channels[ch].Granules[0].Count1TableSelect = stream.GetBitsFromBuffer(1);
                 }
                 // for(ch=0; ch<channels; ch++)
             }
@@ -719,7 +720,7 @@ namespace MP3Sharp.Decoding.Decoders
         private void ReadScaleFactors(int ch, int gr)
         {
             int sfb, window;
-            GranuleInfo gr_info = (m_SideInfo.Channels[ch].gr[gr]);
+            GranuleInfo gr_info = (m_SideInfo.Channels[ch].Granules[gr]);
             int scale_comp = gr_info.ScaleFacCompress;
             int length0 = slen[0][scale_comp];
             int length1 = slen[1][scale_comp];
@@ -730,13 +731,13 @@ namespace MP3Sharp.Decoding.Decoders
                 {
                     // MIXED
                     for (sfb = 0; sfb < 8; sfb++)
-                        scalefac[ch].l[sfb] = m_BitReserve.hgetbits(slen[0][gr_info.ScaleFacCompress]);
+                        scalefac[ch].l[sfb] = m_BitReserve.ReadBits(slen[0][gr_info.ScaleFacCompress]);
                     for (sfb = 3; sfb < 6; sfb++)
                         for (window = 0; window < 3; window++)
-                            scalefac[ch].s[window][sfb] = m_BitReserve.hgetbits(slen[0][gr_info.ScaleFacCompress]);
+                            scalefac[ch].s[window][sfb] = m_BitReserve.ReadBits(slen[0][gr_info.ScaleFacCompress]);
                     for (sfb = 6; sfb < 12; sfb++)
                         for (window = 0; window < 3; window++)
-                            scalefac[ch].s[window][sfb] = m_BitReserve.hgetbits(slen[1][gr_info.ScaleFacCompress]);
+                            scalefac[ch].s[window][sfb] = m_BitReserve.ReadBits(slen[1][gr_info.ScaleFacCompress]);
                     for (sfb = 12, window = 0; window < 3; window++)
                         scalefac[ch].s[window][sfb] = 0;
                 }
@@ -744,42 +745,42 @@ namespace MP3Sharp.Decoding.Decoders
                 {
                     // SHORT
 
-                    scalefac[ch].s[0][0] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[1][0] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[2][0] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[0][1] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[1][1] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[2][1] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[0][2] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[1][2] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[2][2] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[0][3] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[1][3] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[2][3] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[0][4] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[1][4] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[2][4] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[0][5] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[1][5] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[2][5] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].s[0][6] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[1][6] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[2][6] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[0][7] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[1][7] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[2][7] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[0][8] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[1][8] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[2][8] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[0][9] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[1][9] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[2][9] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[0][10] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[1][10] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[2][10] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[0][11] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[1][11] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].s[2][11] = m_BitReserve.hgetbits(length1);
+                    scalefac[ch].s[0][0] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[1][0] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[2][0] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[0][1] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[1][1] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[2][1] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[0][2] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[1][2] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[2][2] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[0][3] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[1][3] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[2][3] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[0][4] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[1][4] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[2][4] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[0][5] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[1][5] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[2][5] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].s[0][6] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[1][6] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[2][6] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[0][7] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[1][7] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[2][7] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[0][8] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[1][8] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[2][8] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[0][9] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[1][9] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[2][9] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[0][10] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[1][10] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[2][10] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[0][11] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[1][11] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].s[2][11] = m_BitReserve.ReadBits(length1);
                     scalefac[ch].s[0][12] = 0;
                     scalefac[ch].s[1][12] = 0;
                     scalefac[ch].s[2][12] = 0;
@@ -792,36 +793,36 @@ namespace MP3Sharp.Decoding.Decoders
 
                 if ((m_SideInfo.Channels[ch].scfsi[0] == 0) || (gr == 0))
                 {
-                    scalefac[ch].l[0] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[1] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[2] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[3] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[4] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[5] = m_BitReserve.hgetbits(length0);
+                    scalefac[ch].l[0] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[1] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[2] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[3] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[4] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[5] = m_BitReserve.ReadBits(length0);
                 }
                 if ((m_SideInfo.Channels[ch].scfsi[1] == 0) || (gr == 0))
                 {
-                    scalefac[ch].l[6] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[7] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[8] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[9] = m_BitReserve.hgetbits(length0);
-                    scalefac[ch].l[10] = m_BitReserve.hgetbits(length0);
+                    scalefac[ch].l[6] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[7] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[8] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[9] = m_BitReserve.ReadBits(length0);
+                    scalefac[ch].l[10] = m_BitReserve.ReadBits(length0);
                 }
                 if ((m_SideInfo.Channels[ch].scfsi[2] == 0) || (gr == 0))
                 {
-                    scalefac[ch].l[11] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].l[12] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].l[13] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].l[14] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].l[15] = m_BitReserve.hgetbits(length1);
+                    scalefac[ch].l[11] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].l[12] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].l[13] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].l[14] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].l[15] = m_BitReserve.ReadBits(length1);
                 }
                 if ((m_SideInfo.Channels[ch].scfsi[3] == 0) || (gr == 0))
                 {
-                    scalefac[ch].l[16] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].l[17] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].l[18] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].l[19] = m_BitReserve.hgetbits(length1);
-                    scalefac[ch].l[20] = m_BitReserve.hgetbits(length1);
+                    scalefac[ch].l[16] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].l[17] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].l[18] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].l[19] = m_BitReserve.ReadBits(length1);
+                    scalefac[ch].l[20] = m_BitReserve.ReadBits(length1);
                 }
 
                 scalefac[ch].l[21] = 0;
@@ -837,7 +838,7 @@ namespace MP3Sharp.Decoding.Decoders
             int blocktypenumber;
             int blocknumber = 0;
 
-            GranuleInfo grInfo = (m_SideInfo.Channels[ch].gr[gr]);
+            GranuleInfo grInfo = (m_SideInfo.Channels[ch].Granules[gr]);
 
             scalefac_comp = grInfo.ScaleFacCompress;
 
@@ -863,7 +864,7 @@ namespace MP3Sharp.Decoding.Decoders
                     new_slen[1] = (SupportClass.URShift(scalefac_comp, 4))%5;
                     new_slen[2] = SupportClass.URShift((scalefac_comp & 0xF), 2);
                     new_slen[3] = (scalefac_comp & 3);
-                    m_SideInfo.Channels[ch].gr[gr].Preflag = 0;
+                    m_SideInfo.Channels[ch].Granules[gr].Preflag = 0;
                     blocknumber = 0;
                 }
                 else if (scalefac_comp < 500)
@@ -872,7 +873,7 @@ namespace MP3Sharp.Decoding.Decoders
                     new_slen[1] = (SupportClass.URShift((scalefac_comp - 400), 2))%5;
                     new_slen[2] = (scalefac_comp - 400) & 3;
                     new_slen[3] = 0;
-                    m_SideInfo.Channels[ch].gr[gr].Preflag = 0;
+                    m_SideInfo.Channels[ch].Granules[gr].Preflag = 0;
                     blocknumber = 1;
                 }
                 else if (scalefac_comp < 512)
@@ -881,7 +882,7 @@ namespace MP3Sharp.Decoding.Decoders
                     new_slen[1] = (scalefac_comp - 500)%3;
                     new_slen[2] = 0;
                     new_slen[3] = 0;
-                    m_SideInfo.Channels[ch].gr[gr].Preflag = 1;
+                    m_SideInfo.Channels[ch].Granules[gr].Preflag = 1;
                     blocknumber = 2;
                 }
             }
@@ -896,7 +897,7 @@ namespace MP3Sharp.Decoding.Decoders
                     new_slen[1] = (int_scalefac_comp%36)/6;
                     new_slen[2] = (int_scalefac_comp%36)%6;
                     new_slen[3] = 0;
-                    m_SideInfo.Channels[ch].gr[gr].Preflag = 0;
+                    m_SideInfo.Channels[ch].Granules[gr].Preflag = 0;
                     blocknumber = 3;
                 }
                 else if (int_scalefac_comp < 244)
@@ -905,7 +906,7 @@ namespace MP3Sharp.Decoding.Decoders
                     new_slen[1] = SupportClass.URShift(((int_scalefac_comp - 180) & 0xF), 2);
                     new_slen[2] = (int_scalefac_comp - 180) & 3;
                     new_slen[3] = 0;
-                    m_SideInfo.Channels[ch].gr[gr].Preflag = 0;
+                    m_SideInfo.Channels[ch].Granules[gr].Preflag = 0;
                     blocknumber = 4;
                 }
                 else if (int_scalefac_comp < 255)
@@ -914,7 +915,7 @@ namespace MP3Sharp.Decoding.Decoders
                     new_slen[1] = (int_scalefac_comp - 244)%3;
                     new_slen[2] = 0;
                     new_slen[3] = 0;
-                    m_SideInfo.Channels[ch].gr[gr].Preflag = 0;
+                    m_SideInfo.Channels[ch].Granules[gr].Preflag = 0;
                     blocknumber = 5;
                 }
             }
@@ -928,7 +929,7 @@ namespace MP3Sharp.Decoding.Decoders
             {
                 for (int j = 0; j < nr_of_sfb_block[blocknumber][blocktypenumber][i]; j++)
                 {
-                    scalefac_buffer[m] = (new_slen[i] == 0) ? 0 : m_BitReserve.hgetbits(new_slen[i]);
+                    scalefac_buffer[m] = (new_slen[i] == 0) ? 0 : m_BitReserve.ReadBits(new_slen[i]);
                     m++;
                 }
                 // for (unint32 j ...
@@ -943,7 +944,7 @@ namespace MP3Sharp.Decoding.Decoders
         {
             int m = 0;
             int sfb;
-            GranuleInfo grInfo = (m_SideInfo.Channels[ch].gr[gr]);
+            GranuleInfo grInfo = (m_SideInfo.Channels[ch].Granules[gr]);
 
             get_LSF_scale_data(ch, gr);
 
@@ -1007,7 +1008,7 @@ namespace MP3Sharp.Decoding.Decoders
             v[0] = 0;
             w[0] = 0;
 
-            int part2_3_end = part2_start + m_SideInfo.Channels[ch].gr[gr].Part23Length;
+            int part2_3_end = part2_start + m_SideInfo.Channels[ch].Granules[gr].Part23Length;
             int num_bits;
             int region1Start;
             int region2Start;
@@ -1019,7 +1020,7 @@ namespace MP3Sharp.Decoding.Decoders
 
             // Find region boundary for short block case
 
-            if (((m_SideInfo.Channels[ch].gr[gr].WindowSwitchingFlag) != 0) && (m_SideInfo.Channels[ch].gr[gr].BlockType == 2))
+            if (((m_SideInfo.Channels[ch].Granules[gr].WindowSwitchingFlag) != 0) && (m_SideInfo.Channels[ch].Granules[gr].BlockType == 2))
             {
                 // Region2.
                 //MS: Extrahandling for 8KHZ
@@ -1030,8 +1031,8 @@ namespace MP3Sharp.Decoding.Decoders
             {
                 // Find region boundary for long block case
 
-                buf = m_SideInfo.Channels[ch].gr[gr].Region0Count + 1;
-                buf1 = buf + m_SideInfo.Channels[ch].gr[gr].Region1Count + 1;
+                buf = m_SideInfo.Channels[ch].Granules[gr].Region0Count + 1;
+                buf1 = buf + m_SideInfo.Channels[ch].Granules[gr].Region1Count + 1;
 
                 if (buf1 > sfBandIndex[sfreq].l.Length - 1)
                     buf1 = sfBandIndex[sfreq].l.Length - 1;
@@ -1042,14 +1043,14 @@ namespace MP3Sharp.Decoding.Decoders
 
             index = 0;
             // Read bigvalues area
-            for (int i = 0; i < (m_SideInfo.Channels[ch].gr[gr].BigValues << 1); i += 2)
+            for (int i = 0; i < (m_SideInfo.Channels[ch].Granules[gr].BigValues << 1); i += 2)
             {
                 if (i < region1Start)
-                    h = Huffman.ht[m_SideInfo.Channels[ch].gr[gr].TableSelect[0]];
+                    h = Huffman.ht[m_SideInfo.Channels[ch].Granules[gr].TableSelect[0]];
                 else if (i < region2Start)
-                    h = Huffman.ht[m_SideInfo.Channels[ch].gr[gr].TableSelect[1]];
+                    h = Huffman.ht[m_SideInfo.Channels[ch].Granules[gr].TableSelect[1]];
                 else
-                    h = Huffman.ht[m_SideInfo.Channels[ch].gr[gr].TableSelect[2]];
+                    h = Huffman.ht[m_SideInfo.Channels[ch].Granules[gr].TableSelect[2]];
 
                 Huffman.Decode(h, x, y, v, w, m_BitReserve);
 
@@ -1060,7 +1061,7 @@ namespace MP3Sharp.Decoding.Decoders
             }
 
             // Read count1 area
-            h = Huffman.ht[m_SideInfo.Channels[ch].gr[gr].Count1TableSelect + 32];
+            h = Huffman.ht[m_SideInfo.Channels[ch].Granules[gr].Count1TableSelect + 32];
             num_bits = m_BitReserve.hsstell();
 
             while ((num_bits < part2_3_end) && (index < 576))
@@ -1087,7 +1088,7 @@ namespace MP3Sharp.Decoding.Decoders
 
             // Dismiss stuffing bits
             if (num_bits < part2_3_end)
-                m_BitReserve.hgetbits(part2_3_end - num_bits);
+                m_BitReserve.ReadBits(part2_3_end - num_bits);
 
             // Zero out rest
 
@@ -1131,7 +1132,7 @@ namespace MP3Sharp.Decoding.Decoders
         /// </summary>
         private void dequantize_sample(float[][] xr, int ch, int gr)
         {
-            GranuleInfo gr_info = (m_SideInfo.Channels[ch].gr[gr]);
+            GranuleInfo gr_info = (m_SideInfo.Channels[ch].Granules[gr]);
             int cb = 0;
             int next_cb_boundary;
             int cb_begin = 0;
@@ -1287,7 +1288,7 @@ namespace MP3Sharp.Decoding.Decoders
         /// </summary>
         private void Reorder(float[][] xr, int ch, int gr)
         {
-            GranuleInfo gr_info = (m_SideInfo.Channels[ch].gr[gr]);
+            GranuleInfo gr_info = (m_SideInfo.Channels[ch].Granules[gr]);
             int freq, freq3;
             int index;
             int sfb, sfb_start, sfb_lines;
@@ -1386,7 +1387,7 @@ namespace MP3Sharp.Decoding.Decoders
             }
             else
             {
-                GranuleInfo gr_info = (m_SideInfo.Channels[0].gr[gr]);
+                GranuleInfo gr_info = (m_SideInfo.Channels[0].Granules[gr]);
                 int mode_ext = header.mode_extension();
                 int sfb;
                 int i;
@@ -1725,7 +1726,7 @@ namespace MP3Sharp.Decoding.Decoders
         private void Antialias(int ch, int gr)
         {
             int sb18, ss, sb18lim;
-            GranuleInfo gr_info = (m_SideInfo.Channels[ch].gr[gr]);
+            GranuleInfo gr_info = (m_SideInfo.Channels[ch].Granules[gr]);
             // 31 alias-reduction operations between each pair of sub-bands
             // with 8 butterflies between each pair
 
@@ -1759,7 +1760,7 @@ namespace MP3Sharp.Decoding.Decoders
         {
             int bt;
             int sb18;
-            GranuleInfo gr_info = (m_SideInfo.Channels[ch].gr[gr]);
+            GranuleInfo gr_info = (m_SideInfo.Channels[ch].Granules[gr]);
             float[] tsOut;
 
             float[][] prvblk;

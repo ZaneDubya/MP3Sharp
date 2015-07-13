@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MP3Sharp.Decoding.Decoders.Subbands
+namespace MP3Sharp.Decoding.Decoders.LayerII
 {
     /// <summary>
     ///     Class for layer II subbands in joint stereo mode.

@@ -375,7 +375,7 @@ namespace MP3Sharp.Decoding
         /// <summary>
         ///     Read bits from buffer into the lower bits of an unsigned int.
         ///     The LSB contains the latest read bit of the stream.
-        ///     (1 <= number_of_bits <= 16)
+        ///     (between 1 and 16, inclusive).
         /// </summary>
         public int GetBitsFromBuffer(int countBits)
         {

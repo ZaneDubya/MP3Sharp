@@ -19,12 +19,16 @@ namespace XNA4Sample
         {
             m_Stream = new MP3Stream(path, NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK);
             m_Instance = new DynamicSoundEffectInstance(22050, AudioChannels.Stereo);
-            m_Instance.BufferNeeded += instance_BufferNeeded;
+            
         }
 
         public void Dispose()
         {
-            m_Instance.BufferNeeded -= instance_BufferNeeded;
+            if (m_Playing)
+            {
+                Stop();
+            }
+
             m_Instance.Dispose();
             m_Instance = null;
 
@@ -39,16 +43,23 @@ namespace XNA4Sample
                 Stop();
             }
 
-            m_Repeat = repeat;
             m_Playing = true;
+            m_Repeat = repeat;
+            
             SubmitBuffer(3);
+            m_Instance.BufferNeeded += instance_BufferNeeded;
             m_Instance.Play();
         }
 
         public void Stop()
         {
-            m_Playing = false;
-            m_Instance.Stop();
+            if (m_Playing)
+            {
+                m_Playing = false;
+
+                m_Instance.Stop();
+                m_Instance.BufferNeeded -= instance_BufferNeeded;
+            }
         }
 
         private void instance_BufferNeeded(object sender, EventArgs e)

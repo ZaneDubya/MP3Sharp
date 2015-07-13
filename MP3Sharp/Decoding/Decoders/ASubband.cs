@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MP3Sharp.Decoding.Decoders.Subbands
+namespace MP3Sharp.Decoding.Decoders
 {
     /// <summary>
     ///     Abstract base class for subband classes of layer I and II

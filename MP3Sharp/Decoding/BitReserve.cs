@@ -70,7 +70,7 @@ namespace MP3Sharp.Decoding
         /// <summary>
         ///     Read a number bits from the bit stream.
         /// </summary>
-        public int hgetbits(int N)
+        public int ReadBits(int N)
         {
             totbit += N;
 
@@ -101,13 +101,7 @@ namespace MP3Sharp.Decoding
         /// <summary>
         ///     Read 1 bit from the bit stream.
         /// </summary>
-        /// <summary>
-        ///     Returns next bit from reserve.
-        /// </summary>
-        /// <returns>
-        ///     s 0 if next bit is reset, or 1 if next bit is set.
-        /// </returns>
-        public int hget1bit()
+        public int ReadOneBit()
         {
             totbit++;
             int val = buf[buf_byte_idx];
@@ -115,9 +109,6 @@ namespace MP3Sharp.Decoding
             return val;
         }
 
-        /// <summary>
-        ///     Retrieves bits from the reserve.
-        /// </summary>
         /// <summary>
         ///     Write 8 bits into the bit stream.
         /// </summary>
@@ -140,7 +131,7 @@ namespace MP3Sharp.Decoding
         }
 
         /// <summary>
-        ///     Rewind N bits in Stream.
+        ///     Rewind n bits in Stream.
         /// </summary>
         public void RewindStreamBits(int bitCount)
         {
@@ -151,7 +142,7 @@ namespace MP3Sharp.Decoding
         }
 
         /// <summary>
-        ///     Rewind N bytes in Stream.
+        ///     Rewind n bytes in Stream.
         /// </summary>
         public void RewindStreamBytes(int byteCount)
         {
