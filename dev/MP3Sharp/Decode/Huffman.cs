@@ -21,7 +21,7 @@ namespace MP3Sharp.Decode
     /// <summary>
     ///     Class to implements Huffman decoder.
     /// </summary>
-    internal sealed class HuffmanDecoder
+    internal sealed class Huffman
     {
         private const int MXOFF = 250;
         private const int HTN = 34;
@@ -689,7 +689,7 @@ namespace MP3Sharp.Decode
             new[] {0, 12}, new[] {0, 13}, new[] {2, 1}, new[] {0, 14}, new[] {0, 15}
         };
 
-        public static HuffmanDecoder[] ht; /* Simulate extern struct                 */
+        public static Huffman[] ht; /* Simulate extern struct                 */
         private static int[] bitbuf;
         private readonly int linbits; /* number of linbits   	                  */
         private readonly char tablename0 = ' '; /* string, containing table_description   */
@@ -704,7 +704,7 @@ namespace MP3Sharp.Decode
         private int[] table; /* pointer to array[xlen][ylen]		      */
         private char tablename2 = ' '; /* string, containing table_description   */
 
-        static HuffmanDecoder()
+        static Huffman()
         {
             bitbuf = new int[32];
         }
@@ -712,7 +712,7 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Big Constructor : Computes all Huffman Tables.
         /// </summary>
-        private HuffmanDecoder(string S, int XLEN, int YLEN, int LINBITS, int LINMAX, int REF, int[] TABLE, int[] HLEN,
+        private Huffman(string S, int XLEN, int YLEN, int LINBITS, int LINMAX, int REF, int[] TABLE, int[] HLEN,
             int[][] VAL, int TREELEN)
         {
             tablename0 = S[0];
@@ -733,7 +733,7 @@ namespace MP3Sharp.Decode
         ///     Do the huffman-decoding.
         ///     NOTE: for counta, countb -the 4 bit value is returned in y, discard x.
         /// </summary>
-        public static int Decode(HuffmanDecoder h, int[] x, int[] y, int[] v, int[] w, BitReserve br)
+        public static int Decode(Huffman h, int[] x, int[] y, int[] v, int[] w, BitReserve br)
         {
             // array of all huffcodtable headers
             // 0..31 Huffman code table 0..31
@@ -855,41 +855,41 @@ namespace MP3Sharp.Decode
             if (ht != null)
                 return;
 
-            ht = new HuffmanDecoder[HTN];
-            ht[0] = new HuffmanDecoder("0  ", 0, 0, 0, 0, -1, null, null, ValTab0, 0);
-            ht[1] = new HuffmanDecoder("1  ", 2, 2, 0, 0, -1, null, null, ValTab1, 7);
-            ht[2] = new HuffmanDecoder("2  ", 3, 3, 0, 0, -1, null, null, ValTab2, 17);
-            ht[3] = new HuffmanDecoder("3  ", 3, 3, 0, 0, -1, null, null, ValTab3, 17);
-            ht[4] = new HuffmanDecoder("4  ", 0, 0, 0, 0, -1, null, null, ValTab4, 0);
-            ht[5] = new HuffmanDecoder("5  ", 4, 4, 0, 0, -1, null, null, ValTab5, 31);
-            ht[6] = new HuffmanDecoder("6  ", 4, 4, 0, 0, -1, null, null, ValTab6, 31);
-            ht[7] = new HuffmanDecoder("7  ", 6, 6, 0, 0, -1, null, null, ValTab7, 71);
-            ht[8] = new HuffmanDecoder("8  ", 6, 6, 0, 0, -1, null, null, ValTab8, 71);
-            ht[9] = new HuffmanDecoder("9  ", 6, 6, 0, 0, -1, null, null, ValTab9, 71);
-            ht[10] = new HuffmanDecoder("10 ", 8, 8, 0, 0, -1, null, null, ValTab10, 127);
-            ht[11] = new HuffmanDecoder("11 ", 8, 8, 0, 0, -1, null, null, ValTab11, 127);
-            ht[12] = new HuffmanDecoder("12 ", 8, 8, 0, 0, -1, null, null, ValTab12, 127);
-            ht[13] = new HuffmanDecoder("13 ", 16, 16, 0, 0, -1, null, null, ValTab13, 511);
-            ht[14] = new HuffmanDecoder("14 ", 0, 0, 0, 0, -1, null, null, ValTab14, 0);
-            ht[15] = new HuffmanDecoder("15 ", 16, 16, 0, 0, -1, null, null, ValTab15, 511);
-            ht[16] = new HuffmanDecoder("16 ", 16, 16, 1, 1, -1, null, null, ValTab16, 511);
-            ht[17] = new HuffmanDecoder("17 ", 16, 16, 2, 3, 16, null, null, ValTab16, 511);
-            ht[18] = new HuffmanDecoder("18 ", 16, 16, 3, 7, 16, null, null, ValTab16, 511);
-            ht[19] = new HuffmanDecoder("19 ", 16, 16, 4, 15, 16, null, null, ValTab16, 511);
-            ht[20] = new HuffmanDecoder("20 ", 16, 16, 6, 63, 16, null, null, ValTab16, 511);
-            ht[21] = new HuffmanDecoder("21 ", 16, 16, 8, 255, 16, null, null, ValTab16, 511);
-            ht[22] = new HuffmanDecoder("22 ", 16, 16, 10, 1023, 16, null, null, ValTab16, 511);
-            ht[23] = new HuffmanDecoder("23 ", 16, 16, 13, 8191, 16, null, null, ValTab16, 511);
-            ht[24] = new HuffmanDecoder("24 ", 16, 16, 4, 15, -1, null, null, ValTab24, 512);
-            ht[25] = new HuffmanDecoder("25 ", 16, 16, 5, 31, 24, null, null, ValTab24, 512);
-            ht[26] = new HuffmanDecoder("26 ", 16, 16, 6, 63, 24, null, null, ValTab24, 512);
-            ht[27] = new HuffmanDecoder("27 ", 16, 16, 7, 127, 24, null, null, ValTab24, 512);
-            ht[28] = new HuffmanDecoder("28 ", 16, 16, 8, 255, 24, null, null, ValTab24, 512);
-            ht[29] = new HuffmanDecoder("29 ", 16, 16, 9, 511, 24, null, null, ValTab24, 512);
-            ht[30] = new HuffmanDecoder("30 ", 16, 16, 11, 2047, 24, null, null, ValTab24, 512);
-            ht[31] = new HuffmanDecoder("31 ", 16, 16, 13, 8191, 24, null, null, ValTab24, 512);
-            ht[32] = new HuffmanDecoder("32 ", 1, 16, 0, 0, -1, null, null, ValTab32, 31);
-            ht[33] = new HuffmanDecoder("33 ", 1, 16, 0, 0, -1, null, null, ValTab33, 31);
+            ht = new Huffman[HTN];
+            ht[0] = new Huffman("0  ", 0, 0, 0, 0, -1, null, null, ValTab0, 0);
+            ht[1] = new Huffman("1  ", 2, 2, 0, 0, -1, null, null, ValTab1, 7);
+            ht[2] = new Huffman("2  ", 3, 3, 0, 0, -1, null, null, ValTab2, 17);
+            ht[3] = new Huffman("3  ", 3, 3, 0, 0, -1, null, null, ValTab3, 17);
+            ht[4] = new Huffman("4  ", 0, 0, 0, 0, -1, null, null, ValTab4, 0);
+            ht[5] = new Huffman("5  ", 4, 4, 0, 0, -1, null, null, ValTab5, 31);
+            ht[6] = new Huffman("6  ", 4, 4, 0, 0, -1, null, null, ValTab6, 31);
+            ht[7] = new Huffman("7  ", 6, 6, 0, 0, -1, null, null, ValTab7, 71);
+            ht[8] = new Huffman("8  ", 6, 6, 0, 0, -1, null, null, ValTab8, 71);
+            ht[9] = new Huffman("9  ", 6, 6, 0, 0, -1, null, null, ValTab9, 71);
+            ht[10] = new Huffman("10 ", 8, 8, 0, 0, -1, null, null, ValTab10, 127);
+            ht[11] = new Huffman("11 ", 8, 8, 0, 0, -1, null, null, ValTab11, 127);
+            ht[12] = new Huffman("12 ", 8, 8, 0, 0, -1, null, null, ValTab12, 127);
+            ht[13] = new Huffman("13 ", 16, 16, 0, 0, -1, null, null, ValTab13, 511);
+            ht[14] = new Huffman("14 ", 0, 0, 0, 0, -1, null, null, ValTab14, 0);
+            ht[15] = new Huffman("15 ", 16, 16, 0, 0, -1, null, null, ValTab15, 511);
+            ht[16] = new Huffman("16 ", 16, 16, 1, 1, -1, null, null, ValTab16, 511);
+            ht[17] = new Huffman("17 ", 16, 16, 2, 3, 16, null, null, ValTab16, 511);
+            ht[18] = new Huffman("18 ", 16, 16, 3, 7, 16, null, null, ValTab16, 511);
+            ht[19] = new Huffman("19 ", 16, 16, 4, 15, 16, null, null, ValTab16, 511);
+            ht[20] = new Huffman("20 ", 16, 16, 6, 63, 16, null, null, ValTab16, 511);
+            ht[21] = new Huffman("21 ", 16, 16, 8, 255, 16, null, null, ValTab16, 511);
+            ht[22] = new Huffman("22 ", 16, 16, 10, 1023, 16, null, null, ValTab16, 511);
+            ht[23] = new Huffman("23 ", 16, 16, 13, 8191, 16, null, null, ValTab16, 511);
+            ht[24] = new Huffman("24 ", 16, 16, 4, 15, -1, null, null, ValTab24, 512);
+            ht[25] = new Huffman("25 ", 16, 16, 5, 31, 24, null, null, ValTab24, 512);
+            ht[26] = new Huffman("26 ", 16, 16, 6, 63, 24, null, null, ValTab24, 512);
+            ht[27] = new Huffman("27 ", 16, 16, 7, 127, 24, null, null, ValTab24, 512);
+            ht[28] = new Huffman("28 ", 16, 16, 8, 255, 24, null, null, ValTab24, 512);
+            ht[29] = new Huffman("29 ", 16, 16, 9, 511, 24, null, null, ValTab24, 512);
+            ht[30] = new Huffman("30 ", 16, 16, 11, 2047, 24, null, null, ValTab24, 512);
+            ht[31] = new Huffman("31 ", 16, 16, 13, 8191, 24, null, null, ValTab24, 512);
+            ht[32] = new Huffman("32 ", 1, 16, 0, 0, -1, null, null, ValTab32, 31);
+            ht[33] = new Huffman("33 ", 1, 16, 0, 0, -1, null, null, ValTab33, 31);
         }
     }
 }
