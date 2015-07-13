@@ -1,5 +1,6 @@
 # MP3Sharp
 Decode MP3 files to PCM bitstreams entirely in .NET managed code.
+<img align="center" src ="https://raw.githubusercontent.com/ZaneDubya/MP3Sharp/master/Images/MP3SharpHeader.png" />
 
 ## License
 MP3Sharp is released under the [LGPL Version 3](https://github.com/ZaneDubya/MP3Sharp/blob/master/license.txt).
