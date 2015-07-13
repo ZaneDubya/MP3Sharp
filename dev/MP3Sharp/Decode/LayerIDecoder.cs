@@ -214,7 +214,7 @@ namespace MP3Sharp.Decode
             /// </summary>
             public override void read_allocation(Bitstream stream, Header header, Crc16 crc)
             {
-                if ((allocation = stream.get_bits(4)) == 15)
+                if ((allocation = stream.GetBitsFromBuffer(4)) == 15)
                 {
                 }
                 //	 cerr << "WARNING: stream contains an illegal allocation!\n";
@@ -235,7 +235,7 @@ namespace MP3Sharp.Decode
             public override void read_scalefactor(Bitstream stream, Header header)
             {
                 if (allocation != 0)
-                    scalefactor = ScaleFactors[stream.get_bits(6)];
+                    scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
             }
 
             /// <summary>
@@ -245,7 +245,7 @@ namespace MP3Sharp.Decode
             {
                 if (allocation != 0)
                 {
-                    sample = stream.get_bits(samplelength);
+                    sample = stream.GetBitsFromBuffer(samplelength);
                 }
                 if (++samplenumber == 12)
                 {
@@ -298,8 +298,8 @@ namespace MP3Sharp.Decode
             {
                 if (allocation != 0)
                 {
-                    scalefactor = ScaleFactors[stream.get_bits(6)];
-                    channel2_scalefactor = ScaleFactors[stream.get_bits(6)];
+                    scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                    channel2_scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
                 }
             }
 
@@ -363,8 +363,8 @@ namespace MP3Sharp.Decode
             /// </summary>
             public override void read_allocation(Bitstream stream, Header header, Crc16 crc)
             {
-                allocation = stream.get_bits(4);
-                channel2_allocation = stream.get_bits(4);
+                allocation = stream.GetBitsFromBuffer(4);
+                channel2_allocation = stream.GetBitsFromBuffer(4);
                 if (crc != null)
                 {
                     crc.add_bits(allocation, 4);
@@ -390,9 +390,9 @@ namespace MP3Sharp.Decode
             public override void read_scalefactor(Bitstream stream, Header header)
             {
                 if (allocation != 0)
-                    scalefactor = ScaleFactors[stream.get_bits(6)];
+                    scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
                 if (channel2_allocation != 0)
-                    channel2_scalefactor = ScaleFactors[stream.get_bits(6)];
+                    channel2_scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
             }
 
             /// <summary>
@@ -403,7 +403,7 @@ namespace MP3Sharp.Decode
                 bool returnvalue = base.read_sampledata(stream);
                 if (channel2_allocation != 0)
                 {
-                    channel2_sample = stream.get_bits(channel2_samplelength);
+                    channel2_sample = stream.GetBitsFromBuffer(channel2_samplelength);
                 }
                 return (returnvalue);
             }

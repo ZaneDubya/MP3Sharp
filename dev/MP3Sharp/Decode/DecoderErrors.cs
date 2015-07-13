@@ -27,12 +27,8 @@ namespace MP3Sharp.Decode
 
         static DecoderErrors_Fields()
         {
-            UNKNOWN_ERROR = JavaLayerErrors_Fields.DECODER_ERROR + 0;
-            UNSUPPORTED_LAYER = JavaLayerErrors_Fields.DECODER_ERROR + 1;
+            UNKNOWN_ERROR = BitstreamErrors.DECODER_ERROR + 0;
+            UNSUPPORTED_LAYER = BitstreamErrors.DECODER_ERROR + 1;
         }
-    }
-
-    internal interface DecoderErrors : JavaLayerErrors
-    {
     }
 }

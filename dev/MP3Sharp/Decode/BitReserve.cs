@@ -18,13 +18,11 @@ namespace MP3Sharp.Decode
 {
     /// <summary>
     ///     Implementation of Bit Reservoir for Layer III.
-    ///     <p>
-    ///         The implementation stores single bits as a word in the buffer. If
-    ///         a bit is set, the corresponding word in the buffer will be non-zero.
-    ///         If a bit is clear, the corresponding word is zero. Although this
-    ///         may seem waseful, this can be a factor of two quicker than
-    ///         packing 8 bits to a byte and extracting.
-    ///         <p>
+    ///     The implementation stores single bits as a word in the buffer. If
+    ///     a bit is set, the corresponding word in the buffer will be non-zero.
+    ///     If a bit is clear, the corresponding word is zero. Although this
+    ///     may seem waseful, this can be a factor of two quicker than
+    ///     packing 8 bits to a byte and extracting.
     /// </summary>
 
     // REVIEW: there is no range checking, so buffer underflow or overflow
@@ -72,9 +70,6 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Read a number bits from the bit stream.
         /// </summary>
-        /// <param name="N">
-        ///     the number of
-        /// </param>
         public int hgetbits(int N)
         {
             totbit += N;
@@ -147,10 +142,10 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Rewind N bits in Stream.
         /// </summary>
-        public void rewindNbits(int N)
+        public void RewindStreamBits(int bitCount)
         {
-            totbit -= N;
-            buf_byte_idx -= N;
+            totbit -= bitCount;
+            buf_byte_idx -= bitCount;
             if (buf_byte_idx < 0)
                 buf_byte_idx += BUFSIZE;
         }
@@ -158,9 +153,9 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Rewind N bytes in Stream.
         /// </summary>
-        public void rewindNbytes(int N)
+        public void RewindStreamBytes(int byteCount)
         {
-            int bits = (N << 3);
+            int bits = (byteCount << 3);
             totbit -= bits;
             buf_byte_idx -= bits;
             if (buf_byte_idx < 0)

@@ -23,25 +23,21 @@ namespace MP3Sharp
     ///     Instances of <code>BitstreamException</code> are thrown
     ///     when operations on a <code>Bitstream</code> fail.
     ///     <p>
-    ///         The exception provides details of the exception condition
-    ///         in two ways:
-    ///         <ol>
-    ///             <li>
-    ///                 as an error-code describing the nature of the error
-    ///             </li>
-    ///             <br></br>
-    ///             <li>
-    ///                 as the <code>Throwable</code> instance, if any, that was thrown
-    ///                 indicating that an exceptional condition has occurred.
-    ///             </li>
-    ///         </ol>
+    ///     The exception provides details of the exception condition
+    ///     in two ways:
+    ///     <ol>
+    ///         <li>
+    ///             as an error-code describing the nature of the error
+    ///         </li>
+    ///         <br></br>
+    ///         <li>
+    ///             as the <code>Throwable</code> instance, if any, that was thrown
+    ///             indicating that an exceptional condition has occurred.
+    ///         </li>
+    ///     </ol>
     ///     </p>
-    ///     @since 0.0.6
     /// </summary>
-    /// <author>
-    ///     MDM	12/12/99
-    /// </author>
-    public class BitstreamException : Mp3SharpException, BitstreamErrors
+    public class BitstreamException : MP3SharpException
     {
         private int errorcode;
 
@@ -63,7 +59,7 @@ namespace MP3Sharp
 
         private void InitBlock()
         {
-            errorcode = BitstreamErrors_Fields.UNKNOWN_ERROR;
+            errorcode = BitstreamErrors.UNKNOWN_ERROR;
         }
 
         public static string getErrorString(int errorcode)

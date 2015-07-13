@@ -17,7 +17,7 @@
 using MP3Sharp.Support;
 using System.IO;
 
-namespace MP3Sharp.Convert
+namespace MP3Sharp.IO
 {
     /// <summary>
     ///     Class allowing WaveFormat Access

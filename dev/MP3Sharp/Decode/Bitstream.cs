@@ -21,133 +21,110 @@ using MP3Sharp.Support;
 namespace MP3Sharp.Decode
 {
     /// <summary>
-    ///     The <code>Bistream</code> class is responsible for parsing
-    ///     an MPEG audio bitstream.
-    ///     *
-    ///     <b>REVIEW:</b> much of the parsing currently occurs in the
-    ///     various decoders. This should be moved into this class and associated
-    ///     inner classes.
+    ///     The Bistream class is responsible for parsing an MPEG audio bitstream.
+    ///     REVIEW: much of the parsing currently occurs in the various decoders.
+    ///     This should be moved into this class and associated inner classes.
     /// </summary>
-    internal sealed class Bitstream : BitstreamErrors
+    internal sealed class Bitstream
     {
-        // max. 1730 bytes per frame: 144 * 384kbit/s / 32000 Hz + 2 Bytes CRC
         /// <summary>
-        ///     Maximum size of the frame buffer.
+        ///     Maximum size of the frame buffer:
+        ///     1730 bytes per frame: 144 * 384kbit/s / 32000 Hz + 2 Bytes CRC
         /// </summary>
         private const int BUFFER_INT_SIZE = 433;
 
         /// <summary>
-        ///     Syncrhronization control constant for the initial
+        ///     Synchronization control constant for the initial
         ///     synchronization to the start of a frame.
         /// </summary>
         internal static sbyte INITIAL_SYNC = 0;
 
         /// <summary>
-        ///     Syncrhronization control constant for non-iniital frame
+        ///     Synchronization control constant for non-inital frame
         ///     synchronizations.
         /// </summary>
         internal static sbyte STRICT_SYNC = 1;
 
-        //private int 			current_frame_number;
-        //private int				last_frame_number;
-
         private readonly int[] bitmask =
         {
-            0, 0x00000001, 0x00000003, 0x00000007, 0x0000000F, 0x0000001F, 0x0000003F, 0x0000007F, 0x000000FF,
-            0x000001FF,
-            0x000003FF, 0x000007FF, 0x00000FFF, 0x00001FFF, 0x00003FFF, 0x00007FFF, 0x0000FFFF, 0x0001FFFF
+            0x00000000, 0x00000001, 0x00000003, 0x00000007, 0x0000000F, 0x0000001F, 0x0000003F, 0x0000007F,
+            0x000000FF, 0x000001FF, 0x000003FF, 0x000007FF, 0x00000FFF, 0x00001FFF, 0x00003FFF, 0x00007FFF,
+            0x0000FFFF, 0x0001FFFF
         };
 
-        private readonly BackStream source;
+        private readonly BackStream m_SourceStream;
 
         /// <summary>
         ///     Number (0-31, from MSB to LSB) of next bit for get_bits()
         /// </summary>
-        private int bitindex;
+        private int m_BitIndex;
 
-        private Crc16[] crc;
+        private Crc16[] m_CRC;
 
         /// <summary>
         ///     The bytes read from the stream.
         /// </summary>
-        private sbyte[] frame_bytes;
+        private sbyte[] m_FrameBytes;
 
         /// <summary>
         ///     The frame buffer that holds the data for the current frame.
         /// </summary>
-        private int[] framebuffer;
+        private int[] m_FrameBuffer;
 
         /// <summary>
         ///     Number of valid bytes in the frame buffer.
         /// </summary>
-        private int framesize;
+        private int m_FrameSize;
 
-        private Header header;
+        private Header m_Header;
 
-        /// <summary>
-        ///     *
-        /// </summary>
         private bool single_ch_mode;
 
-        private sbyte[] syncbuf;
+        private sbyte[] m_SyncBuffer;
 
         /// <summary>
         ///     The current specified syncword
         /// </summary>
-        private int syncword;
+        private int m_SyncWord;
 
         /// <summary>
         ///     Index into <code>framebuffer</code> where the next bits are
         ///     retrieved.
         /// </summary>
-        private int wordpointer;
-
-        //private ByteArrayOutputStream	_baos = null; // E.B
+        private int m_WordPointer;
 
         /// <summary>
-        ///     Construct a IBitstream that reads data from a
-        ///     given InputStream.
-        ///     *
+        ///     Construct a IBitstream that reads data from a given InputStream.
         /// </summary>
-        /// <param name="in	The">
-        ///     InputStream to read from.
-        /// </param>
-        internal Bitstream(BackStream in_Renamed)
+        internal Bitstream(BackStream stream)
         {
             InitBlock();
-            if (in_Renamed == null)
-                throw new NullReferenceException("in");
+            if (stream == null)
+                throw new NullReferenceException("in stream is null");
 
-            source = in_Renamed;
-            // ROB - fuck the SupportClass, let's roll our own. new SupportClass.BackInputStream(in_Renamed, 1024);
-
-            //_baos = new ByteArrayOutputStream(); // E.B
+            m_SourceStream = stream;
 
             CloseFrame();
-            //current_frame_number = -1;
-            //last_frame_number = -1;
         }
 
         private void InitBlock()
         {
-            crc = new Crc16[1];
-            syncbuf = new sbyte[4];
-            frame_bytes = new sbyte[BUFFER_INT_SIZE*4];
-            framebuffer = new int[BUFFER_INT_SIZE];
-            header = new Header();
+            m_CRC = new Crc16[1];
+            m_SyncBuffer = new sbyte[4];
+            m_FrameBytes = new sbyte[BUFFER_INT_SIZE*4];
+            m_FrameBuffer = new int[BUFFER_INT_SIZE];
+            m_Header = new Header();
         }
 
         public void close()
         {
             try
             {
-                //UPGRADE_TODO: Method 'java.io.FilterInputStream.close' was converted to 'System.IO.BinaryReader.Close' which has a different behavior. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1073_javaioFilterInputStreamclose"'
-                source.Close();
-                //_baos = null;
+                m_SourceStream.Close();
             }
             catch (System.IO.IOException ex)
             {
-                throw newBitstreamException(BitstreamErrors_Fields.STREAM_ERROR, ex);
+                throw newBitstreamException(BitstreamErrors.STREAM_ERROR, ex);
             }
         }
 
@@ -155,7 +132,7 @@ namespace MP3Sharp.Decode
         ///     Reads and parses the next frame from the input source.
         /// </summary>
         /// <returns>
-        ///     the Header describing details of the frame read,
+        ///     The Header describing details of the frame read,
         ///     or null if the end of the stream has been reached.
         /// </returns>
         internal Header readFrame()
@@ -167,7 +144,7 @@ namespace MP3Sharp.Decode
             }
             catch (BitstreamException ex)
             {
-                if (ex.ErrorCode != BitstreamErrors_Fields.STREAM_EOF)
+                if (ex.ErrorCode != BitstreamErrors.STREAM_EOF)
                 {
                     // wrap original exception so stack trace is maintained.
                     throw newBitstreamException(ex.ErrorCode, ex);
@@ -178,65 +155,60 @@ namespace MP3Sharp.Decode
 
         private Header readNextFrame()
         {
-            if (framesize == -1)
+            if (m_FrameSize == -1)
             {
                 nextFrame();
             }
 
-            return header;
+            return m_Header;
         }
 
-        /// <summary>
-        ///     *
-        /// </summary>
         private void nextFrame()
         {
             // entire frame is read by the header class.
-            header.read_header(this, crc);
+            m_Header.read_header(this, m_CRC);
         }
 
         /// <summary>
         ///     Unreads the bytes read from the frame.
-        ///     @throws BitstreamException
+        ///     Throws BitstreamException.
+        ///     REVIEW: add new error codes for this.
         /// </summary>
-        // REVIEW: add new error codes for this.
         public void unreadFrame()
         {
-            if (wordpointer == -1 && bitindex == -1 && (framesize > 0))
+            if (m_WordPointer == -1 && m_BitIndex == -1 && (m_FrameSize > 0))
             {
                 try
                 {
-                    //source.UnRead(SupportClass.ToByteArray(frame_bytes), 0, framesize);
-                    source.UnRead(framesize);
+                    m_SourceStream.UnRead(m_FrameSize);
                 }
                 catch
                 {
-                    throw newBitstreamException(BitstreamErrors_Fields.STREAM_ERROR);
+                    throw newBitstreamException(BitstreamErrors.STREAM_ERROR);
                 }
             }
         }
 
         public void CloseFrame()
         {
-            framesize = -1;
-            wordpointer = -1;
-            bitindex = -1;
+            m_FrameSize = -1;
+            m_WordPointer = -1;
+            m_BitIndex = -1;
         }
 
         /// <summary>
-        ///     Determines if the next 4 bytes of the stream represent a
-        ///     frame header.
+        ///     Determines if the next 4 bytes of the stream represent a frame header.
         /// </summary>
         public bool IsSyncCurrentPosition(int syncmode)
         {
-            int read = readBytes(syncbuf, 0, 4);
-            int headerstring = ((syncbuf[0] << 24) & (int) SupportClass.Identity(0xFF000000)) |
-                               ((syncbuf[1] << 16) & 0x00FF0000) | ((syncbuf[2] << 8) & 0x0000FF00) |
-                               ((syncbuf[3] << 0) & 0x000000FF);
+            int read = readBytes(m_SyncBuffer, 0, 4);
+            int headerstring = ((m_SyncBuffer[0] << 24) & (int) SupportClass.Identity(0xFF000000)) |
+                               ((m_SyncBuffer[1] << 16) & 0x00FF0000) | ((m_SyncBuffer[2] << 8) & 0x0000FF00) |
+                               ((m_SyncBuffer[3] << 0) & 0x000000FF);
 
             try
             {
-                source.UnRead(read);
+                m_SourceStream.UnRead(read);
             }
             catch
             {
@@ -252,7 +224,7 @@ namespace MP3Sharp.Decode
                     break;
 
                 case 4:
-                    sync = isSyncMark(headerstring, syncmode, syncword);
+                    sync = isSyncMark(headerstring, syncmode, m_SyncWord);
                     break;
             }
 
@@ -264,13 +236,13 @@ namespace MP3Sharp.Decode
         // be removed.
         public int readBits(int n)
         {
-            return get_bits(n);
+            return GetBitsFromBuffer(n);
         }
 
         public int readCheckedBits(int n)
         {
             // REVIEW: implement CRC check.
-            return get_bits(n);
+            return GetBitsFromBuffer(n);
         }
 
         internal BitstreamException newBitstreamException(int errorcode)
@@ -295,60 +267,28 @@ namespace MP3Sharp.Decode
             int headerstring;
 
             // read additinal 2 bytes
-            int bytesRead = readBytes(syncbuf, 0, 3);
+            int bytesRead = readBytes(m_SyncBuffer, 0, 3);
 
             if (bytesRead != 3)
-                throw newBitstreamException(BitstreamErrors_Fields.STREAM_EOF, null);
+                throw newBitstreamException(BitstreamErrors.STREAM_EOF, null);
 
             //_baos.write(syncbuf, 0, 3); // E.B
 
-            headerstring = ((syncbuf[0] << 16) & 0x00FF0000) | ((syncbuf[1] << 8) & 0x0000FF00) |
-                           ((syncbuf[2] << 0) & 0x000000FF);
-
-#if THROW_ON_SYNC_LOSS
-    // t/DD: If we don't resync in a reasonable amount of time, 
-    //       throw an exception
-                        int bytesSkipped = 0;
-                        bool lostSyncYet = false;
-#endif
+            headerstring = ((m_SyncBuffer[0] << 16) & 0x00FF0000) | ((m_SyncBuffer[1] << 8) & 0x0000FF00) |
+                           ((m_SyncBuffer[2] << 0) & 0x000000FF);
 
             do
             {
                 headerstring <<= 8;
 
-                if (readBytes(syncbuf, 3, 1) != 1)
-                    throw newBitstreamException(BitstreamErrors_Fields.STREAM_EOF, null);
+                if (readBytes(m_SyncBuffer, 3, 1) != 1)
+                    throw newBitstreamException(BitstreamErrors.STREAM_EOF, null);
 
                 //_baos.write(syncbuf, 3, 1); // E.B
 
-                headerstring |= (syncbuf[3] & 0x000000FF);
+                headerstring |= (m_SyncBuffer[3] & 0x000000FF);
 
-                sync = isSyncMark(headerstring, syncmode, syncword);
-
-#if THROW_ON_SYNC_LOSS
-    // Just for debugging -- if we lost sync, bitch
-                                if (!sync && !lostSyncYet)
-                                {
-                                   lostSyncYet = true;
-                                   Trace.WriteLine( "Lost Sync :(", "Bitstream" );
-                                }
-
-                                if (lostSyncYet && sync)
-                                {
-                                   Trace.WriteLine( "Found Sync", "Bitstream" );
-                                }
-
-
-                                // If we haven't resynced within a frame (or so) give up and
-                                // throw an exception. (Could try harder?)
-                                ++ bytesSkipped;
-                                if ((bytesSkipped % 2048) == 0) // A paranoia check -- is the code hanging in a loop here?
-                                {
-                                    Trace.WriteLine( "Sync still not found", "Bitstream" );
-                                    // throw newBitstreamException(MP3Sharp.Decode.BitstreamErrors_Fields.STREAM_ERROR, 
-                                    //                             null);
-                                }
-#endif
+                sync = isSyncMark(headerstring, syncmode, m_SyncWord);
             } while (!sync);
 
             //current_frame_number++;
@@ -401,21 +341,21 @@ namespace MP3Sharp.Decode
         /// </summary>
         internal void read_frame_data(int bytesize)
         {
-            readFully(frame_bytes, 0, bytesize);
-            framesize = bytesize;
-            wordpointer = -1;
-            bitindex = -1;
+            readFully(m_FrameBytes, 0, bytesize);
+            m_FrameSize = bytesize;
+            m_WordPointer = -1;
+            m_BitIndex = -1;
         }
 
         /// <summary>
         ///     Parses the data previously read with read_frame_data().
         /// </summary>
-        internal void parse_frame()
+        internal void ParseFrame()
         {
             // Convert Bytes read to int
             int b = 0;
-            sbyte[] byteread = frame_bytes;
-            int bytesize = framesize;
+            sbyte[] byteread = m_FrameBytes;
+            int bytesize = m_FrameSize;
 
             for (int k = 0; k < bytesize; k = k + 4)
             {
@@ -430,12 +370,12 @@ namespace MP3Sharp.Decode
                     b2 = byteread[k + 2];
                 if (k + 3 < bytesize)
                     b3 = byteread[k + 3];
-                framebuffer[b++] = ((b0 << 24) & (int) SupportClass.Identity(0xFF000000)) | ((b1 << 16) & 0x00FF0000) |
+                m_FrameBuffer[b++] = ((b0 << 24) & (int) SupportClass.Identity(0xFF000000)) | ((b1 << 16) & 0x00FF0000) |
                                    ((b2 << 8) & 0x0000FF00) | (b3 & 0x000000FF);
             }
 
-            wordpointer = 0;
-            bitindex = 0;
+            m_WordPointer = 0;
+            m_BitIndex = 0;
         }
 
         /// <summary>
@@ -443,26 +383,26 @@ namespace MP3Sharp.Decode
         ///     The LSB contains the latest read bit of the stream.
         ///     (1 <= number_of_bits <= 16)
         /// </summary>
-        public int get_bits(int number_of_bits)
+        public int GetBitsFromBuffer(int countBits)
         {
             int returnvalue = 0;
-            int sum = bitindex + number_of_bits;
+            int sum = m_BitIndex + countBits;
 
             // E.B
             // There is a problem here, wordpointer could be -1 ?!
-            if (wordpointer < 0)
-                wordpointer = 0;
+            if (m_WordPointer < 0)
+                m_WordPointer = 0;
             // E.B : End.
 
             if (sum <= 32)
             {
                 // all bits contained in *wordpointer
-                returnvalue = (SupportClass.URShift(framebuffer[wordpointer], (32 - sum))) & bitmask[number_of_bits];
+                returnvalue = (SupportClass.URShift(m_FrameBuffer[m_WordPointer], (32 - sum))) & bitmask[countBits];
                 // returnvalue = (wordpointer[0] >> (32 - sum)) & bitmask[number_of_bits];
-                if ((bitindex += number_of_bits) == 32)
+                if ((m_BitIndex += countBits) == 32)
                 {
-                    bitindex = 0;
-                    wordpointer++; // added by me!
+                    m_BitIndex = 0;
+                    m_WordPointer++; // added by me!
                 }
                 return returnvalue;
             }
@@ -471,16 +411,16 @@ namespace MP3Sharp.Decode
             //((short[])&returnvalue)[0] = ((short[])wordpointer + 1)[0];
             //wordpointer++; // Added by me!
             //((short[])&returnvalue + 1)[0] = ((short[])wordpointer)[0];
-            int Right = (framebuffer[wordpointer] & 0x0000FFFF);
-            wordpointer++;
-            int Left = (framebuffer[wordpointer] & (int) SupportClass.Identity(0xFFFF0000));
+            int Right = (m_FrameBuffer[m_WordPointer] & 0x0000FFFF);
+            m_WordPointer++;
+            int Left = (m_FrameBuffer[m_WordPointer] & (int) SupportClass.Identity(0xFFFF0000));
             returnvalue = ((Right << 16) & (int) SupportClass.Identity(0xFFFF0000)) |
                           ((SupportClass.URShift(Left, 16)) & 0x0000FFFF);
 
             returnvalue = SupportClass.URShift(returnvalue, 48 - sum);
             // returnvalue >>= 16 - (number_of_bits - (32 - bitindex))
-            returnvalue &= bitmask[number_of_bits];
-            bitindex = sum - 32;
+            returnvalue &= bitmask[countBits];
+            m_BitIndex = sum - 32;
             return returnvalue;
         }
 
@@ -488,16 +428,15 @@ namespace MP3Sharp.Decode
         ///     Set the word we want to sync the header to.
         ///     In Big-Endian byte order
         /// </summary>
-        internal void set_syncword(int syncword0)
+        internal void SetSyncWord(int syncword0)
         {
-            syncword = syncword0 & unchecked((int) 0xFFFFFF3F);
+            m_SyncWord = syncword0 & unchecked((int) 0xFFFFFF3F);
             single_ch_mode = ((syncword0 & 0x000000C0) == 0x000000C0);
         }
 
         /// <summary>
         ///     Reads the exact number of bytes from the source
         ///     input stream into a byte array.
-        ///     *
         /// </summary>
         /// <param name="b		The">
         ///     byte array to read the specified number
@@ -521,9 +460,8 @@ namespace MP3Sharp.Decode
             {
                 while (len > 0)
                 {
-                    int bytesread = source.Read(b, offs, len);
-                    if (bytesread == -1
-                        || bytesread == 0) // t/DD -- .NET returns 0 at end-of-stream!
+                    int bytesread = m_SourceStream.Read(b, offs, len);
+                    if (bytesread == -1 || bytesread == 0) // t/DD -- .NET returns 0 at end-of-stream!
                     {
                         // t/DD: this really SHOULD throw an exception here...
                         Trace.WriteLine("readFully -- returning success at EOF? (" + bytesread + ")",
@@ -542,7 +480,7 @@ namespace MP3Sharp.Decode
             }
             catch (System.IO.IOException ex)
             {
-                throw newBitstreamException(BitstreamErrors_Fields.STREAM_ERROR, ex);
+                throw newBitstreamException(BitstreamErrors.STREAM_ERROR, ex);
             }
         }
 
@@ -557,7 +495,7 @@ namespace MP3Sharp.Decode
             {
                 while (len > 0)
                 {
-                    int bytesread = source.Read(b, offs, len);
+                    int bytesread = m_SourceStream.Read(b, offs, len);
 //					for (int i = 0; i < len; i++) b[i] = (sbyte)Temp[i];
                     if (bytesread == -1 || bytesread == 0)
                     {
@@ -570,7 +508,7 @@ namespace MP3Sharp.Decode
             }
             catch (System.IO.IOException ex)
             {
-                throw newBitstreamException(BitstreamErrors_Fields.STREAM_ERROR, ex);
+                throw newBitstreamException(BitstreamErrors.STREAM_ERROR, ex);
             }
             return totalBytesRead;
         }

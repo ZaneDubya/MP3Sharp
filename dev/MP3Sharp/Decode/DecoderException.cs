@@ -22,7 +22,7 @@ namespace MP3Sharp.Decode
     ///     The <code>DecoderException</code> represents the class of
     ///     errors that can occur when decoding MPEG audio.
     /// </summary>
-    internal class DecoderException : Mp3SharpException, DecoderErrors
+    internal class DecoderException : MP3SharpException
     {
         private int m_ErrorCode;
 

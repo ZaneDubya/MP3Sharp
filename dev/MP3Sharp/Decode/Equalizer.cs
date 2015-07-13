@@ -21,19 +21,12 @@ namespace MP3Sharp.Decode
     /// <summary>
     ///     The <code>Equalizer</code> class can be used to specify
     ///     equalization settings for the MPEG audio decoder.
-    ///     <p>
-    ///         The equalizer consists of 32 band-pass filters.
-    ///         Each band of the equalizer can take on a fractional value between
-    ///         -1.0 and +1.0.
-    ///         At -1.0, the input signal is attenuated by 6dB, at +1.0 the signal is
-    ///         amplified by 6dB.
+    ///     The equalizer consists of 32 band-pass filters.
+    ///     Each band of the equalizer can take on a fractional value between
+    ///     -1.0 and +1.0.
+    ///     At -1.0, the input signal is attenuated by 6dB, at +1.0 the signal is
+    ///     amplified by 6dB.
     /// </summary>
-    /// <seealso cref="">
-    ///     Decoder
-    /// </seealso>
-    /// <author>
-    ///     MDM
-    /// </author>
     internal class Equalizer
     {
         private const int BANDS = 32;

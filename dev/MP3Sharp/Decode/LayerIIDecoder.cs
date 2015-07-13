@@ -604,7 +604,7 @@ namespace MP3Sharp.Decode
             public override void read_allocation(Bitstream stream, Header header, Crc16 crc)
             {
                 int length = get_allocationlength(header);
-                allocation = stream.get_bits(length);
+                allocation = stream.GetBitsFromBuffer(length);
                 if (crc != null)
                     crc.add_bits(allocation, length);
             }
@@ -616,7 +616,7 @@ namespace MP3Sharp.Decode
             {
                 if (allocation != 0)
                 {
-                    scfsi = stream.get_bits(2);
+                    scfsi = stream.GetBitsFromBuffer(2);
                     if (crc != null)
                         crc.add_bits(scfsi, 2);
                 }
@@ -632,23 +632,23 @@ namespace MP3Sharp.Decode
                     switch (scfsi)
                     {
                         case 0:
-                            scalefactor1 = ScaleFactors[stream.get_bits(6)];
-                            scalefactor2 = ScaleFactors[stream.get_bits(6)];
-                            scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            scalefactor1 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            scalefactor2 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 1:
-                            scalefactor1 = scalefactor2 = ScaleFactors[stream.get_bits(6)];
-                            scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            scalefactor1 = scalefactor2 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 2:
-                            scalefactor1 = scalefactor2 = scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            scalefactor1 = scalefactor2 = scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 3:
-                            scalefactor1 = ScaleFactors[stream.get_bits(6)];
-                            scalefactor2 = scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            scalefactor1 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            scalefactor2 = scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
                     }
                     prepare_sample_reading(header, allocation, 0, factor, codelength, c, d);
@@ -663,7 +663,7 @@ namespace MP3Sharp.Decode
                 if (allocation != 0)
                     if (groupingtable[0] != null)
                     {
-                        int samplecode = stream.get_bits(codelength[0]);
+                        int samplecode = stream.GetBitsFromBuffer(codelength[0]);
                         // create requantized samples:
                         samplecode += samplecode << 1;
                         float[] target = samples;
@@ -696,9 +696,9 @@ namespace MP3Sharp.Decode
                     }
                     else
                     {
-                        samples[0] = (float) ((stream.get_bits(codelength[0]))*factor[0] - 1.0);
-                        samples[1] = (float) ((stream.get_bits(codelength[0]))*factor[0] - 1.0);
-                        samples[2] = (float) ((stream.get_bits(codelength[0]))*factor[0] - 1.0);
+                        samples[0] = (float) ((stream.GetBitsFromBuffer(codelength[0]))*factor[0] - 1.0);
+                        samples[1] = (float) ((stream.GetBitsFromBuffer(codelength[0]))*factor[0] - 1.0);
+                        samples[2] = (float) ((stream.GetBitsFromBuffer(codelength[0]))*factor[0] - 1.0);
                     }
 
                 samplenumber = 0;
@@ -763,8 +763,8 @@ namespace MP3Sharp.Decode
             {
                 if (allocation != 0)
                 {
-                    scfsi = stream.get_bits(2);
-                    channel2_scfsi = stream.get_bits(2);
+                    scfsi = stream.GetBitsFromBuffer(2);
+                    channel2_scfsi = stream.GetBitsFromBuffer(2);
                     if (crc != null)
                     {
                         crc.add_bits(scfsi, 2);
@@ -784,24 +784,24 @@ namespace MP3Sharp.Decode
                     switch (channel2_scfsi)
                     {
                         case 0:
-                            channel2_scalefactor1 = ScaleFactors[stream.get_bits(6)];
-                            channel2_scalefactor2 = ScaleFactors[stream.get_bits(6)];
-                            channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            channel2_scalefactor2 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            channel2_scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 1:
-                            channel2_scalefactor1 = channel2_scalefactor2 = ScaleFactors[stream.get_bits(6)];
-                            channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = channel2_scalefactor2 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            channel2_scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 2:
                             channel2_scalefactor1 =
-                                channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                                channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 3:
-                            channel2_scalefactor1 = ScaleFactors[stream.get_bits(6)];
-                            channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
                     }
                 }
@@ -905,8 +905,8 @@ namespace MP3Sharp.Decode
             public override void read_allocation(Bitstream stream, Header header, Crc16 crc)
             {
                 int length = get_allocationlength(header);
-                allocation = stream.get_bits(length);
-                channel2_allocation = stream.get_bits(length);
+                allocation = stream.GetBitsFromBuffer(length);
+                channel2_allocation = stream.GetBitsFromBuffer(length);
                 if (crc != null)
                 {
                     crc.add_bits(allocation, length);
@@ -921,13 +921,13 @@ namespace MP3Sharp.Decode
             {
                 if (allocation != 0)
                 {
-                    scfsi = stream.get_bits(2);
+                    scfsi = stream.GetBitsFromBuffer(2);
                     if (crc != null)
                         crc.add_bits(scfsi, 2);
                 }
                 if (channel2_allocation != 0)
                 {
-                    channel2_scfsi = stream.get_bits(2);
+                    channel2_scfsi = stream.GetBitsFromBuffer(2);
                     if (crc != null)
                         crc.add_bits(channel2_scfsi, 2);
                 }
@@ -944,24 +944,24 @@ namespace MP3Sharp.Decode
                     switch (channel2_scfsi)
                     {
                         case 0:
-                            channel2_scalefactor1 = ScaleFactors[stream.get_bits(6)];
-                            channel2_scalefactor2 = ScaleFactors[stream.get_bits(6)];
-                            channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            channel2_scalefactor2 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            channel2_scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 1:
-                            channel2_scalefactor1 = channel2_scalefactor2 = ScaleFactors[stream.get_bits(6)];
-                            channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = channel2_scalefactor2 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            channel2_scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 2:
                             channel2_scalefactor1 =
-                                channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                                channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
 
                         case 3:
-                            channel2_scalefactor1 = ScaleFactors[stream.get_bits(6)];
-                            channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.get_bits(6)];
+                            channel2_scalefactor1 = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                            channel2_scalefactor2 = channel2_scalefactor3 = ScaleFactors[stream.GetBitsFromBuffer(6)];
                             break;
                     }
                     prepare_sample_reading(header, channel2_allocation, 1, channel2_factor, channel2_codelength,
@@ -979,7 +979,7 @@ namespace MP3Sharp.Decode
                 if (channel2_allocation != 0)
                     if (groupingtable[1] != null)
                     {
-                        int samplecode = stream.get_bits(channel2_codelength[0]);
+                        int samplecode = stream.GetBitsFromBuffer(channel2_codelength[0]);
                         // create requantized samples:
                         samplecode += samplecode << 1;
                         /*
@@ -1009,11 +1009,11 @@ namespace MP3Sharp.Decode
                     else
                     {
                         channel2_samples[0] =
-                            (float) ((stream.get_bits(channel2_codelength[0]))*channel2_factor[0] - 1.0);
+                            (float) ((stream.GetBitsFromBuffer(channel2_codelength[0]))*channel2_factor[0] - 1.0);
                         channel2_samples[1] =
-                            (float) ((stream.get_bits(channel2_codelength[0]))*channel2_factor[0] - 1.0);
+                            (float) ((stream.GetBitsFromBuffer(channel2_codelength[0]))*channel2_factor[0] - 1.0);
                         channel2_samples[2] =
-                            (float) ((stream.get_bits(channel2_codelength[0]))*channel2_factor[0] - 1.0);
+                            (float) ((stream.GetBitsFromBuffer(channel2_codelength[0]))*channel2_factor[0] - 1.0);
                     }
                 return returnvalue;
             }

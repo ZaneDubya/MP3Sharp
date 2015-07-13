@@ -578,7 +578,7 @@ namespace MP3Sharp.Decode
             ABuffer buffer0, int which_ch0)
         {
             InitBlock();
-            huffcodetab.inithuff();
+            HuffmanDecoder.inithuff();
             is_1d = new int[SBLIMIT*SSLIMIT + 4];
             ro = new float[2][][];
             for (int i = 0; i < 2; i++)
@@ -794,7 +794,7 @@ namespace MP3Sharp.Decode
             get_side_info();
 
             for (i = 0; i < nSlots; i++)
-                br.hputbuf(stream.get_bits(8));
+                br.hputbuf(stream.GetBitsFromBuffer(8));
 
             main_data_end = SupportClass.URShift(br.hsstell(), 3); // of previous frame
 
@@ -814,7 +814,7 @@ namespace MP3Sharp.Decode
             if (main_data_end > 4096)
             {
                 frame_start -= 4096;
-                br.rewindNbytes(4096);
+                br.RewindStreamBytes(4096);
             }
 
             for (; bytes_to_discard > 0; bytes_to_discard--)
@@ -927,40 +927,40 @@ namespace MP3Sharp.Decode
             int ch, gr;
             if (header.version() == Header.MPEG1)
             {
-                si.main_data_begin = stream.get_bits(9);
+                si.main_data_begin = stream.GetBitsFromBuffer(9);
                 if (channels == 1)
-                    si.private_bits = stream.get_bits(5);
+                    si.private_bits = stream.GetBitsFromBuffer(5);
                 else
-                    si.private_bits = stream.get_bits(3);
+                    si.private_bits = stream.GetBitsFromBuffer(3);
 
                 for (ch = 0; ch < channels; ch++)
                 {
-                    si.ch[ch].scfsi[0] = stream.get_bits(1);
-                    si.ch[ch].scfsi[1] = stream.get_bits(1);
-                    si.ch[ch].scfsi[2] = stream.get_bits(1);
-                    si.ch[ch].scfsi[3] = stream.get_bits(1);
+                    si.ch[ch].scfsi[0] = stream.GetBitsFromBuffer(1);
+                    si.ch[ch].scfsi[1] = stream.GetBitsFromBuffer(1);
+                    si.ch[ch].scfsi[2] = stream.GetBitsFromBuffer(1);
+                    si.ch[ch].scfsi[3] = stream.GetBitsFromBuffer(1);
                 }
 
                 for (gr = 0; gr < 2; gr++)
                 {
                     for (ch = 0; ch < channels; ch++)
                     {
-                        si.ch[ch].gr[gr].part2_3_length = stream.get_bits(12);
-                        si.ch[ch].gr[gr].big_values = stream.get_bits(9);
-                        si.ch[ch].gr[gr].global_gain = stream.get_bits(8);
-                        si.ch[ch].gr[gr].scalefac_compress = stream.get_bits(4);
-                        si.ch[ch].gr[gr].window_switching_flag = stream.get_bits(1);
+                        si.ch[ch].gr[gr].part2_3_length = stream.GetBitsFromBuffer(12);
+                        si.ch[ch].gr[gr].big_values = stream.GetBitsFromBuffer(9);
+                        si.ch[ch].gr[gr].global_gain = stream.GetBitsFromBuffer(8);
+                        si.ch[ch].gr[gr].scalefac_compress = stream.GetBitsFromBuffer(4);
+                        si.ch[ch].gr[gr].window_switching_flag = stream.GetBitsFromBuffer(1);
                         if ((si.ch[ch].gr[gr].window_switching_flag) != 0)
                         {
-                            si.ch[ch].gr[gr].block_type = stream.get_bits(2);
-                            si.ch[ch].gr[gr].mixed_block_flag = stream.get_bits(1);
+                            si.ch[ch].gr[gr].block_type = stream.GetBitsFromBuffer(2);
+                            si.ch[ch].gr[gr].mixed_block_flag = stream.GetBitsFromBuffer(1);
 
-                            si.ch[ch].gr[gr].table_select[0] = stream.get_bits(5);
-                            si.ch[ch].gr[gr].table_select[1] = stream.get_bits(5);
+                            si.ch[ch].gr[gr].table_select[0] = stream.GetBitsFromBuffer(5);
+                            si.ch[ch].gr[gr].table_select[1] = stream.GetBitsFromBuffer(5);
 
-                            si.ch[ch].gr[gr].subblock_gain[0] = stream.get_bits(3);
-                            si.ch[ch].gr[gr].subblock_gain[1] = stream.get_bits(3);
-                            si.ch[ch].gr[gr].subblock_gain[2] = stream.get_bits(3);
+                            si.ch[ch].gr[gr].subblock_gain[0] = stream.GetBitsFromBuffer(3);
+                            si.ch[ch].gr[gr].subblock_gain[1] = stream.GetBitsFromBuffer(3);
+                            si.ch[ch].gr[gr].subblock_gain[2] = stream.GetBitsFromBuffer(3);
 
                             // Set region_count parameters since they are implicit in this case.
 
@@ -981,16 +981,16 @@ namespace MP3Sharp.Decode
                         }
                         else
                         {
-                            si.ch[ch].gr[gr].table_select[0] = stream.get_bits(5);
-                            si.ch[ch].gr[gr].table_select[1] = stream.get_bits(5);
-                            si.ch[ch].gr[gr].table_select[2] = stream.get_bits(5);
-                            si.ch[ch].gr[gr].region0_count = stream.get_bits(4);
-                            si.ch[ch].gr[gr].region1_count = stream.get_bits(3);
+                            si.ch[ch].gr[gr].table_select[0] = stream.GetBitsFromBuffer(5);
+                            si.ch[ch].gr[gr].table_select[1] = stream.GetBitsFromBuffer(5);
+                            si.ch[ch].gr[gr].table_select[2] = stream.GetBitsFromBuffer(5);
+                            si.ch[ch].gr[gr].region0_count = stream.GetBitsFromBuffer(4);
+                            si.ch[ch].gr[gr].region1_count = stream.GetBitsFromBuffer(3);
                             si.ch[ch].gr[gr].block_type = 0;
                         }
-                        si.ch[ch].gr[gr].preflag = stream.get_bits(1);
-                        si.ch[ch].gr[gr].scalefac_scale = stream.get_bits(1);
-                        si.ch[ch].gr[gr].count1table_select = stream.get_bits(1);
+                        si.ch[ch].gr[gr].preflag = stream.GetBitsFromBuffer(1);
+                        si.ch[ch].gr[gr].scalefac_scale = stream.GetBitsFromBuffer(1);
+                        si.ch[ch].gr[gr].count1table_select = stream.GetBitsFromBuffer(1);
                     }
                 }
             }
@@ -998,30 +998,30 @@ namespace MP3Sharp.Decode
             {
                 // MPEG-2 LSF, SZD: MPEG-2.5 LSF
 
-                si.main_data_begin = stream.get_bits(8);
+                si.main_data_begin = stream.GetBitsFromBuffer(8);
                 if (channels == 1)
-                    si.private_bits = stream.get_bits(1);
+                    si.private_bits = stream.GetBitsFromBuffer(1);
                 else
-                    si.private_bits = stream.get_bits(2);
+                    si.private_bits = stream.GetBitsFromBuffer(2);
 
                 for (ch = 0; ch < channels; ch++)
                 {
-                    si.ch[ch].gr[0].part2_3_length = stream.get_bits(12);
-                    si.ch[ch].gr[0].big_values = stream.get_bits(9);
-                    si.ch[ch].gr[0].global_gain = stream.get_bits(8);
-                    si.ch[ch].gr[0].scalefac_compress = stream.get_bits(9);
-                    si.ch[ch].gr[0].window_switching_flag = stream.get_bits(1);
+                    si.ch[ch].gr[0].part2_3_length = stream.GetBitsFromBuffer(12);
+                    si.ch[ch].gr[0].big_values = stream.GetBitsFromBuffer(9);
+                    si.ch[ch].gr[0].global_gain = stream.GetBitsFromBuffer(8);
+                    si.ch[ch].gr[0].scalefac_compress = stream.GetBitsFromBuffer(9);
+                    si.ch[ch].gr[0].window_switching_flag = stream.GetBitsFromBuffer(1);
 
                     if ((si.ch[ch].gr[0].window_switching_flag) != 0)
                     {
-                        si.ch[ch].gr[0].block_type = stream.get_bits(2);
-                        si.ch[ch].gr[0].mixed_block_flag = stream.get_bits(1);
-                        si.ch[ch].gr[0].table_select[0] = stream.get_bits(5);
-                        si.ch[ch].gr[0].table_select[1] = stream.get_bits(5);
+                        si.ch[ch].gr[0].block_type = stream.GetBitsFromBuffer(2);
+                        si.ch[ch].gr[0].mixed_block_flag = stream.GetBitsFromBuffer(1);
+                        si.ch[ch].gr[0].table_select[0] = stream.GetBitsFromBuffer(5);
+                        si.ch[ch].gr[0].table_select[1] = stream.GetBitsFromBuffer(5);
 
-                        si.ch[ch].gr[0].subblock_gain[0] = stream.get_bits(3);
-                        si.ch[ch].gr[0].subblock_gain[1] = stream.get_bits(3);
-                        si.ch[ch].gr[0].subblock_gain[2] = stream.get_bits(3);
+                        si.ch[ch].gr[0].subblock_gain[0] = stream.GetBitsFromBuffer(3);
+                        si.ch[ch].gr[0].subblock_gain[1] = stream.GetBitsFromBuffer(3);
+                        si.ch[ch].gr[0].subblock_gain[2] = stream.GetBitsFromBuffer(3);
 
                         // Set region_count parameters since they are implicit in this case.
 
@@ -1042,16 +1042,16 @@ namespace MP3Sharp.Decode
                     }
                     else
                     {
-                        si.ch[ch].gr[0].table_select[0] = stream.get_bits(5);
-                        si.ch[ch].gr[0].table_select[1] = stream.get_bits(5);
-                        si.ch[ch].gr[0].table_select[2] = stream.get_bits(5);
-                        si.ch[ch].gr[0].region0_count = stream.get_bits(4);
-                        si.ch[ch].gr[0].region1_count = stream.get_bits(3);
+                        si.ch[ch].gr[0].table_select[0] = stream.GetBitsFromBuffer(5);
+                        si.ch[ch].gr[0].table_select[1] = stream.GetBitsFromBuffer(5);
+                        si.ch[ch].gr[0].table_select[2] = stream.GetBitsFromBuffer(5);
+                        si.ch[ch].gr[0].region0_count = stream.GetBitsFromBuffer(4);
+                        si.ch[ch].gr[0].region1_count = stream.GetBitsFromBuffer(3);
                         si.ch[ch].gr[0].block_type = 0;
                     }
 
-                    si.ch[ch].gr[0].scalefac_scale = stream.get_bits(1);
-                    si.ch[ch].gr[0].count1table_select = stream.get_bits(1);
+                    si.ch[ch].gr[0].scalefac_scale = stream.GetBitsFromBuffer(1);
+                    si.ch[ch].gr[0].count1table_select = stream.GetBitsFromBuffer(1);
                 }
                 // for(ch=0; ch<channels; ch++)
             }
@@ -1360,7 +1360,7 @@ namespace MP3Sharp.Decode
 
             int buf, buf1;
 
-            huffcodetab h;
+            HuffmanDecoder h;
 
             // Find region boundary for short block case
 
@@ -1390,13 +1390,13 @@ namespace MP3Sharp.Decode
             for (int i = 0; i < (si.ch[ch].gr[gr].big_values << 1); i += 2)
             {
                 if (i < region1Start)
-                    h = huffcodetab.ht[si.ch[ch].gr[gr].table_select[0]];
+                    h = HuffmanDecoder.ht[si.ch[ch].gr[gr].table_select[0]];
                 else if (i < region2Start)
-                    h = huffcodetab.ht[si.ch[ch].gr[gr].table_select[1]];
+                    h = HuffmanDecoder.ht[si.ch[ch].gr[gr].table_select[1]];
                 else
-                    h = huffcodetab.ht[si.ch[ch].gr[gr].table_select[2]];
+                    h = HuffmanDecoder.ht[si.ch[ch].gr[gr].table_select[2]];
 
-                huffcodetab.huffman_decoder(h, x, y, v, w, br);
+                HuffmanDecoder.Decode(h, x, y, v, w, br);
 
                 is_1d[index++] = x[0];
                 is_1d[index++] = y[0];
@@ -1405,12 +1405,12 @@ namespace MP3Sharp.Decode
             }
 
             // Read count1 area
-            h = huffcodetab.ht[si.ch[ch].gr[gr].count1table_select + 32];
+            h = HuffmanDecoder.ht[si.ch[ch].gr[gr].count1table_select + 32];
             num_bits = br.hsstell();
 
             while ((num_bits < part2_3_end) && (index < 576))
             {
-                huffcodetab.huffman_decoder(h, x, y, v, w, br);
+                HuffmanDecoder.Decode(h, x, y, v, w, br);
 
                 is_1d[index++] = v[0];
                 is_1d[index++] = w[0];
@@ -1424,7 +1424,7 @@ namespace MP3Sharp.Decode
 
             if (num_bits > part2_3_end)
             {
-                br.rewindNbits(num_bits - part2_3_end);
+                br.RewindStreamBits(num_bits - part2_3_end);
                 index -= 4;
             }
 

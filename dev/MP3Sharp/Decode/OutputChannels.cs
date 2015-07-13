@@ -28,12 +28,10 @@ namespace MP3Sharp.Decode
 
     /// <summary>
     ///     A Type-safe representation of the the supported output channel
-    ///     constants.
-    ///     This class is immutable and, hence, is thread safe.
+    ///     constants. This class is immutable and, hence, is thread safe.
     /// </summary>
     /// <author>
-    ///     Mat McGowan 12/12/99
-    ///     @since	0.0.7
+    ///     Mat McGowan
     /// </author>
     internal class OutputChannels
     {

@@ -21,10 +21,8 @@ namespace MP3Sharp.Decode
 {
     /// <summary>
     ///     Class for extracting information from a frame header.
-    ///     *
-    ///     *
     /// </summary>
-    // TODO: move strings into resources
+    // TODO: move strings into resources.
     internal class Header
     {
         /// <summary>
@@ -267,11 +265,11 @@ namespace MP3Sharp.Decode
                         if (h_version == MPEG2_LSF)
                             h_version = MPEG25_LSF;
                         else
-                            throw stream.newBitstreamException(BitstreamErrors_Fields.UNKNOWN_ERROR);
+                            throw stream.newBitstreamException(BitstreamErrors.UNKNOWN_ERROR);
 
                     if ((h_sample_frequency = ((SupportClass.URShift(headerstring, 10)) & 3)) == 3)
                     {
-                        throw stream.newBitstreamException(BitstreamErrors_Fields.UNKNOWN_ERROR);
+                        throw stream.newBitstreamException(BitstreamErrors.UNKNOWN_ERROR);
                     }
                 }
 
@@ -327,7 +325,7 @@ namespace MP3Sharp.Decode
                     if (syncmode == Bitstream.INITIAL_SYNC)
                     {
                         syncmode = Bitstream.STRICT_SYNC;
-                        stream.set_syncword(headerstring & unchecked((int) 0xFFF80CC0));
+                        stream.SetSyncWord(headerstring & unchecked((int) 0xFFF80CC0));
                     }
                     sync = true;
                 }
@@ -337,12 +335,12 @@ namespace MP3Sharp.Decode
                 }
             } while (!sync);
 
-            stream.parse_frame();
+            stream.ParseFrame();
 
             if (h_protection_bit == 0)
             {
                 // frame contains a crc checksum
-                checksum = (short) stream.get_bits(16);
+                checksum = (short) stream.GetBitsFromBuffer(16);
                 if (crc == null)
                     crc = new Crc16();
                 crc.add_bits(headerstring, 16);

@@ -20,28 +20,24 @@ using MP3Sharp.Support;
 namespace MP3Sharp
 {
     /// <summary>
-    ///     The Mp3SharpException is the base class for all API-level
+    ///     MP3SharpException is the base class for all API-level
     ///     exceptions thrown by JavaLayer. To facilitate conversion and
     ///     common handling of exceptions from other domains, the class
     ///     can delegate some functionality to a contained Throwable instance.
-    ///     <p>
     /// </summary>
-    /// <author>
-    ///     MDM
-    /// </author>
-    public class Mp3SharpException : Exception
+    public class MP3SharpException : Exception
     {
         private readonly Exception exception;
 
-        public Mp3SharpException()
+        public MP3SharpException()
         {
         }
 
-        public Mp3SharpException(string msg) : base(msg)
+        public MP3SharpException(string msg) : base(msg)
         {
         }
 
-        public Mp3SharpException(string msg, Exception t) : base(msg)
+        public MP3SharpException(string msg, Exception t) : base(msg)
         {
             exception = t;
         }
@@ -51,14 +47,12 @@ namespace MP3Sharp
             get { return exception; }
         }
 
-        //UPGRADE_TODO: The equivalent of method 'java.lang.Throwable.printStackTrace' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
-        public void printStackTrace()
+        public void PrintStackTrace()
         {
             SupportClass.WriteStackTrace(this, Console.Error);
         }
 
-        //UPGRADE_TODO: The equivalent of method 'java.lang.Throwable.printStackTrace' is not an override method. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1143"'
-        public void printStackTrace(System.IO.StreamWriter ps)
+        public void PrintStackTrace(System.IO.StreamWriter ps)
         {
             if (exception == null)
             {

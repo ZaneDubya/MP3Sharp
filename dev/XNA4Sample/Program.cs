@@ -12,14 +12,6 @@ namespace XNA4Sample
         /// </summary>
         static void Main(string[] args)
         {
-            /*Console.WriteLine("Begin read...");
-            for (int i = 0; i < 10; i++)
-            {
-                ReadAllTheWayThroughMp3File();
-            }
-            Console.WriteLine("... end!");
-            Console.ReadKey();*/
-
             using (BaseGame game = new BaseGame())
             {
                 game.Run();

@@ -17,7 +17,7 @@
 using System;
 using MP3Sharp.Decode;
 
-namespace MP3Sharp.Convert
+namespace MP3Sharp.IO
 {
     /// <summary> Implements an Obuffer by writing the data to a file in RIFF WAVE format.</summary>
     internal class WaveFileBuffer : ABuffer

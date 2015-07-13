@@ -21,7 +21,7 @@ namespace MP3Sharp.Decode
     /// <summary>
     ///     Encapsulates the details of decoding an MPEG audio frame.
     /// </summary>
-    internal class Decoder : DecoderErrors
+    internal class Decoder
     {
         private static readonly Params DEFAULT_PARAMS = new Params();
         private readonly Params params_Renamed;
@@ -279,12 +279,12 @@ namespace MP3Sharp.Decode
             ///     Retrieves the equalizer settings that the decoder's equalizer
             ///     will be initialized from.
             ///     <p>
-            ///         The <code>Equalizer</code> instance returned
-            ///         cannot be changed in real time to affect the
-            ///         decoder output as it is used only to initialize the decoders
-            ///         EQ settings. To affect the decoder's output in realtime,
-            ///         use the Equalizer returned from the getEqualizer() method on
-            ///         the decoder.
+            ///     The <code>Equalizer</code> instance returned
+            ///     cannot be changed in real time to affect the
+            ///     decoder output as it is used only to initialize the decoders
+            ///     EQ settings. To affect the decoder's output in realtime,
+            ///     use the Equalizer returned from the getEqualizer() method on
+            ///     the decoder.
             /// </summary>
             /// <returns>
             ///     The <code>Equalizer</code> used to initialize the
