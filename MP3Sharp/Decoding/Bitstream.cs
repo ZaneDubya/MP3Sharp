@@ -88,8 +88,7 @@ namespace MP3Sharp.Decoding
         private int m_SyncWord;
 
         /// <summary>
-        ///     Index into <code>framebuffer</code> where the next bits are
-        ///     retrieved.
+        ///     Index into framebuffer where the next bits are retrieved.
         /// </summary>
         private int m_WordPointer;
 
@@ -157,16 +156,11 @@ namespace MP3Sharp.Decoding
         {
             if (m_FrameSize == -1)
             {
-                nextFrame();
+                // entire frame is read by the header class.
+                m_Header.read_header(this, m_CRC);
             }
 
             return m_Header;
-        }
-
-        private void nextFrame()
-        {
-            // entire frame is read by the header class.
-            m_Header.read_header(this, m_CRC);
         }
 
         /// <summary>

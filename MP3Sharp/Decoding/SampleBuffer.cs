@@ -17,7 +17,7 @@
 namespace MP3Sharp.Decoding
 {
     /// <summary>
-    ///     The <code>SampleBuffer</code> class implements an output buffer
+    ///     The SampleBuffer class implements an output buffer
     ///     that provides storage for a fixed size block of samples.
     /// </summary>
     internal class SampleBuffer : ABuffer

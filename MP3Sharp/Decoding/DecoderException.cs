@@ -19,7 +19,7 @@ using System;
 namespace MP3Sharp.Decoding
 {
     /// <summary>
-    ///     The <code>DecoderException</code> represents the class of
+    ///     The DecoderException represents the class of
     ///     errors that can occur when decoding MPEG audio.
     /// </summary>
     internal class DecoderException : MP3SharpException

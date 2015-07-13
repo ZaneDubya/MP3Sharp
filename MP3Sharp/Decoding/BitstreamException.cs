@@ -20,8 +20,8 @@ using MP3Sharp.Decoding;
 namespace MP3Sharp
 {
     /// <summary>
-    ///     Instances of <code>BitstreamException</code> are thrown
-    ///     when operations on a <code>Bitstream</code> fail.
+    ///     Instances of BitstreamException are thrown
+    ///     when operations on a Bitstream fail.
     ///     <p>
     ///     The exception provides details of the exception condition
     ///     in two ways:
@@ -31,7 +31,7 @@ namespace MP3Sharp
     ///         </li>
     ///         <br></br>
     ///         <li>
-    ///             as the <code>Throwable</code> instance, if any, that was thrown
+    ///             as the Throwable instance, if any, that was thrown
     ///             indicating that an exceptional condition has occurred.
     ///         </li>
     ///     </ol>

@@ -1468,7 +1468,7 @@ namespace MP3Sharp.Decoding
         /// </param>
         /// <returns>
         ///     An array of arrays in which each element in the returned
-        ///     array will be of length <code>blockSize</code>.
+        ///     array will be of length blockSize.
         /// </returns>
         private static float[][] splitArray(float[] array, int blockSize)
         {

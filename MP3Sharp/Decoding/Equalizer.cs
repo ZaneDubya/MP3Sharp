@@ -19,7 +19,7 @@ using System;
 namespace MP3Sharp.Decoding
 {
     /// <summary>
-    ///     The <code>Equalizer</code> class can be used to specify
+    ///     The Equalizer class can be used to specify
     ///     equalization settings for the MPEG audio decoder.
     ///     The equalizer consists of 32 band-pass filters.
     ///     Each band of the equalizer can take on a fractional value between
@@ -41,7 +41,7 @@ namespace MP3Sharp.Decoding
         private float[] settings;
 
         /// <summary>
-        ///     Creates a new <code>Equalizer</code> instance.
+        ///     Creates a new Equalizer instance.
         /// </summary>
         public Equalizer()
         {

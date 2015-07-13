@@ -5,11 +5,7 @@ using MP3Sharp.Decoding;
 namespace MP3Sharp
 {
     /// <summary>
-    ///     Internal class used to queue samples that are being obtained
-    ///     from an Mp3 stream. This merges the old mp3stream OBuffer with
-    ///     the javazoom SampleBuffer code for the highest efficiency...
-    ///     well, not the highest possible. The highest I'm willing to sweat
-    ///     over. --trs
+    ///     Internal class used to queue samples that are being obtained from an Mp3 stream. 
     ///     This class handles stereo 16-bit data! Switch it out if you want mono or something.
     /// </summary>
     internal class Buffer16BitStereo : ABuffer

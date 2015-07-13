@@ -31,7 +31,7 @@ namespace MP3Sharp
         private readonly Decoding.Bitstream m_BitStream;
         private readonly Decoder m_Decoder = new Decoder(Decoder.DefaultParams);
         // local variables.
-        private readonly Buffer16BitStereo m_QueueOBuffer;
+        private readonly Buffer16BitStereo m_Buffer;
         private readonly Stream m_SourceStream;
         private int m_BackStreamByteCountRep = 0;
         private short m_ChannelCountRep = -1;
@@ -72,9 +72,9 @@ namespace MP3Sharp
             FormatRep = SoundFormat.Pcm16BitStereo;
             m_SourceStream = sourceStream;
             m_BitStream = new Bitstream(new PushbackStream(m_SourceStream, chunkSize));
-            m_QueueOBuffer = new Buffer16BitStereo();
+            m_Buffer = new Buffer16BitStereo();
 
-            m_Decoder.OutputBuffer = m_QueueOBuffer;
+            m_Decoder.OutputBuffer = m_Buffer;
         }
 
         public int ChunkSize
@@ -205,14 +205,14 @@ namespace MP3Sharp
             int bytesRead = 0;
             while (true)
             {
-                if (m_QueueOBuffer.BytesLeft <= 0)
+                if (m_Buffer.BytesLeft <= 0)
                 {
                     if (!ReadFrame()) // out of frames or end of stream?
                         break;
                 }
 
                 // Copy as much as we can from the current buffer:
-                bytesRead += m_QueueOBuffer.Read(buffer,
+                bytesRead += m_Buffer.Read(buffer,
                     offset + bytesRead,
                     count - bytesRead);
 
@@ -258,7 +258,7 @@ namespace MP3Sharp
                 // Apparently, the way JavaZoom sets the output buffer 
                 // on the decoder is a bit dodgy. Even though
                 // this exception should never happen, we test to be sure.
-                if (decoderOutput != m_QueueOBuffer)
+                if (decoderOutput != m_Buffer)
                     throw new ApplicationException("Output buffers are different.");
 
                 // And we're done.

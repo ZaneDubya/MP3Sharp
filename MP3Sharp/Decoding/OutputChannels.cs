@@ -101,7 +101,7 @@ namespace MP3Sharp.Decoding
         }
 
         /// <summary>
-        ///     Creates an <code>OutputChannels</code> instance
+        ///     Creates an OutputChannels instance
         ///     corresponding to the given channel code.
         /// </summary>
         /// <param name="code">

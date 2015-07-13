@@ -18,7 +18,7 @@ namespace MP3Sharp.Decoding
 {
     /// <summary>
     ///     This struct describes all error codes that can be thrown
-    ///     in <code>BistreamException</code>s.
+    ///     in BistreamExceptions.
     /// </summary>
     internal struct BitstreamErrors
     {
