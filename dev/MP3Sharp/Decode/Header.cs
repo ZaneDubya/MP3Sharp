@@ -14,15 +14,15 @@
 //  *
 //  ***************************************************************************/
 
-using System.Text;
 using MP3Sharp.Support;
+using System.Text;
 
 namespace MP3Sharp.Decode
 {
     /// <summary>
     ///     Class for extracting information from a frame header.
+    ///     TODO: move strings into resources.
     /// </summary>
-    // TODO: move strings into resources.
     internal class Header
     {
         /// <summary>
@@ -229,7 +229,7 @@ namespace MP3Sharp.Decode
             buffer.Append(mode_string());
             buffer.Append(' ');
             buffer.Append(version_string());
-            if (!checksums())
+            if (!IsProtection())
                 buffer.Append(" no");
             buffer.Append(" checksums");
             buffer.Append(' ');
@@ -424,7 +424,7 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Returns Protection bit.
         /// </summary>
-        public bool checksums()
+        public bool IsProtection()
         {
             if (h_protection_bit == 0)
                 return true;
@@ -434,7 +434,7 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Returns Copyright.
         /// </summary>
-        public bool copyright()
+        public bool IsCopyright()
         {
             return h_copyright;
         }
@@ -442,7 +442,7 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Returns Original.
         /// </summary>
-        public bool original()
+        public bool IsOriginal()
         {
             return h_original;
         }
@@ -451,7 +451,7 @@ namespace MP3Sharp.Decode
         ///     Returns Checksum flag.
         ///     Compares computed checksum with stream checksum.
         /// </summary>
-        public bool checksum_ok()
+        public bool IsChecksumOK()
         {
             return (checksum == crc.Checksum());
         }
@@ -460,7 +460,7 @@ namespace MP3Sharp.Decode
         /// <summary>
         ///     Returns Layer III Padding bit.
         /// </summary>
-        public bool padding()
+        public bool IsPadding()
         {
             if (h_padding_bit == 0)
                 return false;

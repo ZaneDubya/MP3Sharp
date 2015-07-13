@@ -278,7 +278,6 @@ namespace MP3Sharp.Decode
             /// <summary>
             ///     Retrieves the equalizer settings that the decoder's equalizer
             ///     will be initialized from.
-            ///     <p>
             ///     The <code>Equalizer</code> instance returned
             ///     cannot be changed in real time to affect the
             ///     decoder output as it is used only to initialize the decoders

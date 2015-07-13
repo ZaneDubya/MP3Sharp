@@ -48,7 +48,7 @@ namespace MP3Sharp.Decode
             ReadAllocation();
             ReadScaleFactorSelection();
 
-            if ((crc != null) || header.checksum_ok())
+            if ((crc != null) || header.IsChecksumOK())
             {
                 ReadScaleFactors();
 
