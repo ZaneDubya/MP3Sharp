@@ -13,7 +13,6 @@
 //  * Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
-
 namespace MP3Sharp.Decoding
 {
     /// <summary>

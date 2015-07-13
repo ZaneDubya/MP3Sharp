@@ -1,5 +1,5 @@
 // /***************************************************************************
-//  * JavaLayerException.cs
+//  * MP3SharpException.cs
 //  * Copyright (c) 2015 the authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
@@ -15,6 +15,7 @@
 //  ***************************************************************************/
 
 using System;
+using System.IO;
 using MP3Sharp.Support;
 
 namespace MP3Sharp
@@ -52,7 +53,7 @@ namespace MP3Sharp
             SupportClass.WriteStackTrace(this, Console.Error);
         }
 
-        public void PrintStackTrace(System.IO.StreamWriter ps)
+        public void PrintStackTrace(StreamWriter ps)
         {
             if (exception == null)
             {

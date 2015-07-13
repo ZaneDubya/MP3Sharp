@@ -63,7 +63,7 @@ namespace MP3Sharp.Decoding
 
         public static string GetErrorString(int errorcode)
         {
-            return "Bitstream errorcode " + System.Convert.ToString(errorcode, 16);
+            return "Bitstream errorcode " + Convert.ToString(errorcode, 16);
         }
     }
 }

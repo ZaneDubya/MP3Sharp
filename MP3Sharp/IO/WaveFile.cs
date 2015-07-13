@@ -14,8 +14,8 @@
 //  *
 //  ***************************************************************************/
 
-using MP3Sharp.Support;
 using System.IO;
+using MP3Sharp.Support;
 
 namespace MP3Sharp.IO
 {
@@ -263,7 +263,7 @@ namespace MP3Sharp.IO
 
             private void InitBlock(WaveFile enclosingInstance)
             {
-                this.m_EnclosingInstance = enclosingInstance;
+                m_EnclosingInstance = enclosingInstance;
             }
 
             public virtual int VerifyValidity()
@@ -293,7 +293,7 @@ namespace MP3Sharp.IO
 
             private void InitBlock(WaveFile enclosingInstance)
             {
-                this.m_EnclosingInstance = enclosingInstance;
+                m_EnclosingInstance = enclosingInstance;
             }
         }
     }

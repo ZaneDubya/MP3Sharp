@@ -1,6 +1,22 @@
-﻿using Microsoft.Xna.Framework.Audio;
-using MP3Sharp;
+﻿// /***************************************************************************
+//  * XNAMP3.cs
+//  * Copyright (c) 2015 the authors.
+//  * 
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the GNU Lesser General Public License
+//  * (LGPL) version 3 which accompanies this distribution, and is available at
+//  * https://www.gnu.org/licenses/lgpl-3.0.en.html
+//  *
+//  * This library is distributed in the hope that it will be useful,
+//  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+//  * Lesser General Public License for more details.
+//  *
+//  ***************************************************************************/
+
 using System;
+using Microsoft.Xna.Framework.Audio;
+using MP3Sharp;
 
 namespace XNA4Sample
 {
@@ -10,10 +26,10 @@ namespace XNA4Sample
         private DynamicSoundEffectInstance m_Instance;
 
         private const int NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK = 4096;
-        private byte[] m_WaveBuffer = new byte[NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK];
+        private readonly byte[] m_WaveBuffer = new byte[NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK];
 
-        private bool m_Repeat = false;
-        private bool m_Playing = false;
+        private bool m_Repeat;
+        private bool m_Playing;
 
         public XNAMP3(string path)
         {

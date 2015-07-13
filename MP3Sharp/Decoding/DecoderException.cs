@@ -54,7 +54,7 @@ namespace MP3Sharp.Decoding
             // REVIEW: use resource file to map error codes
             // to locale-sensitive strings. 
 
-            return "Decoder errorcode " + System.Convert.ToString(errorcode, 16);
+            return "Decoder errorcode " + Convert.ToString(errorcode, 16);
         }
     }
 }

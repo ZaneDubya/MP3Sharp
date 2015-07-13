@@ -14,9 +14,9 @@
 //  *
 //  ***************************************************************************/
 
-using MP3Sharp.Decoding;
 using System;
 using System.IO;
+using MP3Sharp.Decoding;
 
 namespace MP3Sharp
 {
@@ -32,7 +32,7 @@ namespace MP3Sharp
         // local variables.
         private readonly Buffer16BitStereo m_Buffer;
         private readonly Stream m_SourceStream;
-        private int m_BackStreamByteCountRep = 0;
+        private readonly int m_BackStreamByteCountRep = 0;
         private short m_ChannelCountRep = -1;
         protected SoundFormat FormatRep;
         private int m_FrequencyRep = -1;

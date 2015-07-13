@@ -15,8 +15,8 @@
 //  ***************************************************************************/
 
 using System;
-using MP3Sharp.Support;
 using MP3Sharp.Decoding.Decoders.LayerIII;
+using MP3Sharp.Support;
 
 namespace MP3Sharp.Decoding.Decoders
 {

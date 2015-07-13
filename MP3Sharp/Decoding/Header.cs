@@ -14,8 +14,8 @@
 //  *
 //  ***************************************************************************/
 
-using MP3Sharp.Support;
 using System.Text;
+using MP3Sharp.Support;
 
 namespace MP3Sharp.Decoding
 {

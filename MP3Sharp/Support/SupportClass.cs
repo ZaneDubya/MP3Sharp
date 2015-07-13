@@ -15,6 +15,7 @@
 //  ***************************************************************************/
 
 using System;
+using System.IO;
 
 namespace MP3Sharp.Support
 {
@@ -46,7 +47,7 @@ namespace MP3Sharp.Support
 
         /*******************************/
 
-        public static void WriteStackTrace(Exception throwable, System.IO.TextWriter stream)
+        public static void WriteStackTrace(Exception throwable, TextWriter stream)
         {
             stream.Write(throwable.StackTrace);
             stream.Flush();
@@ -108,7 +109,7 @@ namespace MP3Sharp.Support
         ///     The number of characters read. The number will be less than or equal to count depending on the data available
         ///     in the source Stream.
         /// </returns>
-        public static int ReadInput(System.IO.Stream sourceStream, ref sbyte[] target, int start, int count)
+        public static int ReadInput(Stream sourceStream, ref sbyte[] target, int start, int count)
         {
             byte[] receiver = new byte[target.Length];
             int bytesRead = sourceStream.Read(receiver, start, count);

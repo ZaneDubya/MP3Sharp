@@ -16,6 +16,7 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using MP3Sharp.Support;
 
 namespace MP3Sharp.Decoding
@@ -121,7 +122,7 @@ namespace MP3Sharp.Decoding
             {
                 m_SourceStream.Close();
             }
-            catch (System.IO.IOException ex)
+            catch (IOException ex)
             {
                 throw newBitstreamException(BitstreamErrors.STREAM_ERROR, ex);
             }
@@ -472,7 +473,7 @@ namespace MP3Sharp.Decoding
                     len -= bytesread;
                 }
             }
-            catch (System.IO.IOException ex)
+            catch (IOException ex)
             {
                 throw newBitstreamException(BitstreamErrors.STREAM_ERROR, ex);
             }
@@ -500,7 +501,7 @@ namespace MP3Sharp.Decoding
                     len -= bytesread;
                 }
             }
-            catch (System.IO.IOException ex)
+            catch (IOException ex)
             {
                 throw newBitstreamException(BitstreamErrors.STREAM_ERROR, ex);
             }

@@ -1,5 +1,5 @@
 // /***************************************************************************
-//  * Obuffer.cs
+//  * ABuffer.cs
 //  * Copyright (c) 2015 the authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
@@ -13,7 +13,6 @@
 //  * Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
-
 namespace MP3Sharp.Decoding
 {
     /// <summary>

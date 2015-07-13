@@ -1,5 +1,5 @@
 // /***************************************************************************
-//  * WaveFileObuffer.cs
+//  * WaveFileBuffer.cs
 //  * Copyright (c) 2015 the authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
@@ -15,6 +15,7 @@
 //  ***************************************************************************/
 
 using System;
+using System.IO;
 using MP3Sharp.Decoding;
 
 namespace MP3Sharp.IO
@@ -44,7 +45,7 @@ namespace MP3Sharp.IO
             int rc = m_OutWave.OpenForWrite(fileName, null, freq, 16, (short) m_Channels);
         }
 
-        public WaveFileBuffer(int numberOfChannels, int freq, System.IO.Stream stream)
+        public WaveFileBuffer(int numberOfChannels, int freq, Stream stream)
         {
             m_Buffer = new short[OBUFFERSIZE];
             m_Bufferp = new short[MAXCHANNELS];

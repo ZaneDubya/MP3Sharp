@@ -1,5 +1,5 @@
 // /***************************************************************************
-//  * huffcodetab.cs
+//  * Huffman.cs
 //  * Copyright (c) 2015 the authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
