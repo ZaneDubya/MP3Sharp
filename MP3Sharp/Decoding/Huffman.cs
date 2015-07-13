@@ -19,7 +19,7 @@ using MP3Sharp.Support;
 namespace MP3Sharp.Decoding
 {
     /// <summary>
-    ///     Class to implements Huffman decoder.
+    /// Implements a Huffman decoder.
     /// </summary>
     internal sealed class Huffman
     {
@@ -690,7 +690,6 @@ namespace MP3Sharp.Decoding
         };
 
         public static Huffman[] ht; /* Simulate extern struct                 */
-        private static int[] bitbuf;
         private readonly int linbits; /* number of linbits   	                  */
         private readonly char tablename0 = ' '; /* string, containing table_description   */
         private readonly char tablename1 = ' '; /* string, containing table_description   */
@@ -706,7 +705,7 @@ namespace MP3Sharp.Decoding
 
         static Huffman()
         {
-            bitbuf = new int[32];
+
         }
 
         /// <summary>
@@ -850,7 +849,7 @@ namespace MP3Sharp.Decoding
             return error;
         }
 
-        public static void inithuff()
+        public static void Initialize()
         {
             if (ht != null)
                 return;

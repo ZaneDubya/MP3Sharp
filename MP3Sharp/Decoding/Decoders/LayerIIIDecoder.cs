@@ -229,10 +229,10 @@ namespace MP3Sharp.Decoding.Decoders
         // REVIEW: these constructor arguments should be moved to the
         // decodeFrame() method, where possible, so that one
         public LayerIIIDecoder(Bitstream stream0, Header header0, SynthesisFilter filtera, SynthesisFilter filterb,
-            ABuffer buffer0, int which_ch0)
+            ABuffer buffer0, int whichCh0)
         {
             InitBlock();
-            Huffman.inithuff();
+            Huffman.Initialize();
             is_1d = new int[SBLIMIT*SSLIMIT + 4];
             ro = new float[2][][];
             for (int i = 0; i < 2; i++)
@@ -364,7 +364,7 @@ namespace MP3Sharp.Decoding.Decoders
             filter1 = filtera;
             filter2 = filterb;
             buffer = buffer0;
-            which_channels = which_ch0;
+            which_channels = whichCh0;
 
             frame_start = 0;
             channels = (header.mode() == Header.SINGLE_CHANNEL) ? 1 : 2;
