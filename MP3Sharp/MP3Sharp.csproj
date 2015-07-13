@@ -44,6 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Decoding\DecoderErrors.cs" />
+    <Compile Include="Decoding\Decoders\LayerIII\ChannelData.cs" />
+    <Compile Include="Decoding\Decoders\LayerIII\GranuleInfo.cs" />
+    <Compile Include="Decoding\Decoders\LayerIII\Layer3SideInfo.cs" />
+    <Compile Include="Decoding\Decoders\LayerIII\SBI.cs" />
+    <Compile Include="Decoding\Decoders\LayerIII\ScaleFactorData.cs" />
+    <Compile Include="Decoding\Decoders\LayerIII\ScaleFactorTable.cs" />
     <Compile Include="Decoding\PushbackStream.cs" />
     <Compile Include="Decoding\BitReserve.cs" />
     <Compile Include="Decoding\Bitstream.cs" />
@@ -53,7 +59,6 @@
     <Compile Include="Decoding\Crc16.cs" />
     <Compile Include="Decoding\Decoder.cs" />
     <Compile Include="Decoding\DecoderException.cs" />
-    <Compile Include="Decoding\Decoders\LayerIII\LayerIIISupport.cs" />
     <Compile Include="Decoding\Decoders\ASubband.cs" />
     <Compile Include="Decoding\Decoders\LayerI\SubbandLayer1Stereo.cs" />
     <Compile Include="Decoding\Decoders\LayerI\SubbandLayer1.cs" />

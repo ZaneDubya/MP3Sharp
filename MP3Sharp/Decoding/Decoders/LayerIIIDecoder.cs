@@ -163,7 +163,7 @@ namespace MP3Sharp.Decoding.Decoders
         private readonly SynthesisFilter filter2;
         private readonly int first_channel;
         private readonly Header header;
-        private readonly temporaire2[] III_scalefac_t;
+        private readonly ScaleFactorData[] III_scalefac_t;
         private readonly int[] is_1d;
         private readonly float[][] k;
         private readonly int last_channel;
@@ -174,7 +174,7 @@ namespace MP3Sharp.Decoding.Decoders
         private readonly float[] out_1d;
         private readonly float[][] prevblck;
         private readonly float[][][] ro;
-        private readonly temporaire2[] scalefac;
+        private readonly ScaleFactorData[] scalefac;
         private readonly SBI[] sfBandIndex; // Init in the constructor.
         private readonly int sfreq;
         private readonly Layer3SideInfo m_SideInfo;
@@ -203,7 +203,7 @@ namespace MP3Sharp.Decoding.Decoders
 
         private float[] samples2;
         public int[] scalefac_buffer;
-        public Sftable sftable;
+        public ScaleFactorTable sftable;
 
         // MDM: tsOutCopy and rawout do not need initializing, so the arrays
         // can be reused.
@@ -226,14 +226,14 @@ namespace MP3Sharp.Decoding.Decoders
 
         /// <summary>
         ///     Constructor.
+        ///     REVIEW: these constructor arguments should be moved to the decodeFrame() method.
         /// </summary>
-        // REVIEW: these constructor arguments should be moved to the
-        // decodeFrame() method, where possible, so that one
         public LayerIIIDecoder(Bitstream stream0, Header header0, SynthesisFilter filtera, SynthesisFilter filterb,
             ABuffer buffer0, int whichCh0)
         {
-            InitBlock();
             Huffman.Initialize();
+
+            InitBlock();
             is_1d = new int[SBLIMIT*SSLIMIT + 4];
             ro = new float[2][][];
             for (int i = 0; i < 2; i++)
@@ -267,9 +267,9 @@ namespace MP3Sharp.Decoding.Decoders
             nonzero = new int[2];
 
             //III_scalefact_t
-            III_scalefac_t = new temporaire2[2];
-            III_scalefac_t[0] = new temporaire2();
-            III_scalefac_t[1] = new temporaire2();
+            III_scalefac_t = new ScaleFactorData[2];
+            III_scalefac_t[0] = new ScaleFactorData();
+            III_scalefac_t[1] = new ScaleFactorData();
             scalefac = III_scalefac_t;
             // L3TABLE INIT
 
@@ -353,7 +353,7 @@ namespace MP3Sharp.Decoding.Decoders
             // Sftable
             int[] ll0 = {0, 6, 11, 16, 21};
             int[] ss0 = {0, 6, 12};
-            sftable = new Sftable(this, ll0, ss0);
+            sftable = new ScaleFactorTable(this, ll0, ss0);
             // END OF Sftable
 
             // scalefac_buffer
