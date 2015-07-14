@@ -33,5 +33,5 @@ MP3Sharp is a port of JavaLayer, a MP3 decoder written by [JavaZoom](http://www.
 The sample MP3 file used in this project is Energy, by [BenSound](http://www.bensound.com) included under the terms of the CC Zero license.
 
 ## FUTURE IMPROVEMENT
-* Many of the variables throughout the ported code are poorly named. I don't know enough about the MP3 specification to suggest better names for them. 
+* Many of the variables throughout the ported code are poorly named. I've done my best to clean them up, but don't know enough about the MP3 specification to suggest better names for most of them. 
 * There is a large amount of dead code and variables that are assigned but never used, and thus significant area for improvement of decoding (using these variables properly) or optimization (removing them altogether).
