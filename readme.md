@@ -35,3 +35,4 @@ The sample MP3 file used in this project is Energy, by [BenSound](http://www.ben
 ## FUTURE IMPROVEMENT
 * Many of the variables throughout the ported code are poorly named. I've done my best to clean them up, but don't know enough about the MP3 specification to suggest better names for most of them. 
 * There is a large amount of dead code and variables that are assigned but never used, and thus significant area for improvement of decoding (using these variables properly) or optimization (removing them altogether).
+* MP3Stream does not automatically detect the bitrate of an opened MP3 file. This could easily be done by reading the first MP3 frame on open.
