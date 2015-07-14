@@ -78,6 +78,9 @@ namespace MP3Sharp
             m_BitStream = new Bitstream(new PushbackStream(m_SourceStream, chunkSize));
             m_Buffer = new Buffer16BitStereo();
             m_Decoder.OutputBuffer = m_Buffer;
+            // read the first frame. This will fill the initial buffer with data, and get our frequency!
+            if (!ReadFrame())
+                IsEOF = true;
         }
 
         public int ChunkSize
@@ -205,6 +208,9 @@ namespace MP3Sharp
         {
             // Copy from queue buffers, reading new ones as necessary,
             // until we can't read more or we have read "count" bytes
+            if (IsEOF)
+                return 0;
+
             int bytesRead = 0;
             while (true)
             {

@@ -50,7 +50,7 @@ namespace MP3Sharp
             }
         }
 
-        /// Copies as much of this buffer as will fit into hte output
+        /// Copies as much of this buffer as will fit into the output
         /// buffer. Return The amount of bytes copied.
         public int Read(byte[] bufferOut, int offset, int count)
         {

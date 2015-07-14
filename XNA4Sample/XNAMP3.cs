@@ -15,7 +15,6 @@
 //  ***************************************************************************/
 
 using System;
-using System.Threading;
 using Microsoft.Xna.Framework.Audio;
 using MP3Sharp;
 
@@ -35,7 +34,7 @@ namespace XNA4Sample
         public XNAMP3(string path)
         {
             m_Stream = new MP3Stream(path, NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK);
-            m_Instance = new DynamicSoundEffectInstance(44100, AudioChannels.Stereo);
+            m_Instance = new DynamicSoundEffectInstance(m_Stream.Frequency, AudioChannels.Stereo);
         }
 
         public void Dispose()
@@ -50,7 +49,6 @@ namespace XNA4Sample
 
             m_Stream.Close();
             m_Stream = null;
-            Thread.Sleep(1);
         }
 
         public void Play(bool repeat = false)
