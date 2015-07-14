@@ -28,7 +28,7 @@ So simple!
 MP3Sharp is licensed under the [LGPL Version 3](https://github.com/ZaneDubya/MP3Sharp/blob/master/license.txt).
 
 ## CREDITS
-MP3Sharp is a port of JavaLayer, a MP3 decoder written by [JavaZoom](http://www.javazoom.net) and released under the LGPL. JavaLayer was initially ported to C# by [Robert Burke](http://www.robburke.net/), in what he modestly describes as a 'half day project'. [tekHedd](http://www.byteheaven.com/) added some significant speed optimizations. I've cleaned up the code and reduced redundancies throughout. The sample MP3 file used in this project is Energy by [BenSound](http://www.bensound.com), and is included under the terms of the CC Zero license.
+MP3Sharp is a port of JavaLayer, a MP3 decoder written by [JavaZoom](http://www.javazoom.net) and released under the LGPL. JavaLayer was initially ported to C# by [Robert Burke](http://www.robburke.net/), in what he modestly describes as a 'half day project'. [tekHedd](http://www.byteheaven.com/) added some significant speed optimizations. I've cleaned up the code and reduced redundancies throughout. The sample MP3 file used in this project is Energy by [BenSound](http://www.bensound.com), and is included under the terms of the Creative commons - Attribution - No Derivative Works license.
 
 ## FUTURE IMPROVEMENT
 * Many of the variables throughout the ported code are poorly named. I've done my best to clean them up, but don't know enough about the MP3 specification to suggest better names for most of them. 
