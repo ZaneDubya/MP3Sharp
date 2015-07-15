@@ -14,9 +14,10 @@
 //  *
 //  ***************************************************************************/
 
+using MP3Sharp.Support;
 using System;
 using System.IO;
-using MP3Sharp.Support;
+using System.Runtime.Serialization;
 
 namespace MP3Sharp
 {
@@ -26,26 +27,23 @@ namespace MP3Sharp
     ///     common handling of exceptions from other domains, the class
     ///     can delegate some functionality to a contained Throwable instance.
     /// </summary>
+    [Serializable]
     public class MP3SharpException : Exception
     {
-        private readonly Exception exception;
-
         public MP3SharpException()
         {
         }
 
-        public MP3SharpException(string msg) : base(msg)
+        public MP3SharpException(string message) : base(message)
         {
         }
 
-        public MP3SharpException(string msg, Exception t) : base(msg)
+        public MP3SharpException(string message, Exception inner) : base(message, inner)
         {
-            exception = t;
         }
 
-        public virtual Exception Exception
+        protected MP3SharpException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            get { return exception; }
         }
 
         public void PrintStackTrace()
@@ -55,13 +53,13 @@ namespace MP3Sharp
 
         public void PrintStackTrace(StreamWriter ps)
         {
-            if (exception == null)
+            if (InnerException == null)
             {
                 SupportClass.WriteStackTrace(this, ps);
             }
             else
             {
-                SupportClass.WriteStackTrace(exception, Console.Error);
+                SupportClass.WriteStackTrace(InnerException, Console.Error);
             }
         }
     }
