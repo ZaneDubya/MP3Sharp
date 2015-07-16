@@ -15,6 +15,7 @@
 //  ***************************************************************************/
 
 using System;
+using System.Runtime.Serialization;
 
 namespace MP3Sharp.Decoding
 {
@@ -36,19 +37,24 @@ namespace MP3Sharp.Decoding
     ///     </ol>
     ///     </p>
     /// </summary>
+    [Serializable]
     public class BitstreamException : MP3SharpException
     {
         private int m_Errorcode;
 
-        public BitstreamException(string msg, Exception t) : base(msg, t)
+        public BitstreamException(string message, Exception inner) : base(message, inner)
         {
             InitBlock();
         }
 
-        public BitstreamException(int errorcode, Exception t) : this(GetErrorString(errorcode), t)
+        public BitstreamException(int errorcode, Exception inner) : this(GetErrorString(errorcode), inner)
         {
             InitBlock();
             m_Errorcode = errorcode;
+        }
+
+        protected BitstreamException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
 
         public virtual int ErrorCode
