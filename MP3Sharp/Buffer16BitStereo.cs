@@ -64,6 +64,14 @@ namespace MP3Sharp
         /// </returns>
         public int Read(byte[] bufferOut, int offset, int count)
         {
+            if (bufferOut == null)
+            {
+                throw new ArgumentNullException("bufferOut");
+            }
+            if ((count + offset) >= bufferOut.Length)
+            {
+                throw new ArgumentException("The sum of offset and count is larger than the buffer length");
+            }
             int remaining = BytesLeft;
             int copySize;
             if (count > remaining)
