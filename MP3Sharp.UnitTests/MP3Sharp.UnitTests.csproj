@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>a1e79dd1-de8b-4ba9-a704-16d9a2504187</ProjectGuid>
+    <ProjectGuid>{07CE2D84-445C-420A-BB83-AA94A74F8FB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MP3Sharp.UnitTests</RootNamespace>
@@ -55,6 +55,15 @@
   <ItemGroup>
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="sample.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MP3Sharp\MP3Sharp.csproj">
+      <Project>{bf3b29f8-da04-4973-93db-144a5bbe2472}</Project>
+      <Name>MP3Sharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
