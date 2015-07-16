@@ -65,7 +65,7 @@ namespace MP3Sharp.Decoding
             FromEQFunction = eq;
         }
 
-        public virtual float[] FromFloatArray
+        public float[] FromFloatArray
         {
             set
             {
