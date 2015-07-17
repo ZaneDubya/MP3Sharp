@@ -23,7 +23,7 @@ namespace MP3Sharp
 {
     /// <summary>
     ///     MP3SharpException is the base class for all API-level
-    ///     exceptions thrown by JavaLayer. To facilitate conversion and
+    ///     exceptions thrown by MP3Sharp. To facilitate conversion and
     ///     common handling of exceptions from other domains, the class
     ///     can delegate some functionality to a contained Throwable instance.
     /// </summary>

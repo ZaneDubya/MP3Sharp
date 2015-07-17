@@ -68,7 +68,7 @@ namespace MP3Sharp
             {
                 throw new ArgumentNullException("bufferOut");
             }
-            if ((count + offset) >= bufferOut.Length)
+            if ((count + offset) > bufferOut.Length)
             {
                 throw new ArgumentException("The sum of offset and count is larger than the buffer length");
             }
@@ -104,7 +104,6 @@ namespace MP3Sharp
             m_Bufferp[channel] += CHANNELS * 2;
         }
 
-        // efficiently write 32 samples
         /// <summary>
         ///     Writes 32 samples to the buffer.
         /// </summary>

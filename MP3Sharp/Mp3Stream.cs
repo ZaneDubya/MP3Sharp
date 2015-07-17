@@ -69,6 +69,7 @@ namespace MP3Sharp
 
         /// <summary>
         ///     Creates a new stream instance using the provided stream as a source.
+        ///     Will also read the first frame of the MP3 into the internal buffer.
         ///     TODO: allow selecting stereo or mono in the constructor (note that this also requires "implementing" the stereo format).
         /// </summary>
         public MP3Stream(Stream sourceStream, int chunkSize)
@@ -135,10 +136,8 @@ namespace MP3Sharp
         }
 
         /// <summary>
-        ///     Gets the frequency of the audio being decoded.
-        ///     Initially set to -1.  Initialized during the first call to either of the Read and DecodeFrames methods,
-        ///     and updated during every subsequent call to one of those methods to reflect the most recent header information
-        ///     from the MP3 stream.
+        ///     Gets the frequency of the audio being decoded. Updated every call to Read() or DecodeFrames(),
+        ///     to reflect the most recent header information from the MP3 Stream.
         /// </summary>
         public int Frequency
         {
@@ -146,10 +145,8 @@ namespace MP3Sharp
         }
 
         /// <summary>
-        ///     Gets the number of channels available in the audio being decoded.
-        ///     Initially set to -1.  Initialized during the first call to either of the Read and DecodeFrames methods,
-        ///     and updated during every subsequent call to one of those methods to reflect the most recent header information
-        ///     from the MP3 stream.
+        ///     Gets the number of channels available in the audio being decoded. Updated every call to Read() or DecodeFrames(),
+        ///     to reflect the most recent header information from the MP3 Stream.
         /// </summary>
         public short ChannelCount
         {
@@ -202,8 +199,8 @@ namespace MP3Sharp
         }
 
         /// <summary>
-        ///     Decodes the requested number of frames from the MP3 stream
-        ///     and caches their PCM-encoded bytes.  These can subsequently be obtained using the Read method.
+        ///     Decodes the requested number of frames from the MP3 stream and caches their PCM-encoded bytes.
+        ///     These can subsequently be obtained using the Read method.
         ///     Returns the number of frames that were successfully decoded.
         /// </summary>
         public int DecodeFrames(int frameCount)
