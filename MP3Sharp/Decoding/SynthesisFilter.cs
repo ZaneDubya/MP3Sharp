@@ -201,8 +201,8 @@ namespace MP3Sharp.Decoding
             0.007919312f, -0.003326416f, 0.000473022f, 0.000015259f
         };
 
-        private readonly int channel;
-        private readonly float[] samples; // 32 new subband samples
+        private readonly int m_ChannelIndex;
+        private readonly float[] m_SubbandSamples; // 32 new subband samples
         private readonly float scalefactor;
         private readonly float[] v1;
         private readonly float[] v2;
@@ -217,14 +217,11 @@ namespace MP3Sharp.Decoding
         private float[] eq;
 
         /// <summary>
-        ///     Quality value for controlling CPU usage/quality tradeoff.
-        /// </summary>
-        /// <summary>
         ///     Contructor.
         ///     The scalefactor scales the calculated float pcm samples to short values
         ///     (raw pcm samples are in [-1.0, 1.0], if no violations occur).
         /// </summary>
-        public SynthesisFilter(int channelnumber, float factor, float[] eq0)
+        public SynthesisFilter(int channelIndex, float factor, float[] eq0)
         {
             InitBlock();
             if (d == null)
@@ -235,8 +232,8 @@ namespace MP3Sharp.Decoding
 
             v1 = new float[512];
             v2 = new float[512];
-            samples = new float[32];
-            channel = channelnumber;
+            m_SubbandSamples = new float[32];
+            m_ChannelIndex = channelIndex;
             scalefactor = factor;
             EQ = eq;
 
@@ -278,7 +275,7 @@ namespace MP3Sharp.Decoding
 
             // initialize samples[]:
             for (int p2 = 0; p2 < 32; p2++)
-                samples[p2] = 0.0f;
+                m_SubbandSamples[p2] = 0.0f;
 
             actual_v = v1;
             actual_write_pos = 15;
@@ -287,16 +284,16 @@ namespace MP3Sharp.Decoding
         /// <summary>
         ///     Inject Sample.
         /// </summary>
-        public void input_sample(float sample, int subbandnumber)
+        public void WriteSample(float sample, int subbandIndex)
         {
-            samples[subbandnumber] = eq[subbandnumber]*sample;
+            m_SubbandSamples[subbandIndex] = eq[subbandIndex]*sample;
         }
 
-        public void input_samples(float[] s)
+        public void WriteAllSamples(float[] s)
         {
             for (int i = 31; i >= 0; i--)
             {
-                samples[i] = s[i]*eq[i];
+                m_SubbandSamples[i] = s[i]*eq[i];
             }
         }
 
@@ -310,7 +307,7 @@ namespace MP3Sharp.Decoding
             float new_v20, new_v21, new_v22, new_v23, new_v24, new_v25, new_v26, new_v27, new_v28, new_v29;
             float new_v30, new_v31;
 
-            float[] s = samples;
+            float[] s = m_SubbandSamples;
 
             float s0 = s[0];
             float s1 = s[1];
@@ -651,7 +648,7 @@ namespace MP3Sharp.Decoding
             //	float[] p = new float[16];
             //	float[] pp = new float[16];
 
-            float[] x1 = samples;
+            float[] x1 = m_SubbandSamples;
 
             p[0] = x1[0] + x1[31];
             p[1] = x1[1] + x1[30];
@@ -1387,7 +1384,7 @@ namespace MP3Sharp.Decoding
 
             if (buffer != null)
             {
-                buffer.AppendSamples(channel, _tmpOut);
+                buffer.AppendSamples(m_ChannelIndex, _tmpOut);
             }
         }
 
@@ -1409,7 +1406,7 @@ namespace MP3Sharp.Decoding
             // MDM: this may not be necessary. The Layer III decoder always
             // outputs 32 subband samples, but I haven't checked layer I & II.
             for (int p = 0; p < 32; p++)
-                samples[p] = 0.0f;
+                m_SubbandSamples[p] = 0.0f;
         }
 
         /// <summary>

@@ -34,15 +34,15 @@ namespace MP3Sharp.Decoding.Decoders.LayerI
         /// <summary>
         ///     *
         /// </summary>
-        public override void read_allocation(Bitstream stream, Header header, Crc16 crc)
+        public override void ReadBitAllocation(Bitstream stream, Header header, Crc16 crc)
         {
-            base.read_allocation(stream, header, crc);
+            base.ReadBitAllocation(stream, header, crc);
         }
 
         /// <summary>
         ///     *
         /// </summary>
-        public override void read_scalefactor(Bitstream stream, Header header)
+        public override void ReadScaleFactor(Bitstream stream, Header header)
         {
             if (allocation != 0)
             {
@@ -54,15 +54,15 @@ namespace MP3Sharp.Decoding.Decoders.LayerI
         /// <summary>
         ///     *
         /// </summary>
-        public override bool read_sampledata(Bitstream stream)
+        public override bool ReadSampleData(Bitstream stream)
         {
-            return base.read_sampledata(stream);
+            return base.ReadSampleData(stream);
         }
 
         /// <summary>
         ///     *
         /// </summary>
-        public override bool put_next_sample(int channels, SynthesisFilter filter1, SynthesisFilter filter2)
+        public override bool PutNextSample(int channels, SynthesisFilter filter1, SynthesisFilter filter2)
         {
             if (allocation != 0)
             {
@@ -70,18 +70,18 @@ namespace MP3Sharp.Decoding.Decoders.LayerI
                 if (channels == OutputChannels.BOTH_CHANNELS)
                 {
                     float sample1 = sample * scalefactor, sample2 = sample * channel2_scalefactor;
-                    filter1.input_sample(sample1, subbandnumber);
-                    filter2.input_sample(sample2, subbandnumber);
+                    filter1.WriteSample(sample1, subbandnumber);
+                    filter2.WriteSample(sample2, subbandnumber);
                 }
                 else if (channels == OutputChannels.LEFT_CHANNEL)
                 {
                     float sample1 = sample * scalefactor;
-                    filter1.input_sample(sample1, subbandnumber);
+                    filter1.WriteSample(sample1, subbandnumber);
                 }
                 else
                 {
                     float sample2 = sample * channel2_scalefactor;
-                    filter1.input_sample(sample2, subbandnumber);
+                    filter1.WriteSample(sample2, subbandnumber);
                 }
             }
             return true;

@@ -93,7 +93,7 @@ namespace MP3Sharp.Decoding.Decoders
         {
             // start to read audio data:
             for (int i = 0; i < num_subbands; ++i)
-                subbands[i].read_allocation(stream, header, crc);
+                subbands[i].ReadBitAllocation(stream, header, crc);
         }
 
         protected internal virtual void ReadScaleFactorSelection()
@@ -104,7 +104,7 @@ namespace MP3Sharp.Decoding.Decoders
         protected internal virtual void ReadScaleFactors()
         {
             for (int i = 0; i < num_subbands; ++i)
-                subbands[i].read_scalefactor(stream, header);
+                subbands[i].ReadScaleFactor(stream, header);
         }
 
         protected internal virtual void ReadSampleData()
@@ -116,11 +116,11 @@ namespace MP3Sharp.Decoding.Decoders
             {
                 int i;
                 for (i = 0; i < num_subbands; ++i)
-                    readReady = subbands[i].read_sampledata(stream);
+                    readReady = subbands[i].ReadSampleData(stream);
                 do
                 {
                     for (i = 0; i < num_subbands; ++i)
-                        writeReady = subbands[i].put_next_sample(which_channels, filter1, filter2);
+                        writeReady = subbands[i].PutNextSample(which_channels, filter1, filter2);
 
                     filter1.calculate_pcm_samples(buffer);
                     if ((which_channels == OutputChannels.BOTH_CHANNELS) && (hdrMode != Header.SINGLE_CHANNEL))

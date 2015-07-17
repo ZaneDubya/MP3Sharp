@@ -64,7 +64,7 @@ namespace MP3Sharp.Decoding.Decoders.LayerI
         /// <summary>
         ///     *
         /// </summary>
-        public override void read_allocation(Bitstream stream, Header header, Crc16 crc)
+        public override void ReadBitAllocation(Bitstream stream, Header header, Crc16 crc)
         {
             if ((allocation = stream.GetBitsFromBuffer(4)) == 15)
             {
@@ -84,7 +84,7 @@ namespace MP3Sharp.Decoding.Decoders.LayerI
         /// <summary>
         ///     *
         /// </summary>
-        public override void read_scalefactor(Bitstream stream, Header header)
+        public override void ReadScaleFactor(Bitstream stream, Header header)
         {
             if (allocation != 0)
                 scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
@@ -93,7 +93,7 @@ namespace MP3Sharp.Decoding.Decoders.LayerI
         /// <summary>
         ///     *
         /// </summary>
-        public override bool read_sampledata(Bitstream stream)
+        public override bool ReadSampleData(Bitstream stream)
         {
             if (allocation != 0)
             {
@@ -110,12 +110,12 @@ namespace MP3Sharp.Decoding.Decoders.LayerI
         /// <summary>
         ///     *
         /// </summary>
-        public override bool put_next_sample(int channels, SynthesisFilter filter1, SynthesisFilter filter2)
+        public override bool PutNextSample(int channels, SynthesisFilter filter1, SynthesisFilter filter2)
         {
             if ((allocation != 0) && (channels != OutputChannels.RIGHT_CHANNEL))
             {
                 float scaled_sample = (sample * factor + offset) * scalefactor;
-                filter1.input_sample(scaled_sample, subbandnumber);
+                filter1.WriteSample(scaled_sample, subbandnumber);
             }
             return true;
         }

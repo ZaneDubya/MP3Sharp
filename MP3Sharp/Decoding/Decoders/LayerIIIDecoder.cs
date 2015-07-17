@@ -528,7 +528,7 @@ namespace MP3Sharp.Decoding.Decoders
                             }
                             //buffer.appendSamples(0, samples1);
                             //Console.WriteLine("Adding samples right into output buffer");
-                            filter1.input_samples(samples1);
+                            filter1.WriteAllSamples(samples1);
                             filter1.calculate_pcm_samples(buffer);
                         }
                     }
@@ -546,7 +546,7 @@ namespace MP3Sharp.Decoding.Decoders
                             }
                             //buffer.appendSamples(1, samples2);
                             //Console.WriteLine("Adding samples right into output buffer");
-                            filter2.input_samples(samples2);
+                            filter2.WriteAllSamples(samples2);
                             filter2.calculate_pcm_samples(buffer);
                         }
                     }

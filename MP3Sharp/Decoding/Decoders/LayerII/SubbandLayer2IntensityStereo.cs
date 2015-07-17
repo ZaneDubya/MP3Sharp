@@ -35,9 +35,9 @@ namespace MP3Sharp.Decoding.Decoders.LayerII
         /// <summary>
         ///     *
         /// </summary>
-        public override void read_allocation(Bitstream stream, Header header, Crc16 crc)
+        public override void ReadBitAllocation(Bitstream stream, Header header, Crc16 crc)
         {
-            base.read_allocation(stream, header, crc);
+            base.ReadBitAllocation(stream, header, crc);
         }
 
         /// <summary>
@@ -60,11 +60,11 @@ namespace MP3Sharp.Decoding.Decoders.LayerII
         /// <summary>
         ///     *
         /// </summary>
-        public override void read_scalefactor(Bitstream stream, Header header)
+        public override void ReadScaleFactor(Bitstream stream, Header header)
         {
             if (allocation != 0)
             {
-                base.read_scalefactor(stream, header);
+                base.ReadScaleFactor(stream, header);
                 switch (channel2_scfsi)
                 {
                     case 0:
@@ -94,15 +94,15 @@ namespace MP3Sharp.Decoding.Decoders.LayerII
         /// <summary>
         ///     *
         /// </summary>
-        public override bool read_sampledata(Bitstream stream)
+        public override bool ReadSampleData(Bitstream stream)
         {
-            return base.read_sampledata(stream);
+            return base.ReadSampleData(stream);
         }
 
         /// <summary>
         ///     *
         /// </summary>
-        public override bool put_next_sample(int channels, SynthesisFilter filter1, SynthesisFilter filter2)
+        public override bool PutNextSample(int channels, SynthesisFilter filter1, SynthesisFilter filter2)
         {
             if (allocation != 0)
             {
@@ -128,8 +128,8 @@ namespace MP3Sharp.Decoding.Decoders.LayerII
                         sample *= scalefactor3;
                         sample2 *= channel2_scalefactor3;
                     }
-                    filter1.input_sample(sample, subbandnumber);
-                    filter2.input_sample(sample2, subbandnumber);
+                    filter1.WriteSample(sample, subbandnumber);
+                    filter2.WriteSample(sample2, subbandnumber);
                 }
                 else if (channels == OutputChannels.LEFT_CHANNEL)
                 {
@@ -139,7 +139,7 @@ namespace MP3Sharp.Decoding.Decoders.LayerII
                         sample *= scalefactor2;
                     else
                         sample *= scalefactor3;
-                    filter1.input_sample(sample, subbandnumber);
+                    filter1.WriteSample(sample, subbandnumber);
                 }
                 else
                 {
@@ -149,7 +149,7 @@ namespace MP3Sharp.Decoding.Decoders.LayerII
                         sample *= channel2_scalefactor2;
                     else
                         sample *= channel2_scalefactor3;
-                    filter1.input_sample(sample, subbandnumber);
+                    filter1.WriteSample(sample, subbandnumber);
                 }
             }
 

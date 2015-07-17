@@ -44,12 +44,12 @@ namespace MP3Sharp.Decoding.Decoders
                 0.00000190734863f, 0.00000151386361f, 0.00000120155435f, 0.00000000000000f
             };
 
-        public abstract void read_allocation(Bitstream stream, Header header, Crc16 crc);
+        public abstract void ReadBitAllocation(Bitstream stream, Header header, Crc16 crc);
 
-        public abstract void read_scalefactor(Bitstream stream, Header header);
+        public abstract void ReadScaleFactor(Bitstream stream, Header header);
 
-        public abstract bool read_sampledata(Bitstream stream);
+        public abstract bool ReadSampleData(Bitstream stream);
 
-        public abstract bool put_next_sample(int channels, SynthesisFilter filter1, SynthesisFilter filter2);
+        public abstract bool PutNextSample(int channels, SynthesisFilter filter1, SynthesisFilter filter2);
     }
 }
