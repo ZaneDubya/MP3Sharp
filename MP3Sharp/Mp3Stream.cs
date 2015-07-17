@@ -40,7 +40,8 @@ namespace MP3Sharp
         public bool IsEOF
         {
             get; 
-            protected set; }
+            protected set;
+		}
 
         /// <summary>
         ///     Creates a new stream instance using the provided filename, and the default chunk size of 4096 bytes.
@@ -82,27 +83,42 @@ namespace MP3Sharp
             if (!ReadFrame())
                 IsEOF = true;
         }
-
+        
+        /// <summary>
+        ///     Gets the chunk size.
+        /// </summary>
         public int ChunkSize
         {
             get { return m_BackStreamByteCountRep; }
         }
 
+        /// <summary>
+        ///     Gets a value indicating whether the current stream supports reading.
+        /// </summary>
         public override bool CanRead
         {
             get { return m_SourceStream.CanRead; }
         }
 
+        /// <summary>
+        ///     Gets a value indicating whether the current stream supports seeking.
+        /// </summary>
         public override bool CanSeek
         {
             get { return m_SourceStream.CanSeek; }
         }
 
+        /// <summary>
+        ///     Gets a value indicating whether the current stream supports writing.
+        /// </summary>
         public override bool CanWrite
         {
             get { return m_SourceStream.CanWrite; }
         }
 
+        /// <summary>
+        ///     Gets the length in bytes of the stream.
+        /// </summary>
         public override long Length
         {
             get { return m_SourceStream.Length; }
@@ -110,8 +126,7 @@ namespace MP3Sharp
 
         /// <summary>
         ///     Gets or sets the position of the source stream.  This is relative to the number of bytes in the MP3 file, rather
-        ///     than
-        ///     the total number of PCM bytes (typically signicantly greater) contained in the Mp3Stream's output.
+        ///     than the total number of PCM bytes (typically signicantly greater) contained in the Mp3Stream's output.
         /// </summary>
         public override long Position
         {
@@ -154,6 +169,9 @@ namespace MP3Sharp
             // set { FormatRep = value; } 
         }
 
+        /// <summary>
+        /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+        /// </summary>
         public override void Flush()
         {
             m_SourceStream.Flush();

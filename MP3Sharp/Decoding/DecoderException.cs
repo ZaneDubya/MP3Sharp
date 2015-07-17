@@ -15,6 +15,7 @@
 //  ***************************************************************************/
 
 using System;
+using System.Runtime.Serialization;
 
 namespace MP3Sharp.Decoding
 {
@@ -22,26 +23,41 @@ namespace MP3Sharp.Decoding
     ///     The DecoderException represents the class of
     ///     errors that can occur when decoding MPEG audio.
     /// </summary>
+    [Serializable]
     internal class DecoderException : MP3SharpException
     {
-        
-
         private int m_ErrorCode;
 
-        public DecoderException(string msg, Exception ex) : base(msg, ex)
+        public DecoderException(string message, Exception inner) : base(message, inner)
         {
             InitBlock();
         }
 
-        public DecoderException(int errorcode, Exception ex) : this(GetErrorString(errorcode), ex)
+        public DecoderException(int errorcode, Exception inner) : this(GetErrorString(errorcode), inner)
         {
             InitBlock();
             m_ErrorCode = errorcode;
         }
 
+        protected DecoderException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            m_ErrorCode = info.GetInt32("ErrorCode");
+        }
+
         public virtual int ErrorCode
         {
             get { return m_ErrorCode; }
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+
+            info.AddValue("ErrorCode", m_ErrorCode);
+            base.GetObjectData(info, context);
         }
 
         private void InitBlock()
