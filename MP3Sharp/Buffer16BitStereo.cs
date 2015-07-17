@@ -42,6 +42,9 @@ namespace MP3Sharp
             ClearBuffer();
         }
 
+        /// <summary>
+        ///     Gets the number of bytes remaining from the current position on the buffer.
+        /// </summary>
         public int BytesLeft
         {
             get
@@ -50,10 +53,25 @@ namespace MP3Sharp
             }
         }
 
-        /// Copies as much of this buffer as will fit into the output
-        /// buffer. Return The amount of bytes copied.
+        /// <summary>
+        ///     Reads a sequence of bytes from the buffer and advances the position of the 
+        ///     buffer by the number of bytes read.
+        /// </summary>
+        /// <returns>
+        ///     The total number of bytes read in to the buffer. This can be less than the
+        ///     number of bytes requested if that many bytes are not currently available, or
+        ///     zero if th eend of the buffer has been reached.
+        /// </returns>
         public int Read(byte[] bufferOut, int offset, int count)
         {
+            if (bufferOut == null)
+            {
+                throw new ArgumentNullException("bufferOut");
+            }
+            if ((count + offset) > bufferOut.Length)
+            {
+                throw new ArgumentException("The sum of offset and count is larger than the buffer length");
+            }
             int remaining = BytesLeft;
             int copySize;
             if (count > remaining)
@@ -73,24 +91,45 @@ namespace MP3Sharp
             return copySize;
         }
 
-        // Inefficiently write one sample value
-        public override void Append(int channel, short valueRenamed)
+        /// <summary>
+        ///     Writes a single sample value to the buffer.
+        /// </summary>
+        /// <param name="channel">The channel.</param>
+        /// <param name="sampleValue">The sample value.</param>
+        public override void Append(int channel, short sampleValue)
         {
-            m_Buffer[m_Bufferp[channel]] = (byte)(valueRenamed & 0xff);
-            m_Buffer[m_Bufferp[channel] + 1] = (byte)(valueRenamed >> 8);
+            m_Buffer[m_Bufferp[channel]] = (byte)(sampleValue & 0xff);
+            m_Buffer[m_Bufferp[channel] + 1] = (byte)(sampleValue >> 8);
 
             m_Bufferp[channel] += CHANNELS * 2;
         }
 
-        // efficiently write 32 samples
-        public override void AppendSamples(int channel, float[] f)
+        /// <summary>
+        ///     Writes 32 samples to the buffer.
+        /// </summary>
+        /// <param name="channel">The channel.</param>
+        /// <param name="samples">An array of sample values.</param>
+        /// <remarks>
+        ///     The <paramref name="samples"/> parameter must have a length equal to
+        ///     or greater than 32.
+        /// </remarks>
+        public override void AppendSamples(int channel, float[] samples)
         {
+            if (samples == null)
+            {
+                // samples is required.
+                throw new ArgumentNullException("samples");
+            }
+            if (samples.Length < 32)
+            {
+                throw new ArgumentException("samples must have 32 values");
+            }
             // Always, 32 samples are appended
             int pos = m_Bufferp[channel];
 
             for (int i = 0; i < 32; i++)
             {
-                float fs = f[i];
+                float fs = samples[i];
                 if (fs > 32767.0f) // can this happen?
                     fs = 32767.0f;
                 else if (fs < -32767.0f)

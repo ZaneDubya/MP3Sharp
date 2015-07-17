@@ -65,7 +65,7 @@ namespace MP3Sharp.Decoding
             FromEQFunction = eq;
         }
 
-        public virtual float[] FromFloatArray
+        public float[] FromFloatArray
         {
             set
             {
@@ -96,7 +96,7 @@ namespace MP3Sharp.Decoding
         }
 
         //UPGRADE_TODO: Method 'setFrom' was converted to a set modifier. This name conflicts with another property. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1137"'
-        public virtual EQFunction FromEQFunction
+        public EQFunction FromEQFunction
         {
             set
             {

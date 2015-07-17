@@ -12,7 +12,7 @@ MP3Stream stream = new MP3Stream(@"sample.mp3");
 // Create the buffer.
 byte[] buffer = new byte[4096];
 // read the entire mp3 file.
-int bytesReturned = 0;
+int bytesReturned = 1;
 int totalBytesRead = 0;
 while (bytesReturned > 0)
 {

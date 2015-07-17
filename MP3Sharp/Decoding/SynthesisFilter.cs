@@ -240,7 +240,7 @@ namespace MP3Sharp.Decoding
             reset();
         }
 
-        public virtual float[] EQ
+        public float[] EQ
         {
             set
             {

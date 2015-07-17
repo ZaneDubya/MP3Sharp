@@ -21,13 +21,7 @@ namespace MP3Sharp.Decoding
     /// </summary>
     internal struct DecoderErrors
     {
-        public static readonly int UNKNOWN_ERROR;
-        public static readonly int UNSUPPORTED_LAYER;
-
-        static DecoderErrors()
-        {
-            UNKNOWN_ERROR = BitstreamErrors.DECODER_ERROR + 0;
-            UNSUPPORTED_LAYER = BitstreamErrors.DECODER_ERROR + 1;
-        }
+        public static readonly int UNKNOWN_ERROR = BitstreamErrors.DECODER_ERROR + 0;
+        public static readonly int UNSUPPORTED_LAYER = BitstreamErrors.DECODER_ERROR + 1;
     }
 }

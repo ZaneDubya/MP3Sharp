@@ -40,7 +40,8 @@ namespace MP3Sharp
         public bool IsEOF
         {
             get; 
-            protected set; }
+            protected set;
+		}
 
         /// <summary>
         ///     Creates a new stream instance using the provided filename, and the default chunk size of 4096 bytes.
@@ -68,6 +69,7 @@ namespace MP3Sharp
 
         /// <summary>
         ///     Creates a new stream instance using the provided stream as a source.
+        ///     Will also read the first frame of the MP3 into the internal buffer.
         ///     TODO: allow selecting stereo or mono in the constructor (note that this also requires "implementing" the stereo format).
         /// </summary>
         public MP3Stream(Stream sourceStream, int chunkSize)
@@ -82,27 +84,42 @@ namespace MP3Sharp
             if (!ReadFrame())
                 IsEOF = true;
         }
-
+        
+        /// <summary>
+        ///     Gets the chunk size.
+        /// </summary>
         public int ChunkSize
         {
             get { return m_BackStreamByteCountRep; }
         }
 
+        /// <summary>
+        ///     Gets a value indicating whether the current stream supports reading.
+        /// </summary>
         public override bool CanRead
         {
             get { return m_SourceStream.CanRead; }
         }
 
+        /// <summary>
+        ///     Gets a value indicating whether the current stream supports seeking.
+        /// </summary>
         public override bool CanSeek
         {
             get { return m_SourceStream.CanSeek; }
         }
 
+        /// <summary>
+        ///     Gets a value indicating whether the current stream supports writing.
+        /// </summary>
         public override bool CanWrite
         {
             get { return m_SourceStream.CanWrite; }
         }
 
+        /// <summary>
+        ///     Gets the length in bytes of the stream.
+        /// </summary>
         public override long Length
         {
             get { return m_SourceStream.Length; }
@@ -110,8 +127,7 @@ namespace MP3Sharp
 
         /// <summary>
         ///     Gets or sets the position of the source stream.  This is relative to the number of bytes in the MP3 file, rather
-        ///     than
-        ///     the total number of PCM bytes (typically signicantly greater) contained in the Mp3Stream's output.
+        ///     than the total number of PCM bytes (typically signicantly greater) contained in the Mp3Stream's output.
         /// </summary>
         public override long Position
         {
@@ -120,10 +136,8 @@ namespace MP3Sharp
         }
 
         /// <summary>
-        ///     Gets the frequency of the audio being decoded.
-        ///     Initially set to -1.  Initialized during the first call to either of the Read and DecodeFrames methods,
-        ///     and updated during every subsequent call to one of those methods to reflect the most recent header information
-        ///     from the MP3 stream.
+        ///     Gets the frequency of the audio being decoded. Updated every call to Read() or DecodeFrames(),
+        ///     to reflect the most recent header information from the MP3 Stream.
         /// </summary>
         public int Frequency
         {
@@ -131,10 +145,8 @@ namespace MP3Sharp
         }
 
         /// <summary>
-        ///     Gets the number of channels available in the audio being decoded.
-        ///     Initially set to -1.  Initialized during the first call to either of the Read and DecodeFrames methods,
-        ///     and updated during every subsequent call to one of those methods to reflect the most recent header information
-        ///     from the MP3 stream.
+        ///     Gets the number of channels available in the audio being decoded. Updated every call to Read() or DecodeFrames(),
+        ///     to reflect the most recent header information from the MP3 Stream.
         /// </summary>
         public short ChannelCount
         {
@@ -154,6 +166,9 @@ namespace MP3Sharp
             // set { FormatRep = value; } 
         }
 
+        /// <summary>
+        /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+        /// </summary>
         public override void Flush()
         {
             m_SourceStream.Flush();
@@ -184,8 +199,8 @@ namespace MP3Sharp
         }
 
         /// <summary>
-        ///     Decodes the requested number of frames from the MP3 stream
-        ///     and caches their PCM-encoded bytes.  These can subsequently be obtained using the Read method.
+        ///     Decodes the requested number of frames from the MP3 stream and caches their PCM-encoded bytes.
+        ///     These can subsequently be obtained using the Read method.
         ///     Returns the number of frames that were successfully decoded.
         /// </summary>
         public int DecodeFrames(int frameCount)
