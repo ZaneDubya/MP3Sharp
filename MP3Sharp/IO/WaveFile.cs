@@ -221,10 +221,7 @@ namespace MP3Sharp.IO
                 Config(44100, 16, 1);
             }
 
-            public WaveFile EnclosingInstance
-            {
-                get { return m_EnclosingInstance; }
-            }
+            public WaveFile EnclosingInstance => m_EnclosingInstance;
 
             private void InitBlock(WaveFile enclosingInstance)
             {
@@ -256,10 +253,7 @@ namespace MP3Sharp.IO
                 Header.CkSize = 16;
             }
 
-            public WaveFile EnclosingInstance
-            {
-                get { return m_EnclosingInstance; }
-            }
+            public WaveFile EnclosingInstance => m_EnclosingInstance;
 
             private void InitBlock(WaveFile enclosingInstance)
             {
@@ -286,10 +280,7 @@ namespace MP3Sharp.IO
                 Chan = new short[MAX_WAVE_CHANNELS];
             }
 
-            public WaveFile EnclosingInstance
-            {
-                get { return m_EnclosingInstance; }
-            }
+            public WaveFile EnclosingInstance => m_EnclosingInstance;
 
             private void InitBlock(WaveFile enclosingInstance)
             {

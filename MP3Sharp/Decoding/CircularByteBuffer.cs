@@ -55,7 +55,7 @@ namespace MP3Sharp.Decoding
         /// </summary>
         public int BufferSize
         {
-            get { return m_Length; }
+            get => m_Length;
             set
             {
                 byte[] newDataArray = new byte[value];
@@ -76,8 +76,8 @@ namespace MP3Sharp.Decoding
         /// </summary>
         public byte this[int index]
         {
-            get { return InternalGet(-1 - index); }
-            set { InternalSet(-1 - index, value); }
+            get => InternalGet(-1 - index);
+            set => InternalSet(-1 - index, value);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace MP3Sharp.Decoding
         /// </summary>
         public int NumValid
         {
-            get { return m_NumValid; }
+            get => m_NumValid;
             set
             {
                 if (value > m_NumValid)

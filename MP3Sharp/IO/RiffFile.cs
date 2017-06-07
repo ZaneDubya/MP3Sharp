@@ -609,10 +609,7 @@ namespace MP3Sharp.IO
                 InitBlock(enclosingInstance);
             }
 
-            public RiffFile EnclosingInstance
-            {
-                get { return m_EnclosingInstance; }
-            }
+            public RiffFile EnclosingInstance => m_EnclosingInstance;
 
             private void InitBlock(RiffFile enclosingInstance)
             {

@@ -113,10 +113,7 @@ namespace MP3Sharp.Decoding
         /// <summary>
         ///     Retrieves the number of bands present in this equalizer.
         /// </summary>
-        public virtual int BandCount
-        {
-            get { return settings.Length; }
-        }
+        public virtual int BandCount => settings.Length;
 
         /// <summary>
         ///     Retrieves an array of floats whose values represent a
