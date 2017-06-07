@@ -1,13 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
+using NUnit.Framework;
 
 namespace MP3Sharp.UnitTests
 {
-    [TestClass]
+    [TestFixture]
     public class UnitTest1
     {
-        [TestMethod]
+        [Test]
         public void MP3Stream_basic_properties()
         {
             using (var mp3 = Assembly.GetExecutingAssembly().GetManifestResourceStream("MP3Sharp.UnitTests.sample.mp3"))
@@ -37,7 +37,7 @@ namespace MP3Sharp.UnitTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void MP3Stream_read_md5()
         {
             var md5 = System.Security.Cryptography.MD5.Create();
