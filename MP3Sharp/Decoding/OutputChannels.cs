@@ -69,10 +69,7 @@ namespace MP3Sharp.Decoding
         /// <returns>
         ///     the channel code represented by this instance.
         /// </returns>
-        public virtual int ChannelsOutputCode
-        {
-            get { return outputChannels; }
-        }
+        public virtual int ChannelsOutputCode => outputChannels;
 
         /// <summary>
         ///     Retrieves the number of output channels represented

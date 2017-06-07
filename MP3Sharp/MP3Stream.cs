@@ -1,7 +1,7 @@
 // /***************************************************************************
 //  * MP3Stream.cs
 //  * Copyright (c) 2015 the authors.
-//  * 
+//  *
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
 //  * (LGPL) version 3 which accompanies this distribution, and is available at
@@ -39,7 +39,7 @@ namespace MP3Sharp
 
         public bool IsEOF
         {
-            get; 
+            get;
             protected set;
 		}
 
@@ -84,46 +84,31 @@ namespace MP3Sharp
             if (!ReadFrame())
                 IsEOF = true;
         }
-        
+
         /// <summary>
         ///     Gets the chunk size.
         /// </summary>
-        public int ChunkSize
-        {
-            get { return m_BackStreamByteCountRep; }
-        }
+        public int ChunkSize => m_BackStreamByteCountRep;
 
         /// <summary>
         ///     Gets a value indicating whether the current stream supports reading.
         /// </summary>
-        public override bool CanRead
-        {
-            get { return m_SourceStream.CanRead; }
-        }
+        public override bool CanRead => m_SourceStream.CanRead;
 
         /// <summary>
         ///     Gets a value indicating whether the current stream supports seeking.
         /// </summary>
-        public override bool CanSeek
-        {
-            get { return m_SourceStream.CanSeek; }
-        }
+        public override bool CanSeek => m_SourceStream.CanSeek;
 
         /// <summary>
         ///     Gets a value indicating whether the current stream supports writing.
         /// </summary>
-        public override bool CanWrite
-        {
-            get { return m_SourceStream.CanWrite; }
-        }
+        public override bool CanWrite => m_SourceStream.CanWrite;
 
         /// <summary>
         ///     Gets the length in bytes of the stream.
         /// </summary>
-        public override long Length
-        {
-            get { return m_SourceStream.Length; }
-        }
+        public override long Length => m_SourceStream.Length;
 
         /// <summary>
         ///     Gets or sets the position of the source stream.  This is relative to the number of bytes in the MP3 file, rather
@@ -131,40 +116,26 @@ namespace MP3Sharp
         /// </summary>
         public override long Position
         {
-            get { return m_SourceStream.Position; }
-            set { m_SourceStream.Position = value; }
+            get => m_SourceStream.Position;
+            set => m_SourceStream.Position = value;
         }
 
         /// <summary>
         ///     Gets the frequency of the audio being decoded. Updated every call to Read() or DecodeFrames(),
         ///     to reflect the most recent header information from the MP3 Stream.
         /// </summary>
-        public int Frequency
-        {
-            get { return m_FrequencyRep; }
-        }
+        public int Frequency => m_FrequencyRep;
 
         /// <summary>
         ///     Gets the number of channels available in the audio being decoded. Updated every call to Read() or DecodeFrames(),
         ///     to reflect the most recent header information from the MP3 Stream.
         /// </summary>
-        public short ChannelCount
-        {
-            get { return m_ChannelCountRep; }
-        }
+        public short ChannelCount => m_ChannelCountRep;
 
         /// <summary>
         ///     Gets the PCM output format of this stream.
         /// </summary>
-        public SoundFormat Format
-        {
-            get { return FormatRep; }
-
-            // Note: the buffers are stored in an optimized format--changing
-            // the Format involves flushing the buffers and so on, so 
-            // let's just not, OK?
-            // set { FormatRep = value; } 
-        }
+        public SoundFormat Format => FormatRep;
 
         /// <summary>
         /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
@@ -282,7 +253,7 @@ namespace MP3Sharp
                 // Decode the frame.
                 ABuffer decoderOutput = m_Decoder.DecodeFrame(header, m_BitStream);
 
-                // Apparently, the way JavaZoom sets the output buffer 
+                // Apparently, the way JavaZoom sets the output buffer
                 // on the decoder is a bit dodgy. Even though
                 // this exception should never happen, we test to be sure.
                 if (decoderOutput != m_Buffer)

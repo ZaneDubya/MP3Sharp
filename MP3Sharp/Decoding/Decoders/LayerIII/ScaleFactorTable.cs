@@ -36,10 +36,7 @@ namespace MP3Sharp.Decoding.Decoders.LayerIII
             s = thes;
         }
 
-        public LayerIIIDecoder Enclosing_Instance
-        {
-            get { return enclosingInstance; }
-        }
+        public LayerIIIDecoder Enclosing_Instance => enclosingInstance;
 
         private void InitBlock(LayerIIIDecoder enclosingInstance)
         {

@@ -209,11 +209,7 @@ namespace MP3Sharp.Decoding
         /// <summary>
         ///     Returns synchronized header.
         /// </summary>
-        public virtual int SyncHeader
-        {
-            // E.B
-            get { return _headerstring; }
-        }
+        public virtual int SyncHeader => _headerstring;
 
         private void InitBlock()
         {

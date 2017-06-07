@@ -44,10 +44,7 @@ namespace MP3Sharp.Decoding
             m_ErrorCode = info.GetInt32("ErrorCode");
         }
 
-        public virtual int ErrorCode
-        {
-            get { return m_ErrorCode; }
-        }
+        public virtual int ErrorCode => m_ErrorCode;
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

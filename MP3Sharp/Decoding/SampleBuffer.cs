@@ -40,25 +40,13 @@ namespace MP3Sharp.Decoding
                 bufferp[i] = (short) i;
         }
 
-        public virtual int ChannelCount
-        {
-            get { return channels; }
-        }
+        public virtual int ChannelCount => channels;
 
-        public virtual int SampleFrequency
-        {
-            get { return frequency; }
-        }
+        public virtual int SampleFrequency => frequency;
 
-        public virtual short[] Buffer
-        {
-            get { return buffer; }
-        }
+        public virtual short[] Buffer => buffer;
 
-        public virtual int BufferLength
-        {
-            get { return bufferp[0]; }
-        }
+        public virtual int BufferLength => bufferp[0];
 
         /// <summary>
         ///     Takes a 16 Bit PCM sample.
