@@ -8,7 +8,7 @@
   <PropertyGroup>
     <Title>MP3Sharp</Title>
     <PackageId>MP3Sharp</PackageId>
-    <PackageVersion>1.0.3-preview1</PackageVersion>
+    <PackageVersion>1.0.3</PackageVersion>
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.en.html</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/ZaneDubya/MP3Sharp</PackageProjectUrl>
     <PackageIconUrl>https://upload.wikimedia.org/wikipedia/commons/f/f5/Audio-mp3.svg</PackageIconUrl>
