@@ -15,6 +15,7 @@
     <PackageReleaseNotes>Merged upstream fix to index out of bounds error.</PackageReleaseNotes>
     <PackageOutputPath>../nuget</PackageOutputPath>
     <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
     <RepositoryUrl>https://github.com/Nihlus/MP3Sharp</RepositoryUrl>
   </PropertyGroup>
 </Project>
