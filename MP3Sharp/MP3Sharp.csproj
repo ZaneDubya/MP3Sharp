@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <Description>Decode MP3 files to PCM bitstreams entirely in .NET managed code.</Description>
     <Authors>Robert Burke;Zane Dubya</Authors>
   </PropertyGroup>
@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/Nihlus/MP3Sharp</PackageProjectUrl>
     <PackageIconUrl>https://upload.wikimedia.org/wikipedia/commons/f/f5/Audio-mp3.svg</PackageIconUrl>
     <PackageTags>mp3;open-source;library;lgpl;decoder;pcm;netstandard2.0;cross-platform</PackageTags>
-    <PackageReleaseNotes>Merged upstream fix to index out of bounds error.</PackageReleaseNotes>
+    <PackageReleaseNotes>Rebuild package in release mode.</PackageReleaseNotes>
     <PackageOutputPath>../nuget</PackageOutputPath>
     <IncludeSymbols>true</IncludeSymbols>
     <IncludeSource>true</IncludeSource>
