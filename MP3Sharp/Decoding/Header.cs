@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * Header.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -17,168 +17,137 @@
 using System.Text;
 using MP3Sharp.Support;
 
-namespace MP3Sharp.Decoding
-{
+namespace MP3Sharp.Decoding {
     /// <summary>
-    ///     Class for extracting information from a frame header.
-    ///     TODO: move strings into resources.
+    /// public class for extracting information from a frame header.
+    /// TODO: move strings into resources.
     /// </summary>
-    internal class Header
-    {
+    public class Header {
         /// <summary>
-        ///     Constant for MPEG-2 LSF version
+        /// Constant for MPEG-2 LSF version
         /// </summary>
-        public const int MPEG2_LSF = 0;
+        internal const int MPEG2_LSF = 0;
 
-        public const int MPEG25_LSF = 2; // SZD
+        internal const int MPEG25_LSF = 2; // SZD
 
         /// <summary>
-        ///     Constant for MPEG-1 version
+        /// Constant for MPEG-1 version
         /// </summary>
-        public const int MPEG1 = 1;
+        internal const int MPEG1 = 1;
 
-        public const int STEREO = 0;
-        public const int JOINT_STEREO = 1;
-        public const int DUAL_CHANNEL = 2;
-        public const int SINGLE_CHANNEL = 3;
-        public const int FOURTYFOUR_POINT_ONE = 0;
-        public const int FOURTYEIGHT = 1;
-        public const int THIRTYTWO = 2;
+        internal const int STEREO = 0;
+        internal const int JOINT_STEREO = 1;
+        internal const int DUAL_CHANNEL = 2;
+        internal const int SINGLE_CHANNEL = 3;
+        internal const int FOURTYFOUR_POINT_ONE = 0;
+        internal const int FOURTYEIGHT = 1;
+        internal const int THIRTYTWO = 2;
 
-        public static readonly int[][] frequencies =
-        {
+        internal static readonly int[][] Frequencies = {
             new[] {22050, 24000, 16000, 1}, new[] {44100, 48000, 32000, 1},
             new[] {11025, 12000, 8000, 1}
-        }; // SZD: MPEG25
+        };
 
-        // E.B -> private to public
-        public static readonly int[][][] bitrates =
-        {
-            new[]
-            {
-                new[]
-                {
+        internal static readonly int[][][] Bitrates = {
+            new[] {
+                new[] {
                     0, 32000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000, 160000, 176000, 192000, 224000,
                     256000, 0
                 },
-                new[]
-                {
+                new[] {
                     0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000,
                     160000,
                     0
                 },
-                new[]
-                {
+                new[] {
                     0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000,
                     160000,
                     0
                 }
             },
-            new[]
-            {
-                new[]
-                {
+            new[] {
+                new[] {
                     0, 32000, 64000, 96000, 128000, 160000, 192000, 224000, 256000, 288000, 320000, 352000, 384000,
                     416000,
                     448000, 0
                 },
-                new[]
-                {
+                new[] {
                     0, 32000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 160000, 192000, 224000, 256000, 320000,
                     384000, 0
                 },
-                new[]
-                {
+                new[] {
                     0, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 160000, 192000, 224000, 256000,
                     320000, 0
                 }
             },
-            new[]
-            {
-                new[]
-                {
+            new[] {
+                new[] {
                     0, 32000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000, 160000, 176000, 192000, 224000,
                     256000, 0
                 },
-                new[]
-                {
+                new[] {
                     0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000,
                     160000,
                     0
                 },
-                new[]
-                {
+                new[] {
                     0, 8000, 16000, 24000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 144000,
                     160000,
                     0
                 }
             }
         };
-
-        // E.B -> private to public
-        public static readonly string[][][] bitrate_str =
-        {
-            new[]
-            {
-                new[]
-                {
+        
+        internal static readonly string[][][] BitrateStr = {
+            new[] {
+                new[] {
                     "free format", "32 kbit/s", "48 kbit/s", "56 kbit/s", "64 kbit/s", "80 kbit/s", "96 kbit/s",
                     "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s", "176 kbit/s", "192 kbit/s", "224 kbit/s",
                     "256 kbit/s", "forbidden"
                 },
-                new[]
-                {
+                new[] {
                     "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
                     "56 kbit/s",
                     "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
                     "forbidden"
                 },
-                new[]
-                {
+                new[] {
                     "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
                     "56 kbit/s",
                     "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
                     "forbidden"
                 }
             },
-            new[]
-            {
-                new[]
-                {
+            new[] {
+                new[] {
                     "free format", "32 kbit/s", "64 kbit/s", "96 kbit/s", "128 kbit/s", "160 kbit/s", "192 kbit/s",
                     "224 kbit/s", "256 kbit/s", "288 kbit/s", "320 kbit/s", "352 kbit/s", "384 kbit/s", "416 kbit/s",
                     "448 kbit/s", "forbidden"
                 },
-                new[]
-                {
+                new[] {
                     "free format", "32 kbit/s", "48 kbit/s", "56 kbit/s", "64 kbit/s", "80 kbit/s", "96 kbit/s",
                     "112 kbit/s", "128 kbit/s", "160 kbit/s", "192 kbit/s", "224 kbit/s", "256 kbit/s", "320 kbit/s",
                     "384 kbit/s", "forbidden"
                 },
-                new[]
-                {
+                new[] {
                     "free format", "32 kbit/s", "40 kbit/s", "48 kbit/s", "56 kbit/s", "64 kbit/s", "80 kbit/s",
                     "96 kbit/s", "112 kbit/s", "128 kbit/s", "160 kbit/s", "192 kbit/s", "224 kbit/s", "256 kbit/s",
                     "320 kbit/s", "forbidden"
                 }
             },
-            new[]
-            {
-                new[]
-                {
+            new[] {
+                new[] {
                     "free format", "32 kbit/s", "48 kbit/s", "56 kbit/s", "64 kbit/s", "80 kbit/s", "96 kbit/s",
                     "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s", "176 kbit/s", "192 kbit/s", "224 kbit/s",
                     "256 kbit/s", "forbidden"
                 },
-                new[]
-                {
+                new[] {
                     "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
                     "56 kbit/s",
                     "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
                     "forbidden"
                 },
-                new[]
-                {
+                new[] {
                     "free format", "8 kbit/s", "16 kbit/s", "24 kbit/s", "32 kbit/s", "40 kbit/s", "48 kbit/s",
                     "56 kbit/s",
                     "64 kbit/s", "80 kbit/s", "96 kbit/s", "112 kbit/s", "128 kbit/s", "144 kbit/s", "160 kbit/s",
@@ -187,403 +156,328 @@ namespace MP3Sharp.Decoding
             }
         };
 
-        private int _headerstring = -1;
-        public short checksum;
-        private Crc16 crc;
-        public int framesize;
-        private bool h_copyright, h_original;
-        private int h_layer, h_protection_bit, h_bitrate_index, h_padding_bit, h_mode_extension;
-        private int h_mode;
-        private int h_number_of_subbands, h_intensity_stereo_bound;
-        private int h_sample_frequency;
-        private int h_version;
-        public int nSlots;
-        private sbyte syncmode;
-        // E.B
+        internal short Checksum;
+        internal int NSlots;
 
-        internal Header()
-        {
+        private Crc16 _CRC;
+        internal int Framesize;
+        private bool _Copyright, _Original;
+        private int _Headerstring = -1;
+        private int _Layer, _ProtectionBit, _BitrateIndex, _PaddingBit, _ModeExtension;
+        private int _Mode;
+        private int _NumberOfSubbands, _IntensityStereoBound;
+        private int _SampleFrequency;
+        private sbyte _Syncmode;
+        private int _Version;
+
+        internal Header() {
             InitBlock();
         }
 
         /// <summary>
-        ///     Returns synchronized header.
+        /// Returns synchronized header.
         /// </summary>
-        public virtual int SyncHeader
-        {
-            // E.B
-            get { return _headerstring; }
+        internal virtual int SyncHeader => _Headerstring;
+
+        private void InitBlock() {
+            _Syncmode = Bitstream.INITIAL_SYNC;
         }
 
-        private void InitBlock()
-        {
-            syncmode = Bitstream.INITIAL_SYNC;
-        }
-
-        public override string ToString()
-        {
+        public override string ToString() {
             StringBuilder buffer = new StringBuilder(200);
             buffer.Append("Layer ");
-            buffer.Append(layer_string());
+            buffer.Append(LayerAsString());
             buffer.Append(" frame ");
-            buffer.Append(mode_string());
+            buffer.Append(ModeAsString());
             buffer.Append(' ');
-            buffer.Append(version_string());
+            buffer.Append(VersionAsString());
             if (!IsProtection())
                 buffer.Append(" no");
             buffer.Append(" checksums");
             buffer.Append(' ');
-            buffer.Append(sample_frequency_string());
+            buffer.Append(SampleFrequencyAsString());
             buffer.Append(',');
             buffer.Append(' ');
-            buffer.Append(bitrate_string());
+            buffer.Append(BitrateAsString());
 
             string s = buffer.ToString();
             return s;
         }
 
         /// <summary>
-        ///     Read a 32-bit header from the bitstream.
+        /// Read a 32-bit header from the bitstream.
         /// </summary>
-        internal void read_header(Bitstream stream, Crc16[] crcp)
-        {
+        internal void read_header(Bitstream stream, Crc16[] crcp) {
             int headerstring;
-            int channel_bitrate;
+            int channelBitrate;
 
             bool sync = false;
 
-            do
-            {
-                headerstring = stream.syncHeader(syncmode);
-                _headerstring = headerstring; // E.B
+            do {
+                headerstring = stream.SyncHeader(_Syncmode);
+                _Headerstring = headerstring;
 
-                if (syncmode == Bitstream.INITIAL_SYNC)
-                {
-                    h_version = ((SupportClass.URShift(headerstring, 19)) & 1);
-                    if (((SupportClass.URShift(headerstring, 20)) & 1) == 0)
+                if (_Syncmode == Bitstream.INITIAL_SYNC) {
+                    _Version = SupportClass.URShift(headerstring, 19) & 1;
+                    if ((SupportClass.URShift(headerstring, 20) & 1) == 0)
                         // SZD: MPEG2.5 detection
-                        if (h_version == MPEG2_LSF)
-                            h_version = MPEG25_LSF;
+                        if (_Version == MPEG2_LSF)
+                            _Version = MPEG25_LSF;
                         else
-                            throw stream.newBitstreamException(BitstreamErrors.UNKNOWN_ERROR);
+                            throw stream.NewBitstreamException(BitstreamErrors.UNKNOWN_ERROR);
 
-                    if ((h_sample_frequency = ((SupportClass.URShift(headerstring, 10)) & 3)) == 3)
-                    {
-                        throw stream.newBitstreamException(BitstreamErrors.UNKNOWN_ERROR);
+                    if ((_SampleFrequency = SupportClass.URShift(headerstring, 10) & 3) == 3) {
+                        throw stream.NewBitstreamException(BitstreamErrors.UNKNOWN_ERROR);
                     }
                 }
 
-                h_layer = 4 - (SupportClass.URShift(headerstring, 17)) & 3;
-                h_protection_bit = (SupportClass.URShift(headerstring, 16)) & 1;
-                h_bitrate_index = (SupportClass.URShift(headerstring, 12)) & 0xF;
-                h_padding_bit = (SupportClass.URShift(headerstring, 9)) & 1;
-                h_mode = ((SupportClass.URShift(headerstring, 6)) & 3);
-                h_mode_extension = (SupportClass.URShift(headerstring, 4)) & 3;
-                if (h_mode == JOINT_STEREO)
-                    h_intensity_stereo_bound = (h_mode_extension << 2) + 4;
+                _Layer = 4 - SupportClass.URShift(headerstring, 17) & 3;
+                _ProtectionBit = SupportClass.URShift(headerstring, 16) & 1;
+                _BitrateIndex = SupportClass.URShift(headerstring, 12) & 0xF;
+                _PaddingBit = SupportClass.URShift(headerstring, 9) & 1;
+                _Mode = SupportClass.URShift(headerstring, 6) & 3;
+                _ModeExtension = SupportClass.URShift(headerstring, 4) & 3;
+                if (_Mode == JOINT_STEREO)
+                    _IntensityStereoBound = (_ModeExtension << 2) + 4;
                 else
-                    h_intensity_stereo_bound = 0;
+                    _IntensityStereoBound = 0;
                 // should never be used
-                if (((SupportClass.URShift(headerstring, 3)) & 1) == 1)
-                    h_copyright = true;
-                if (((SupportClass.URShift(headerstring, 2)) & 1) == 1)
-                    h_original = true;
+                _Copyright |= (SupportClass.URShift(headerstring, 3) & 1) == 1;
+                _Original |= (SupportClass.URShift(headerstring, 2) & 1) == 1;
 
                 // calculate number of subbands:
-                if (h_layer == 1)
-                    h_number_of_subbands = 32;
-                else
-                {
-                    channel_bitrate = h_bitrate_index;
+                if (_Layer == 1)
+                    _NumberOfSubbands = 32;
+                else {
+                    channelBitrate = _BitrateIndex;
                     // calculate bitrate per channel:
-                    if (h_mode != SINGLE_CHANNEL)
-                        if (channel_bitrate == 4)
-                            channel_bitrate = 1;
+                    if (_Mode != SINGLE_CHANNEL)
+                        if (channelBitrate == 4)
+                            channelBitrate = 1;
                         else
-                            channel_bitrate -= 4;
+                            channelBitrate -= 4;
 
-                    if ((channel_bitrate == 1) || (channel_bitrate == 2))
-                        if (h_sample_frequency == THIRTYTWO)
-                            h_number_of_subbands = 12;
+                    if (channelBitrate == 1 || channelBitrate == 2)
+                        if (_SampleFrequency == THIRTYTWO)
+                            _NumberOfSubbands = 12;
                         else
-                            h_number_of_subbands = 8;
-                    else if ((h_sample_frequency == FOURTYEIGHT) || ((channel_bitrate >= 3) && (channel_bitrate <= 5)))
-                        h_number_of_subbands = 27;
+                            _NumberOfSubbands = 8;
+                    else if (_SampleFrequency == FOURTYEIGHT || channelBitrate >= 3 && channelBitrate <= 5)
+                        _NumberOfSubbands = 27;
                     else
-                        h_number_of_subbands = 30;
+                        _NumberOfSubbands = 30;
                 }
-                if (h_intensity_stereo_bound > h_number_of_subbands)
-                    h_intensity_stereo_bound = h_number_of_subbands;
+                if (_IntensityStereoBound > _NumberOfSubbands)
+                    _IntensityStereoBound = _NumberOfSubbands;
                 // calculate framesize and nSlots
-                calculate_framesize();
+                CalculateFrameSize();
 
                 // read framedata:
-                stream.read_frame_data(framesize);
+                stream.Read_frame_data(Framesize);
 
-                if (stream.IsSyncCurrentPosition(syncmode))
-                {
-                    if (syncmode == Bitstream.INITIAL_SYNC)
-                    {
-                        syncmode = Bitstream.STRICT_SYNC;
-                        stream.SetSyncWord(headerstring & unchecked((int) 0xFFF80CC0));
+                if (stream.IsSyncCurrentPosition(_Syncmode)) {
+                    if (_Syncmode == Bitstream.INITIAL_SYNC) {
+                        _Syncmode = Bitstream.STRICT_SYNC;
+                        stream.SetSyncWord(headerstring & unchecked((int)0xFFF80CC0));
                     }
                     sync = true;
                 }
-                else
-                {
-                    stream.unreadFrame();
+                else {
+                    stream.UnreadFrame();
                 }
             } while (!sync);
 
             stream.ParseFrame();
 
-            if (h_protection_bit == 0)
-            {
+            if (_ProtectionBit == 0) {
                 // frame contains a crc checksum
-                checksum = (short) stream.GetBitsFromBuffer(16);
-                if (crc == null)
-                    crc = new Crc16();
-                crc.add_bits(headerstring, 16);
-                crcp[0] = crc;
+                Checksum = (short)stream.GetBitsFromBuffer(16);
+                if (_CRC == null)
+                    _CRC = new Crc16();
+                _CRC.AddBits(headerstring, 16);
+                crcp[0] = _CRC;
             }
             else
                 crcp[0] = null;
-            if (h_sample_frequency == FOURTYFOUR_POINT_ONE)
-            {
+            if (_SampleFrequency == FOURTYFOUR_POINT_ONE) {
                 /*
-				if (offset == null)
-				{
-				int max = max_number_of_frames(stream);
-				offset = new int[max];
-				for(int i=0; i<max; i++) offset[i] = 0;
-				}
-				// Bizarre, y avait ici une acollade ouvrante
-				int cf = stream.current_frame();
-				int lf = stream.last_frame();
-				if ((cf > 0) && (cf == lf))
-				{
-				offset[cf] = offset[cf-1] + h_padding_bit;
-				}
-				else
-				{
-				offset[0] = h_padding_bit;
-				}
-				*/
+                if (offset == null)
+                {
+                int max = max_number_of_frames(stream);
+                offset = new int[max];
+                for(int i=0; i<max; i++) offset[i] = 0;
+                }
+                // Bizarre, y avait ici une acollade ouvrante
+                int cf = stream.current_frame();
+                int lf = stream.last_frame();
+                if ((cf > 0) && (cf == lf))
+                {
+                offset[cf] = offset[cf-1] + h_padding_bit;
+                }
+                else
+                {
+                offset[0] = h_padding_bit;
+                }
+                */
             }
         }
 
         // Functions to query header contents:
         /// <summary>
-        ///     Returns version.
+        /// Returns version.
         /// </summary>
-        public int version()
-        {
-            return h_version;
-        }
+        internal int Version() => _Version;
 
         /// <summary>
-        ///     Returns Layer ID.
+        /// Returns Layer ID.
         /// </summary>
-        public int layer()
-        {
-            return h_layer;
-        }
+        internal int Layer() => _Layer;
 
         /// <summary>
-        ///     Returns bitrate index.
+        /// Returns bitrate index.
         /// </summary>
-        public int bitrate_index()
-        {
-            return h_bitrate_index;
-        }
+        internal int bitrate_index() => _BitrateIndex;
 
         /// <summary>
-        ///     Returns Sample Frequency.
+        /// Returns Sample Frequency.
         /// </summary>
-        public int sample_frequency()
-        {
-            return h_sample_frequency;
-        }
+        internal int sample_frequency() => _SampleFrequency;
 
         /// <summary>
-        ///     Returns Frequency.
+        /// Returns Frequency.
         /// </summary>
-        public int frequency()
-        {
-            return frequencies[h_version][h_sample_frequency];
-        }
+        internal int Frequency() => Frequencies[_Version][_SampleFrequency];
 
         /// <summary>
-        ///     Returns Mode.
+        /// Returns Mode.
         /// </summary>
-        public int mode()
-        {
-            return h_mode;
-        }
+        internal int Mode() => _Mode;
 
         /// <summary>
-        ///     Returns Protection bit.
+        /// Returns Protection bit.
         /// </summary>
-        public bool IsProtection()
-        {
-            if (h_protection_bit == 0)
+        internal bool IsProtection() {
+            if (_ProtectionBit == 0)
                 return true;
             return false;
         }
 
         /// <summary>
-        ///     Returns Copyright.
+        /// Returns Copyright.
         /// </summary>
-        public bool IsCopyright()
-        {
-            return h_copyright;
-        }
+        internal bool IsCopyright() => _Copyright;
 
         /// <summary>
-        ///     Returns Original.
+        /// Returns Original.
         /// </summary>
-        public bool IsOriginal()
-        {
-            return h_original;
-        }
+        internal bool IsOriginal() => _Original;
 
         /// <summary>
-        ///     Returns Checksum flag.
-        ///     Compares computed checksum with stream checksum.
+        /// Returns Checksum flag.
+        /// Compares computed checksum with stream checksum.
         /// </summary>
-        public bool IsChecksumOK()
-        {
-            return (checksum == crc.Checksum());
-        }
+        internal bool IsChecksumOK() => Checksum == _CRC.Checksum();
 
         // Seeking and layer III stuff
         /// <summary>
-        ///     Returns Layer III Padding bit.
+        /// Returns Layer III Padding bit.
         /// </summary>
-        public bool IsPadding()
-        {
-            if (h_padding_bit == 0)
+        internal bool IsPadding() {
+            if (_PaddingBit == 0)
                 return false;
             return true;
         }
 
         /// <summary>
-        ///     Returns Slots.
+        /// Returns Slots.
         /// </summary>
-        public int slots()
-        {
-            return nSlots;
-        }
+        internal int Slots() => NSlots;
 
         /// <summary>
-        ///     Returns Mode Extension.
+        /// Returns Mode Extension.
         /// </summary>
-        public int mode_extension()
-        {
-            return h_mode_extension;
-        }
-
-        // E.B -> private to public
+        internal int mode_extension() => _ModeExtension;
+        
         /// <summary>
-        ///     Calculate Frame size.
-        ///     Calculates framesize in bytes excluding header size.
+        /// Calculate Frame size.
+        /// Calculates framesize in bytes excluding header size.
         /// </summary>
-        public int calculate_framesize()
-        {
-            if (h_layer == 1)
-            {
-                framesize = (12*bitrates[h_version][0][h_bitrate_index])/frequencies[h_version][h_sample_frequency];
-                if (h_padding_bit != 0)
-                    framesize++;
-                framesize <<= 2; // one slot is 4 bytes long
-                nSlots = 0;
+        internal int CalculateFrameSize() {
+            if (_Layer == 1) {
+                Framesize = 12 * Bitrates[_Version][0][_BitrateIndex] / Frequencies[_Version][_SampleFrequency];
+                if (_PaddingBit != 0)
+                    Framesize++;
+                Framesize <<= 2; // one slot is 4 bytes long
+                NSlots = 0;
             }
-            else
-            {
-                framesize = (144*bitrates[h_version][h_layer - 1][h_bitrate_index])/
-                            frequencies[h_version][h_sample_frequency];
-                if (h_version == MPEG2_LSF || h_version == MPEG25_LSF)
-                    framesize >>= 1;
+            else {
+                Framesize = 144 * Bitrates[_Version][_Layer - 1][_BitrateIndex] /
+                            Frequencies[_Version][_SampleFrequency];
+                if (_Version == MPEG2_LSF || _Version == MPEG25_LSF)
+                    Framesize >>= 1;
                 // SZD
-                if (h_padding_bit != 0)
-                    framesize++;
+                if (_PaddingBit != 0)
+                    Framesize++;
                 // Layer III slots
-                if (h_layer == 3)
-                {
-                    if (h_version == MPEG1)
-                    {
-                        nSlots = framesize - ((h_mode == SINGLE_CHANNEL) ? 17 : 32) - ((h_protection_bit != 0) ? 0 : 2) -
+                if (_Layer == 3) {
+                    if (_Version == MPEG1) {
+                        NSlots = Framesize - (_Mode == SINGLE_CHANNEL ? 17 : 32) - (_ProtectionBit != 0 ? 0 : 2) -
                                  4; // header size
                     }
-                    else
-                    {
+                    else {
                         // MPEG-2 LSF, SZD: MPEG-2.5 LSF
-                        nSlots = framesize - ((h_mode == SINGLE_CHANNEL) ? 9 : 17) - ((h_protection_bit != 0) ? 0 : 2) -
+                        NSlots = Framesize - (_Mode == SINGLE_CHANNEL ? 9 : 17) - (_ProtectionBit != 0 ? 0 : 2) -
                                  4; // header size
                     }
                 }
-                else
-                {
-                    nSlots = 0;
+                else {
+                    NSlots = 0;
                 }
             }
-            framesize -= 4; // subtract header size
-            return framesize;
+            Framesize -= 4; // subtract header size
+            return Framesize;
         }
 
         /// <summary>
-        ///     Returns the maximum number of frames in the stream.
+        /// Returns the maximum number of frames in the stream.
         /// </summary>
-        public int max_number_of_frames(int streamsize)
-            // E.B
-        {
-            if ((framesize + 4 - h_padding_bit) == 0)
+        internal int MaxNumberOfFrame(int streamsize) {
+            if (Framesize + 4 - _PaddingBit == 0)
                 return 0;
-            return (streamsize/(framesize + 4 - h_padding_bit));
+            return streamsize / (Framesize + 4 - _PaddingBit);
         }
 
         /// <summary>
-        ///     Returns the maximum number of frames in the stream.
+        /// Returns the maximum number of frames in the stream.
         /// </summary>
-        public int min_number_of_frames(int streamsize)
-            // E.B
-        {
-            if ((framesize + 5 - h_padding_bit) == 0)
+        internal int min_number_of_frames(int streamsize) {
+            if (Framesize + 5 - _PaddingBit == 0)
                 return 0;
-            return (streamsize/(framesize + 5 - h_padding_bit));
+            return streamsize / (Framesize + 5 - _PaddingBit);
         }
 
         /// <summary>
-        ///     Returns ms/frame.
+        /// Returns ms/frame.
         /// </summary>
-        public float ms_per_frame()
-            // E.B
-        {
-            float[][] ms_per_frame_array =
-            {
+        internal float MsPerFrame() {
+            float[][] msPerFrameArray = {
                 new[] {8.707483f, 8.0f, 12.0f}, new[] {26.12245f, 24.0f, 36.0f},
                 new[] {26.12245f, 24.0f, 36.0f}
             };
-            return (ms_per_frame_array[h_layer - 1][h_sample_frequency]);
+            return msPerFrameArray[_Layer - 1][_SampleFrequency];
         }
 
         /// <summary>
-        ///     Returns total ms.
+        /// Returns total ms.
         /// </summary>
-        public float total_ms(int streamsize)
-            // E.B
-        {
-            return (max_number_of_frames(streamsize)*ms_per_frame());
-        }
+        internal float TotalMS(int streamsize) => MaxNumberOfFrame(streamsize) * MsPerFrame();
 
         // functions which return header informations as strings:
         /// <summary>
-        ///     Return Layer version.
+        /// Return Layer version.
         /// </summary>
-        public string layer_string()
-        {
-            switch (h_layer)
-            {
+        internal string LayerAsString() {
+            switch (_Layer) {
                 case 1:
                     return "I";
 
@@ -597,58 +491,48 @@ namespace MP3Sharp.Decoding
         }
 
         /// <summary>
-        ///     Returns Bitrate.
+        /// Returns Bitrate.
         /// </summary>
-        public string bitrate_string()
-        {
-            return bitrate_str[h_version][h_layer - 1][h_bitrate_index];
-        }
+        internal string BitrateAsString() => BitrateStr[_Version][_Layer - 1][_BitrateIndex];
 
         /// <summary>
-        ///     Returns Frequency
+        /// Returns Frequency
         /// </summary>
-        public string sample_frequency_string()
-        {
-            switch (h_sample_frequency)
-            {
+        internal string SampleFrequencyAsString() {
+            switch (_SampleFrequency) {
                 case THIRTYTWO:
-                    if (h_version == MPEG1)
+                    if (_Version == MPEG1)
                         return "32 kHz";
-                    if (h_version == MPEG2_LSF)
+                    if (_Version == MPEG2_LSF)
                         return "16 kHz";
                     return "8 kHz";
                 case FOURTYFOUR_POINT_ONE:
-                    if (h_version == MPEG1)
+                    if (_Version == MPEG1)
                         return "44.1 kHz";
-                    if (h_version == MPEG2_LSF)
+                    if (_Version == MPEG2_LSF)
                         return "22.05 kHz";
                     return "11.025 kHz";
                 case FOURTYEIGHT:
-                    if (h_version == MPEG1)
+                    if (_Version == MPEG1)
                         return "48 kHz";
-                    if (h_version == MPEG2_LSF)
+                    if (_Version == MPEG2_LSF)
                         return "24 kHz";
                     return "12 kHz";
             }
-            return (null);
+            return null;
         }
 
         /// <summary>
-        ///     Returns Mode.
+        /// Returns Mode.
         /// </summary>
-        public string mode_string()
-        {
-            switch (h_mode)
-            {
+        internal string ModeAsString() {
+            switch (_Mode) {
                 case STEREO:
                     return "Stereo";
-
                 case JOINT_STEREO:
                     return "Joint stereo";
-
                 case DUAL_CHANNEL:
                     return "Dual channel";
-
                 case SINGLE_CHANNEL:
                     return "Single channel";
             }
@@ -656,12 +540,10 @@ namespace MP3Sharp.Decoding
         }
 
         /// <summary>
-        ///     Returns Version.
+        /// Returns Version.
         /// </summary>
-        public string version_string()
-        {
-            switch (h_version)
-            {
+        internal string VersionAsString() {
+            switch (_Version) {
                 case MPEG1:
                     return "MPEG-1";
 
@@ -671,26 +553,20 @@ namespace MP3Sharp.Decoding
                 case MPEG25_LSF:
                     return "MPEG-2.5 LSF";
             }
-            return (null);
+            return null;
         }
 
         /// <summary>
-        ///     Returns the number of subbands in the current frame.
+        /// Returns the number of subbands in the current frame.
         /// </summary>
-        public int number_of_subbands()
-        {
-            return h_number_of_subbands;
-        }
+        internal int NumberSubbands() => _NumberOfSubbands;
 
         /// <summary>
-        ///     Returns Intensity Stereo.
-        ///     Layer II joint stereo only).
-        ///     Returns the number of subbands which are in stereo mode,
-        ///     subbands above that limit are in intensity stereo mode.
+        /// Returns Intensity Stereo.
+        /// Layer II joint stereo only).
+        /// Returns the number of subbands which are in stereo mode,
+        /// subbands above that limit are in intensity stereo mode.
         /// </summary>
-        public int intensity_stereo_bound()
-        {
-            return h_intensity_stereo_bound;
-        }
+        internal int IntensityStereoBound() => _IntensityStereoBound;
     }
 }

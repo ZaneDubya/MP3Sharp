@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * SynthesisFilter.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -16,61 +16,59 @@
 
 using System;
 
-namespace MP3Sharp.Decoding
-{
+namespace MP3Sharp.Decoding {
     /// <summary>
-    ///     A class for the synthesis filter bank.
-    ///     This class does a fast downsampling from 32, 44.1 or 48 kHz to 8 kHz, if ULAW is defined.
-    ///     Frequencies above 4 kHz are removed by ignoring higher subbands.
+    /// A class for the synthesis filter bank.
+    /// This class does a fast downsampling from 32, 44.1 or 48 kHz to 8 kHz, if ULAW is defined.
+    /// Frequencies above 4 kHz are removed by ignoring higher subbands.
     /// </summary>
-    internal class SynthesisFilter
-    {
+    public class SynthesisFilter {
         private const double MY_PI = 3.14159265358979323846;
+
         // Note: These values are not in the same order
         // as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
-        private static readonly float cos1_64 = (float) (1.0/(2.0*Math.Cos(MY_PI/64.0)));
-        private static readonly float cos3_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*3.0/64.0)));
-        private static readonly float cos5_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*5.0/64.0)));
-        private static readonly float cos7_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*7.0/64.0)));
-        private static readonly float cos9_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*9.0/64.0)));
-        private static readonly float cos11_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*11.0/64.0)));
-        private static readonly float cos13_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*13.0/64.0)));
-        private static readonly float cos15_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*15.0/64.0)));
-        private static readonly float cos17_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*17.0/64.0)));
-        private static readonly float cos19_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*19.0/64.0)));
-        private static readonly float cos21_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*21.0/64.0)));
-        private static readonly float cos23_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*23.0/64.0)));
-        private static readonly float cos25_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*25.0/64.0)));
-        private static readonly float cos27_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*27.0/64.0)));
-        private static readonly float cos29_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*29.0/64.0)));
-        private static readonly float cos31_64 = (float) (1.0/(2.0*Math.Cos(MY_PI*31.0/64.0)));
-        private static readonly float cos1_32 = (float) (1.0/(2.0*Math.Cos(MY_PI/32.0)));
-        private static readonly float cos3_32 = (float) (1.0/(2.0*Math.Cos(MY_PI*3.0/32.0)));
-        private static readonly float cos5_32 = (float) (1.0/(2.0*Math.Cos(MY_PI*5.0/32.0)));
-        private static readonly float cos7_32 = (float) (1.0/(2.0*Math.Cos(MY_PI*7.0/32.0)));
-        private static readonly float cos9_32 = (float) (1.0/(2.0*Math.Cos(MY_PI*9.0/32.0)));
-        private static readonly float cos11_32 = (float) (1.0/(2.0*Math.Cos(MY_PI*11.0/32.0)));
-        private static readonly float cos13_32 = (float) (1.0/(2.0*Math.Cos(MY_PI*13.0/32.0)));
-        private static readonly float cos15_32 = (float) (1.0/(2.0*Math.Cos(MY_PI*15.0/32.0)));
-        private static readonly float cos1_16 = (float) (1.0/(2.0*Math.Cos(MY_PI/16.0)));
-        private static readonly float cos3_16 = (float) (1.0/(2.0*Math.Cos(MY_PI*3.0/16.0)));
-        private static readonly float cos5_16 = (float) (1.0/(2.0*Math.Cos(MY_PI*5.0/16.0)));
-        private static readonly float cos7_16 = (float) (1.0/(2.0*Math.Cos(MY_PI*7.0/16.0)));
-        private static readonly float cos1_8 = (float) (1.0/(2.0*Math.Cos(MY_PI/8.0)));
-        private static readonly float cos3_8 = (float) (1.0/(2.0*Math.Cos(MY_PI*3.0/8.0)));
-        private static readonly float cos1_4 = (float) (1.0/(2.0*Math.Cos(MY_PI/4.0)));
+        private static readonly float Cos164 = (float)(1.0 / (2.0 * Math.Cos(MY_PI / 64.0)));
+        private static readonly float Cos364 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 64.0)));
+        private static readonly float Cos564 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 5.0 / 64.0)));
+        private static readonly float Cos764 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 7.0 / 64.0)));
+        private static readonly float Cos964 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 9.0 / 64.0)));
+        private static readonly float Cos1164 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 11.0 / 64.0)));
+        private static readonly float Cos1364 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 13.0 / 64.0)));
+        private static readonly float Cos1564 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 15.0 / 64.0)));
+        private static readonly float Cos1764 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 17.0 / 64.0)));
+        private static readonly float Cos1964 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 19.0 / 64.0)));
+        private static readonly float Cos2164 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 21.0 / 64.0)));
+        private static readonly float Cos2364 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 23.0 / 64.0)));
+        private static readonly float Cos2564 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 25.0 / 64.0)));
+        private static readonly float Cos2764 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 27.0 / 64.0)));
+        private static readonly float Cos2964 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 29.0 / 64.0)));
+        private static readonly float Cos3164 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 31.0 / 64.0)));
+        private static readonly float Cos132 = (float)(1.0 / (2.0 * Math.Cos(MY_PI / 32.0)));
+        private static readonly float Cos332 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 32.0)));
+        private static readonly float Cos532 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 5.0 / 32.0)));
+        private static readonly float Cos732 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 7.0 / 32.0)));
+        private static readonly float Cos932 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 9.0 / 32.0)));
+        private static readonly float Cos1132 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 11.0 / 32.0)));
+        private static readonly float Cos1332 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 13.0 / 32.0)));
+        private static readonly float Cos1532 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 15.0 / 32.0)));
+        private static readonly float Cos116 = (float)(1.0 / (2.0 * Math.Cos(MY_PI / 16.0)));
+        private static readonly float Cos316 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 16.0)));
+        private static readonly float Cos516 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 5.0 / 16.0)));
+        private static readonly float Cos716 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 7.0 / 16.0)));
+        private static readonly float Cos18 = (float)(1.0 / (2.0 * Math.Cos(MY_PI / 8.0)));
+        private static readonly float Cos38 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 8.0)));
+        private static readonly float Cos14 = (float)(1.0 / (2.0 * Math.Cos(MY_PI / 4.0)));
 
-        private static float[] d;
+        private static float[] _d;
 
         /// d[] split into subarrays of length 16. This provides for
         /// more faster access by allowing a block of 16 to be addressed
         /// with constant offset.
-        private static float[][] d16;
+        private static float[][] _d16;
 
         // The original data for d[]. This data (was) loaded from a file
         // to reduce the overall package size and to improve performance. 
-        private static readonly float[] d_data =
-        {
+        private static readonly float[] DData = {
             0.000000000f, -0.000442505f, 0.003250122f, -0.007003784f,
             0.031082153f, -0.078628540f, 0.100311279f, -0.572036743f,
             1.144989014f, 0.572036743f, 0.100311279f, 0.078628540f,
@@ -201,113 +199,101 @@ namespace MP3Sharp.Decoding
             0.007919312f, -0.003326416f, 0.000473022f, 0.000015259f
         };
 
-        private readonly int m_ChannelIndex;
-        private readonly float[] m_SubbandSamples; // 32 new subband samples
-        private readonly float scalefactor;
-        private readonly float[] v1;
-        private readonly float[] v2;
+        private readonly int _Channel;
+        private readonly float[] _Samples; // 32 new subband samples
+        private readonly float _Scalefactor;
+        private readonly float[] _V1;
+        private readonly float[] _V2;
 
         /// <summary>
-        ///     Compute PCM Samples.
+        /// Compute PCM Samples.
         /// </summary>
-        private float[] _tmpOut;
+        private float[] _TmpOut;
 
-        private float[] actual_v; // v1 or v2
-        private int actual_write_pos; // 0-15
-        private float[] eq;
+        private float[] _ActualV; // v1 or v2
+        private int _ActualWritePos; // 0-15
+        private float[] _Eq;
 
         /// <summary>
-        ///     Contructor.
-        ///     The scalefactor scales the calculated float pcm samples to short values
-        ///     (raw pcm samples are in [-1.0, 1.0], if no violations occur).
+        /// Quality value for controlling CPU usage/quality tradeoff.
         /// </summary>
-        public SynthesisFilter(int channelIndex, float factor, float[] eq0)
-        {
+        /// <summary>
+        /// Contructor.
+        /// The scalefactor scales the calculated float pcm samples to short values
+        /// (raw pcm samples are in [-1.0, 1.0], if no violations occur).
+        /// </summary>
+        internal SynthesisFilter(int channelnumber, float factor, float[] eq0) {
             InitBlock();
-            if (d == null)
-            {
-                d = d_data; // load_d();
-                d16 = splitArray(d, 16);
+            if (_d == null) {
+                _d = DData; // load_d();
+                _d16 = SplitArray(_d, 16);
             }
 
-            v1 = new float[512];
-            v2 = new float[512];
-            m_SubbandSamples = new float[32];
-            m_ChannelIndex = channelIndex;
-            scalefactor = factor;
-            EQ = eq;
+            _V1 = new float[512];
+            _V2 = new float[512];
+            _Samples = new float[32];
+            _Channel = channelnumber;
+            _Scalefactor = factor;
+            Eq = _Eq;
 
-            reset();
+            Reset();
         }
 
-        public float[] EQ
-        {
-            set
-            {
-                eq = value;
+        internal float[] Eq {
+            set {
+                _Eq = value;
 
-                if (eq == null)
-                {
-                    eq = new float[32];
+                if (_Eq == null) {
+                    _Eq = new float[32];
                     for (int i = 0; i < 32; i++)
-                        eq[i] = 1.0f;
+                        _Eq[i] = 1.0f;
                 }
-                if (eq.Length < 32)
-                {
+                if (_Eq.Length < 32) {
                     throw new ArgumentException("eq0");
                 }
             }
         }
 
-        private void InitBlock()
-        {
-            _tmpOut = new float[32];
+        private void InitBlock() {
+            _TmpOut = new float[32];
         }
 
         /// <summary>
-        ///     Reset the synthesis filter.
+        /// Reset the synthesis filter.
         /// </summary>
-        public void reset()
-        {
+        internal void Reset() {
             // initialize v1[] and v2[]:
             for (int p = 0; p < 512; p++)
-                v1[p] = v2[p] = 0.0f;
+                _V1[p] = _V2[p] = 0.0f;
 
             // initialize samples[]:
             for (int p2 = 0; p2 < 32; p2++)
-                m_SubbandSamples[p2] = 0.0f;
+                _Samples[p2] = 0.0f;
 
-            actual_v = v1;
-            actual_write_pos = 15;
+            _ActualV = _V1;
+            _ActualWritePos = 15;
         }
 
-        /// <summary>
-        ///     Inject Sample.
-        /// </summary>
-        public void WriteSample(float sample, int subbandIndex)
-        {
-            m_SubbandSamples[subbandIndex] = eq[subbandIndex]*sample;
+        internal void AddSample(float sample, int subbandnumber) {
+            _Samples[subbandnumber] = _Eq[subbandnumber] * sample;
         }
 
-        public void WriteAllSamples(float[] s)
-        {
-            for (int i = 31; i >= 0; i--)
-            {
-                m_SubbandSamples[i] = s[i]*eq[i];
+        internal void AddSamples(float[] s) {
+            for (int i = 31; i >= 0; i--) {
+                _Samples[i] = s[i] * _Eq[i];
             }
         }
 
         /// <summary>
-        ///     Compute new values via a fast cosine transform.
+        /// Compute new values via a fast cosine transform.
         /// </summary>
-        private void compute_new_v()
-        {
-            float new_v0, new_v1, new_v2, new_v3, new_v4, new_v5, new_v6, new_v7, new_v8, new_v9;
-            float new_v10, new_v11, new_v12, new_v13, new_v14, new_v15, new_v16, new_v17, new_v18, new_v19;
-            float new_v20, new_v21, new_v22, new_v23, new_v24, new_v25, new_v26, new_v27, new_v28, new_v29;
-            float new_v30, new_v31;
+        private void ComputeNewValues() {
+            float newV0, newV1, newV2, newV3, newV4, newV5, newV6, newV7, newV8, newV9;
+            float newV10, newV11, newV12, newV13, newV14, newV15, newV16, newV17, newV18, newV19;
+            float newV20, newV21, newV22, newV23, newV24, newV25, newV26, newV27, newV28, newV29;
+            float newV30, newV31;
 
-            float[] s = m_SubbandSamples;
+            float[] s = _Samples;
 
             float s0 = s[0];
             float s1 = s[1];
@@ -367,95 +353,95 @@ namespace MP3Sharp.Decoding
             float pp5 = p5 + p10;
             float pp6 = p6 + p9;
             float pp7 = p7 + p8;
-            float pp8 = (p0 - p15)*cos1_32;
-            float pp9 = (p1 - p14)*cos3_32;
-            float pp10 = (p2 - p13)*cos5_32;
-            float pp11 = (p3 - p12)*cos7_32;
-            float pp12 = (p4 - p11)*cos9_32;
-            float pp13 = (p5 - p10)*cos11_32;
-            float pp14 = (p6 - p9)*cos13_32;
-            float pp15 = (p7 - p8)*cos15_32;
+            float pp8 = (p0 - p15) * Cos132;
+            float pp9 = (p1 - p14) * Cos332;
+            float pp10 = (p2 - p13) * Cos532;
+            float pp11 = (p3 - p12) * Cos732;
+            float pp12 = (p4 - p11) * Cos932;
+            float pp13 = (p5 - p10) * Cos1132;
+            float pp14 = (p6 - p9) * Cos1332;
+            float pp15 = (p7 - p8) * Cos1532;
 
             p0 = pp0 + pp7;
             p1 = pp1 + pp6;
             p2 = pp2 + pp5;
             p3 = pp3 + pp4;
-            p4 = (pp0 - pp7)*cos1_16;
-            p5 = (pp1 - pp6)*cos3_16;
-            p6 = (pp2 - pp5)*cos5_16;
-            p7 = (pp3 - pp4)*cos7_16;
+            p4 = (pp0 - pp7) * Cos116;
+            p5 = (pp1 - pp6) * Cos316;
+            p6 = (pp2 - pp5) * Cos516;
+            p7 = (pp3 - pp4) * Cos716;
             p8 = pp8 + pp15;
             p9 = pp9 + pp14;
             p10 = pp10 + pp13;
             p11 = pp11 + pp12;
-            p12 = (pp8 - pp15)*cos1_16;
-            p13 = (pp9 - pp14)*cos3_16;
-            p14 = (pp10 - pp13)*cos5_16;
-            p15 = (pp11 - pp12)*cos7_16;
+            p12 = (pp8 - pp15) * Cos116;
+            p13 = (pp9 - pp14) * Cos316;
+            p14 = (pp10 - pp13) * Cos516;
+            p15 = (pp11 - pp12) * Cos716;
 
             pp0 = p0 + p3;
             pp1 = p1 + p2;
-            pp2 = (p0 - p3)*cos1_8;
-            pp3 = (p1 - p2)*cos3_8;
+            pp2 = (p0 - p3) * Cos18;
+            pp3 = (p1 - p2) * Cos38;
             pp4 = p4 + p7;
             pp5 = p5 + p6;
-            pp6 = (p4 - p7)*cos1_8;
-            pp7 = (p5 - p6)*cos3_8;
+            pp6 = (p4 - p7) * Cos18;
+            pp7 = (p5 - p6) * Cos38;
             pp8 = p8 + p11;
             pp9 = p9 + p10;
-            pp10 = (p8 - p11)*cos1_8;
-            pp11 = (p9 - p10)*cos3_8;
+            pp10 = (p8 - p11) * Cos18;
+            pp11 = (p9 - p10) * Cos38;
             pp12 = p12 + p15;
             pp13 = p13 + p14;
-            pp14 = (p12 - p15)*cos1_8;
-            pp15 = (p13 - p14)*cos3_8;
+            pp14 = (p12 - p15) * Cos18;
+            pp15 = (p13 - p14) * Cos38;
 
             p0 = pp0 + pp1;
-            p1 = (pp0 - pp1)*cos1_4;
+            p1 = (pp0 - pp1) * Cos14;
             p2 = pp2 + pp3;
-            p3 = (pp2 - pp3)*cos1_4;
+            p3 = (pp2 - pp3) * Cos14;
             p4 = pp4 + pp5;
-            p5 = (pp4 - pp5)*cos1_4;
+            p5 = (pp4 - pp5) * Cos14;
             p6 = pp6 + pp7;
-            p7 = (pp6 - pp7)*cos1_4;
+            p7 = (pp6 - pp7) * Cos14;
             p8 = pp8 + pp9;
-            p9 = (pp8 - pp9)*cos1_4;
+            p9 = (pp8 - pp9) * Cos14;
             p10 = pp10 + pp11;
-            p11 = (pp10 - pp11)*cos1_4;
+            p11 = (pp10 - pp11) * Cos14;
             p12 = pp12 + pp13;
-            p13 = (pp12 - pp13)*cos1_4;
+            p13 = (pp12 - pp13) * Cos14;
             p14 = pp14 + pp15;
-            p15 = (pp14 - pp15)*cos1_4;
+            p15 = (pp14 - pp15) * Cos14;
 
             // this is pretty insane coding
             float tmp1;
-            new_v19 = -(new_v4 = (new_v12 = p7) + p5) - p6;
-            new_v27 = -p6 - p7 - p4;
-            new_v6 = (new_v10 = (new_v14 = p15) + p11) + p13;
-            new_v17 = -(new_v2 = p15 + p13 + p9) - p14;
-            new_v21 = (tmp1 = -p14 - p15 - p10 - p11) - p13;
-            new_v29 = -p14 - p15 - p12 - p8;
-            new_v25 = tmp1 - p12;
-            new_v31 = -p0;
-            new_v0 = p1;
-            new_v23 = -(new_v8 = p3) - p2;
+            newV19 = -(newV4 = (newV12 = p7) + p5) - p6;
+            newV27 = -p6 - p7 - p4;
+            newV6 = (newV10 = (newV14 = p15) + p11) + p13;
+            newV17 = -(newV2 = p15 + p13 + p9) - p14;
+            newV21 = (tmp1 = -p14 - p15 - p10 - p11) - p13;
+            newV29 = -p14 - p15 - p12 - p8;
+            newV25 = tmp1 - p12;
+            newV31 = -p0;
+            newV0 = p1;
+            newV23 = -(newV8 = p3) - p2;
 
-            p0 = (s0 - s31)*cos1_64;
-            p1 = (s1 - s30)*cos3_64;
-            p2 = (s2 - s29)*cos5_64;
-            p3 = (s3 - s28)*cos7_64;
-            p4 = (s4 - s27)*cos9_64;
-            p5 = (s5 - s26)*cos11_64;
-            p6 = (s6 - s25)*cos13_64;
-            p7 = (s7 - s24)*cos15_64;
-            p8 = (s8 - s23)*cos17_64;
-            p9 = (s9 - s22)*cos19_64;
-            p10 = (s10 - s21)*cos21_64;
-            p11 = (s11 - s20)*cos23_64;
-            p12 = (s12 - s19)*cos25_64;
-            p13 = (s13 - s18)*cos27_64;
-            p14 = (s14 - s17)*cos29_64;
-            p15 = (s15 - s16)*cos31_64;
+            p0 = (s0 - s31) * Cos164;
+            p1 = (s1 - s30) * Cos364;
+            p2 = (s2 - s29) * Cos564;
+            p3 = (s3 - s28) * Cos764;
+            p4 = (s4 - s27) * Cos964;
+            p5 = (s5 - s26) * Cos1164;
+            p6 = (s6 - s25) * Cos1364;
+            p7 = (s7 - s24) * Cos1564;
+            p8 = (s8 - s23) * Cos1764;
+            p9 = (s9 - s22) * Cos1964;
+            p10 = (s10 - s21) * Cos2164;
+            p11 = (s11 - s20) * Cos2364;
+            p12 = (s12 - s19) * Cos2564;
+            p13 = (s13 - s18) * Cos2764;
+            p14 = (s14 - s17) * Cos2964;
+            p15 = (s15 - s16) * Cos3164;
 
             pp0 = p0 + p15;
             pp1 = p1 + p14;
@@ -465,995 +451,669 @@ namespace MP3Sharp.Decoding
             pp5 = p5 + p10;
             pp6 = p6 + p9;
             pp7 = p7 + p8;
-            pp8 = (p0 - p15)*cos1_32;
-            pp9 = (p1 - p14)*cos3_32;
-            pp10 = (p2 - p13)*cos5_32;
-            pp11 = (p3 - p12)*cos7_32;
-            pp12 = (p4 - p11)*cos9_32;
-            pp13 = (p5 - p10)*cos11_32;
-            pp14 = (p6 - p9)*cos13_32;
-            pp15 = (p7 - p8)*cos15_32;
+            pp8 = (p0 - p15) * Cos132;
+            pp9 = (p1 - p14) * Cos332;
+            pp10 = (p2 - p13) * Cos532;
+            pp11 = (p3 - p12) * Cos732;
+            pp12 = (p4 - p11) * Cos932;
+            pp13 = (p5 - p10) * Cos1132;
+            pp14 = (p6 - p9) * Cos1332;
+            pp15 = (p7 - p8) * Cos1532;
 
             p0 = pp0 + pp7;
             p1 = pp1 + pp6;
             p2 = pp2 + pp5;
             p3 = pp3 + pp4;
-            p4 = (pp0 - pp7)*cos1_16;
-            p5 = (pp1 - pp6)*cos3_16;
-            p6 = (pp2 - pp5)*cos5_16;
-            p7 = (pp3 - pp4)*cos7_16;
+            p4 = (pp0 - pp7) * Cos116;
+            p5 = (pp1 - pp6) * Cos316;
+            p6 = (pp2 - pp5) * Cos516;
+            p7 = (pp3 - pp4) * Cos716;
             p8 = pp8 + pp15;
             p9 = pp9 + pp14;
             p10 = pp10 + pp13;
             p11 = pp11 + pp12;
-            p12 = (pp8 - pp15)*cos1_16;
-            p13 = (pp9 - pp14)*cos3_16;
-            p14 = (pp10 - pp13)*cos5_16;
-            p15 = (pp11 - pp12)*cos7_16;
+            p12 = (pp8 - pp15) * Cos116;
+            p13 = (pp9 - pp14) * Cos316;
+            p14 = (pp10 - pp13) * Cos516;
+            p15 = (pp11 - pp12) * Cos716;
 
             pp0 = p0 + p3;
             pp1 = p1 + p2;
-            pp2 = (p0 - p3)*cos1_8;
-            pp3 = (p1 - p2)*cos3_8;
+            pp2 = (p0 - p3) * Cos18;
+            pp3 = (p1 - p2) * Cos38;
             pp4 = p4 + p7;
             pp5 = p5 + p6;
-            pp6 = (p4 - p7)*cos1_8;
-            pp7 = (p5 - p6)*cos3_8;
+            pp6 = (p4 - p7) * Cos18;
+            pp7 = (p5 - p6) * Cos38;
             pp8 = p8 + p11;
             pp9 = p9 + p10;
-            pp10 = (p8 - p11)*cos1_8;
-            pp11 = (p9 - p10)*cos3_8;
+            pp10 = (p8 - p11) * Cos18;
+            pp11 = (p9 - p10) * Cos38;
             pp12 = p12 + p15;
             pp13 = p13 + p14;
-            pp14 = (p12 - p15)*cos1_8;
-            pp15 = (p13 - p14)*cos3_8;
+            pp14 = (p12 - p15) * Cos18;
+            pp15 = (p13 - p14) * Cos38;
 
             p0 = pp0 + pp1;
-            p1 = (pp0 - pp1)*cos1_4;
+            p1 = (pp0 - pp1) * Cos14;
             p2 = pp2 + pp3;
-            p3 = (pp2 - pp3)*cos1_4;
+            p3 = (pp2 - pp3) * Cos14;
             p4 = pp4 + pp5;
-            p5 = (pp4 - pp5)*cos1_4;
+            p5 = (pp4 - pp5) * Cos14;
             p6 = pp6 + pp7;
-            p7 = (pp6 - pp7)*cos1_4;
+            p7 = (pp6 - pp7) * Cos14;
             p8 = pp8 + pp9;
-            p9 = (pp8 - pp9)*cos1_4;
+            p9 = (pp8 - pp9) * Cos14;
             p10 = pp10 + pp11;
-            p11 = (pp10 - pp11)*cos1_4;
+            p11 = (pp10 - pp11) * Cos14;
             p12 = pp12 + pp13;
-            p13 = (pp12 - pp13)*cos1_4;
+            p13 = (pp12 - pp13) * Cos14;
             p14 = pp14 + pp15;
-            p15 = (pp14 - pp15)*cos1_4;
+            p15 = (pp14 - pp15) * Cos14;
 
             // manually doing something that a compiler should handle sucks
             // coding like this is hard to read
             float tmp2;
-            new_v5 = (new_v11 = (new_v13 = (new_v15 = p15) + p7) + p11) + p5 + p13;
-            new_v7 = (new_v9 = p15 + p11 + p3) + p13;
-            new_v16 = -(new_v1 = (tmp1 = p13 + p15 + p9) + p1) - p14;
-            new_v18 = -(new_v3 = tmp1 + p5 + p7) - p6 - p14;
+            newV5 = (newV11 = (newV13 = (newV15 = p15) + p7) + p11) + p5 + p13;
+            newV7 = (newV9 = p15 + p11 + p3) + p13;
+            newV16 = -(newV1 = (tmp1 = p13 + p15 + p9) + p1) - p14;
+            newV18 = -(newV3 = tmp1 + p5 + p7) - p6 - p14;
 
-            new_v22 = (tmp1 = -p10 - p11 - p14 - p15) - p13 - p2 - p3;
-            new_v20 = tmp1 - p13 - p5 - p6 - p7;
-            new_v24 = tmp1 - p12 - p2 - p3;
-            new_v26 = tmp1 - p12 - (tmp2 = p4 + p6 + p7);
-            new_v30 = (tmp1 = -p8 - p12 - p14 - p15) - p0;
-            new_v28 = tmp1 - tmp2;
+            newV22 = (tmp1 = -p10 - p11 - p14 - p15) - p13 - p2 - p3;
+            newV20 = tmp1 - p13 - p5 - p6 - p7;
+            newV24 = tmp1 - p12 - p2 - p3;
+            newV26 = tmp1 - p12 - (tmp2 = p4 + p6 + p7);
+            newV30 = (tmp1 = -p8 - p12 - p14 - p15) - p0;
+            newV28 = tmp1 - tmp2;
 
-            // insert V[0-15] (== new_v[0-15]) into actual v:	
+            // insert V[0-15] (== new_v[0-15]) into actual v:
             // float[] x2 = actual_v + actual_write_pos;
-            float[] dest = actual_v;
+            float[] dest = _ActualV;
 
-            int pos = actual_write_pos;
+            int pos = _ActualWritePos;
 
-            dest[0 + pos] = new_v0;
-            dest[16 + pos] = new_v1;
-            dest[32 + pos] = new_v2;
-            dest[48 + pos] = new_v3;
-            dest[64 + pos] = new_v4;
-            dest[80 + pos] = new_v5;
-            dest[96 + pos] = new_v6;
-            dest[112 + pos] = new_v7;
-            dest[128 + pos] = new_v8;
-            dest[144 + pos] = new_v9;
-            dest[160 + pos] = new_v10;
-            dest[176 + pos] = new_v11;
-            dest[192 + pos] = new_v12;
-            dest[208 + pos] = new_v13;
-            dest[224 + pos] = new_v14;
-            dest[240 + pos] = new_v15;
+            dest[0 + pos] = newV0;
+            dest[16 + pos] = newV1;
+            dest[32 + pos] = newV2;
+            dest[48 + pos] = newV3;
+            dest[64 + pos] = newV4;
+            dest[80 + pos] = newV5;
+            dest[96 + pos] = newV6;
+            dest[112 + pos] = newV7;
+            dest[128 + pos] = newV8;
+            dest[144 + pos] = newV9;
+            dest[160 + pos] = newV10;
+            dest[176 + pos] = newV11;
+            dest[192 + pos] = newV12;
+            dest[208 + pos] = newV13;
+            dest[224 + pos] = newV14;
+            dest[240 + pos] = newV15;
 
             // V[16] is always 0.0:
             dest[256 + pos] = 0.0f;
 
             // insert V[17-31] (== -new_v[15-1]) into actual v:
-            dest[272 + pos] = -new_v15;
-            dest[288 + pos] = -new_v14;
-            dest[304 + pos] = -new_v13;
-            dest[320 + pos] = -new_v12;
-            dest[336 + pos] = -new_v11;
-            dest[352 + pos] = -new_v10;
-            dest[368 + pos] = -new_v9;
-            dest[384 + pos] = -new_v8;
-            dest[400 + pos] = -new_v7;
-            dest[416 + pos] = -new_v6;
-            dest[432 + pos] = -new_v5;
-            dest[448 + pos] = -new_v4;
-            dest[464 + pos] = -new_v3;
-            dest[480 + pos] = -new_v2;
-            dest[496 + pos] = -new_v1;
+            dest[272 + pos] = -newV15;
+            dest[288 + pos] = -newV14;
+            dest[304 + pos] = -newV13;
+            dest[320 + pos] = -newV12;
+            dest[336 + pos] = -newV11;
+            dest[352 + pos] = -newV10;
+            dest[368 + pos] = -newV9;
+            dest[384 + pos] = -newV8;
+            dest[400 + pos] = -newV7;
+            dest[416 + pos] = -newV6;
+            dest[432 + pos] = -newV5;
+            dest[448 + pos] = -newV4;
+            dest[464 + pos] = -newV3;
+            dest[480 + pos] = -newV2;
+            dest[496 + pos] = -newV1;
 
             // insert V[32] (== -new_v[0]) into other v:
-            dest = (actual_v == v1) ? v2 : v1;
+            dest = _ActualV == _V1 ? _V2 : _V1;
 
-            dest[0 + pos] = -new_v0;
+            dest[0 + pos] = -newV0;
             // insert V[33-48] (== new_v[16-31]) into other v:
-            dest[16 + pos] = new_v16;
-            dest[32 + pos] = new_v17;
-            dest[48 + pos] = new_v18;
-            dest[64 + pos] = new_v19;
-            dest[80 + pos] = new_v20;
-            dest[96 + pos] = new_v21;
-            dest[112 + pos] = new_v22;
-            dest[128 + pos] = new_v23;
-            dest[144 + pos] = new_v24;
-            dest[160 + pos] = new_v25;
-            dest[176 + pos] = new_v26;
-            dest[192 + pos] = new_v27;
-            dest[208 + pos] = new_v28;
-            dest[224 + pos] = new_v29;
-            dest[240 + pos] = new_v30;
-            dest[256 + pos] = new_v31;
+            dest[16 + pos] = newV16;
+            dest[32 + pos] = newV17;
+            dest[48 + pos] = newV18;
+            dest[64 + pos] = newV19;
+            dest[80 + pos] = newV20;
+            dest[96 + pos] = newV21;
+            dest[112 + pos] = newV22;
+            dest[128 + pos] = newV23;
+            dest[144 + pos] = newV24;
+            dest[160 + pos] = newV25;
+            dest[176 + pos] = newV26;
+            dest[192 + pos] = newV27;
+            dest[208 + pos] = newV28;
+            dest[224 + pos] = newV29;
+            dest[240 + pos] = newV30;
+            dest[256 + pos] = newV31;
 
             // insert V[49-63] (== new_v[30-16]) into other v:
-            dest[272 + pos] = new_v30;
-            dest[288 + pos] = new_v29;
-            dest[304 + pos] = new_v28;
-            dest[320 + pos] = new_v27;
-            dest[336 + pos] = new_v26;
-            dest[352 + pos] = new_v25;
-            dest[368 + pos] = new_v24;
-            dest[384 + pos] = new_v23;
-            dest[400 + pos] = new_v22;
-            dest[416 + pos] = new_v21;
-            dest[432 + pos] = new_v20;
-            dest[448 + pos] = new_v19;
-            dest[464 + pos] = new_v18;
-            dest[480 + pos] = new_v17;
-            dest[496 + pos] = new_v16;
+            dest[272 + pos] = newV30;
+            dest[288 + pos] = newV29;
+            dest[304 + pos] = newV28;
+            dest[320 + pos] = newV27;
+            dest[336 + pos] = newV26;
+            dest[352 + pos] = newV25;
+            dest[368 + pos] = newV24;
+            dest[384 + pos] = newV23;
+            dest[400 + pos] = newV22;
+            dest[416 + pos] = newV21;
+            dest[432 + pos] = newV20;
+            dest[448 + pos] = newV19;
+            dest[464 + pos] = newV18;
+            dest[480 + pos] = newV17;
+            dest[496 + pos] = newV16;
         }
 
-        /// <summary>
-        ///     Compute new values via a fast cosine transform.
-        /// </summary>
-        private void compute_new_v_old()
-        {
-            // p is fully initialized from x1
-            //float[] p = _p;
-            // pp is fully initialized from p
-            //float[] pp = _pp; 
-
-            //float[] new_v = _new_v;
-
-            float[] new_v = new float[32]; // new V[0-15] and V[33-48] of Figure 3-A.2 in ISO DIS 11172-3
-            float[] p = new float[16];
-            float[] pp = new float[16];
-
-            for (int i = 31; i >= 0; i--)
-            {
-                new_v[i] = 0.0f;
-            }
-
-            //	float[] new_v = new float[32]; // new V[0-15] and V[33-48] of Figure 3-A.2 in ISO DIS 11172-3
-            //	float[] p = new float[16];
-            //	float[] pp = new float[16];
-
-            float[] x1 = m_SubbandSamples;
-
-            p[0] = x1[0] + x1[31];
-            p[1] = x1[1] + x1[30];
-            p[2] = x1[2] + x1[29];
-            p[3] = x1[3] + x1[28];
-            p[4] = x1[4] + x1[27];
-            p[5] = x1[5] + x1[26];
-            p[6] = x1[6] + x1[25];
-            p[7] = x1[7] + x1[24];
-            p[8] = x1[8] + x1[23];
-            p[9] = x1[9] + x1[22];
-            p[10] = x1[10] + x1[21];
-            p[11] = x1[11] + x1[20];
-            p[12] = x1[12] + x1[19];
-            p[13] = x1[13] + x1[18];
-            p[14] = x1[14] + x1[17];
-            p[15] = x1[15] + x1[16];
-
-            pp[0] = p[0] + p[15];
-            pp[1] = p[1] + p[14];
-            pp[2] = p[2] + p[13];
-            pp[3] = p[3] + p[12];
-            pp[4] = p[4] + p[11];
-            pp[5] = p[5] + p[10];
-            pp[6] = p[6] + p[9];
-            pp[7] = p[7] + p[8];
-            pp[8] = (p[0] - p[15])*cos1_32;
-            pp[9] = (p[1] - p[14])*cos3_32;
-            pp[10] = (p[2] - p[13])*cos5_32;
-            pp[11] = (p[3] - p[12])*cos7_32;
-            pp[12] = (p[4] - p[11])*cos9_32;
-            pp[13] = (p[5] - p[10])*cos11_32;
-            pp[14] = (p[6] - p[9])*cos13_32;
-            pp[15] = (p[7] - p[8])*cos15_32;
-
-            p[0] = pp[0] + pp[7];
-            p[1] = pp[1] + pp[6];
-            p[2] = pp[2] + pp[5];
-            p[3] = pp[3] + pp[4];
-            p[4] = (pp[0] - pp[7])*cos1_16;
-            p[5] = (pp[1] - pp[6])*cos3_16;
-            p[6] = (pp[2] - pp[5])*cos5_16;
-            p[7] = (pp[3] - pp[4])*cos7_16;
-            p[8] = pp[8] + pp[15];
-            p[9] = pp[9] + pp[14];
-            p[10] = pp[10] + pp[13];
-            p[11] = pp[11] + pp[12];
-            p[12] = (pp[8] - pp[15])*cos1_16;
-            p[13] = (pp[9] - pp[14])*cos3_16;
-            p[14] = (pp[10] - pp[13])*cos5_16;
-            p[15] = (pp[11] - pp[12])*cos7_16;
-
-            pp[0] = p[0] + p[3];
-            pp[1] = p[1] + p[2];
-            pp[2] = (p[0] - p[3])*cos1_8;
-            pp[3] = (p[1] - p[2])*cos3_8;
-            pp[4] = p[4] + p[7];
-            pp[5] = p[5] + p[6];
-            pp[6] = (p[4] - p[7])*cos1_8;
-            pp[7] = (p[5] - p[6])*cos3_8;
-            pp[8] = p[8] + p[11];
-            pp[9] = p[9] + p[10];
-            pp[10] = (p[8] - p[11])*cos1_8;
-            pp[11] = (p[9] - p[10])*cos3_8;
-            pp[12] = p[12] + p[15];
-            pp[13] = p[13] + p[14];
-            pp[14] = (p[12] - p[15])*cos1_8;
-            pp[15] = (p[13] - p[14])*cos3_8;
-
-            p[0] = pp[0] + pp[1];
-            p[1] = (pp[0] - pp[1])*cos1_4;
-            p[2] = pp[2] + pp[3];
-            p[3] = (pp[2] - pp[3])*cos1_4;
-            p[4] = pp[4] + pp[5];
-            p[5] = (pp[4] - pp[5])*cos1_4;
-            p[6] = pp[6] + pp[7];
-            p[7] = (pp[6] - pp[7])*cos1_4;
-            p[8] = pp[8] + pp[9];
-            p[9] = (pp[8] - pp[9])*cos1_4;
-            p[10] = pp[10] + pp[11];
-            p[11] = (pp[10] - pp[11])*cos1_4;
-            p[12] = pp[12] + pp[13];
-            p[13] = (pp[12] - pp[13])*cos1_4;
-            p[14] = pp[14] + pp[15];
-            p[15] = (pp[14] - pp[15])*cos1_4;
-
-            // this is pretty insane coding
-            float tmp1;
-            new_v[36 - 17] = -(new_v[4] = (new_v[12] = p[7]) + p[5]) - p[6];
-            new_v[44 - 17] = -p[6] - p[7] - p[4];
-            new_v[6] = (new_v[10] = (new_v[14] = p[15]) + p[11]) + p[13];
-            new_v[34 - 17] = -(new_v[2] = p[15] + p[13] + p[9]) - p[14];
-            new_v[38 - 17] = (tmp1 = -p[14] - p[15] - p[10] - p[11]) - p[13];
-            new_v[46 - 17] = -p[14] - p[15] - p[12] - p[8];
-            new_v[42 - 17] = tmp1 - p[12];
-            new_v[48 - 17] = -p[0];
-            new_v[0] = p[1];
-            new_v[40 - 17] = -(new_v[8] = p[3]) - p[2];
-
-            p[0] = (x1[0] - x1[31])*cos1_64;
-            p[1] = (x1[1] - x1[30])*cos3_64;
-            p[2] = (x1[2] - x1[29])*cos5_64;
-            p[3] = (x1[3] - x1[28])*cos7_64;
-            p[4] = (x1[4] - x1[27])*cos9_64;
-            p[5] = (x1[5] - x1[26])*cos11_64;
-            p[6] = (x1[6] - x1[25])*cos13_64;
-            p[7] = (x1[7] - x1[24])*cos15_64;
-            p[8] = (x1[8] - x1[23])*cos17_64;
-            p[9] = (x1[9] - x1[22])*cos19_64;
-            p[10] = (x1[10] - x1[21])*cos21_64;
-            p[11] = (x1[11] - x1[20])*cos23_64;
-            p[12] = (x1[12] - x1[19])*cos25_64;
-            p[13] = (x1[13] - x1[18])*cos27_64;
-            p[14] = (x1[14] - x1[17])*cos29_64;
-            p[15] = (x1[15] - x1[16])*cos31_64;
-
-            pp[0] = p[0] + p[15];
-            pp[1] = p[1] + p[14];
-            pp[2] = p[2] + p[13];
-            pp[3] = p[3] + p[12];
-            pp[4] = p[4] + p[11];
-            pp[5] = p[5] + p[10];
-            pp[6] = p[6] + p[9];
-            pp[7] = p[7] + p[8];
-            pp[8] = (p[0] - p[15])*cos1_32;
-            pp[9] = (p[1] - p[14])*cos3_32;
-            pp[10] = (p[2] - p[13])*cos5_32;
-            pp[11] = (p[3] - p[12])*cos7_32;
-            pp[12] = (p[4] - p[11])*cos9_32;
-            pp[13] = (p[5] - p[10])*cos11_32;
-            pp[14] = (p[6] - p[9])*cos13_32;
-            pp[15] = (p[7] - p[8])*cos15_32;
-
-            p[0] = pp[0] + pp[7];
-            p[1] = pp[1] + pp[6];
-            p[2] = pp[2] + pp[5];
-            p[3] = pp[3] + pp[4];
-            p[4] = (pp[0] - pp[7])*cos1_16;
-            p[5] = (pp[1] - pp[6])*cos3_16;
-            p[6] = (pp[2] - pp[5])*cos5_16;
-            p[7] = (pp[3] - pp[4])*cos7_16;
-            p[8] = pp[8] + pp[15];
-            p[9] = pp[9] + pp[14];
-            p[10] = pp[10] + pp[13];
-            p[11] = pp[11] + pp[12];
-            p[12] = (pp[8] - pp[15])*cos1_16;
-            p[13] = (pp[9] - pp[14])*cos3_16;
-            p[14] = (pp[10] - pp[13])*cos5_16;
-            p[15] = (pp[11] - pp[12])*cos7_16;
-
-            pp[0] = p[0] + p[3];
-            pp[1] = p[1] + p[2];
-            pp[2] = (p[0] - p[3])*cos1_8;
-            pp[3] = (p[1] - p[2])*cos3_8;
-            pp[4] = p[4] + p[7];
-            pp[5] = p[5] + p[6];
-            pp[6] = (p[4] - p[7])*cos1_8;
-            pp[7] = (p[5] - p[6])*cos3_8;
-            pp[8] = p[8] + p[11];
-            pp[9] = p[9] + p[10];
-            pp[10] = (p[8] - p[11])*cos1_8;
-            pp[11] = (p[9] - p[10])*cos3_8;
-            pp[12] = p[12] + p[15];
-            pp[13] = p[13] + p[14];
-            pp[14] = (p[12] - p[15])*cos1_8;
-            pp[15] = (p[13] - p[14])*cos3_8;
-
-            p[0] = pp[0] + pp[1];
-            p[1] = (pp[0] - pp[1])*cos1_4;
-            p[2] = pp[2] + pp[3];
-            p[3] = (pp[2] - pp[3])*cos1_4;
-            p[4] = pp[4] + pp[5];
-            p[5] = (pp[4] - pp[5])*cos1_4;
-            p[6] = pp[6] + pp[7];
-            p[7] = (pp[6] - pp[7])*cos1_4;
-            p[8] = pp[8] + pp[9];
-            p[9] = (pp[8] - pp[9])*cos1_4;
-            p[10] = pp[10] + pp[11];
-            p[11] = (pp[10] - pp[11])*cos1_4;
-            p[12] = pp[12] + pp[13];
-            p[13] = (pp[12] - pp[13])*cos1_4;
-            p[14] = pp[14] + pp[15];
-            p[15] = (pp[14] - pp[15])*cos1_4;
-
-            // manually doing something that a compiler should handle sucks
-            // coding like this is hard to read
-            float tmp2;
-            new_v[5] = (new_v[11] = (new_v[13] = (new_v[15] = p[15]) + p[7]) + p[11]) + p[5] + p[13];
-            new_v[7] = (new_v[9] = p[15] + p[11] + p[3]) + p[13];
-            new_v[33 - 17] = -(new_v[1] = (tmp1 = p[13] + p[15] + p[9]) + p[1]) - p[14];
-            new_v[35 - 17] = -(new_v[3] = tmp1 + p[5] + p[7]) - p[6] - p[14];
-
-            new_v[39 - 17] = (tmp1 = -p[10] - p[11] - p[14] - p[15]) - p[13] - p[2] - p[3];
-            new_v[37 - 17] = tmp1 - p[13] - p[5] - p[6] - p[7];
-            new_v[41 - 17] = tmp1 - p[12] - p[2] - p[3];
-            new_v[43 - 17] = tmp1 - p[12] - (tmp2 = p[4] + p[6] + p[7]);
-            new_v[47 - 17] = (tmp1 = -p[8] - p[12] - p[14] - p[15]) - p[0];
-            new_v[45 - 17] = tmp1 - tmp2;
-
-            // insert V[0-15] (== new_v[0-15]) into actual v:
-            x1 = new_v;
-            // float[] x2 = actual_v + actual_write_pos;
-            float[] dest = actual_v;
-
-            dest[0 + actual_write_pos] = x1[0];
-            dest[16 + actual_write_pos] = x1[1];
-            dest[32 + actual_write_pos] = x1[2];
-            dest[48 + actual_write_pos] = x1[3];
-            dest[64 + actual_write_pos] = x1[4];
-            dest[80 + actual_write_pos] = x1[5];
-            dest[96 + actual_write_pos] = x1[6];
-            dest[112 + actual_write_pos] = x1[7];
-            dest[128 + actual_write_pos] = x1[8];
-            dest[144 + actual_write_pos] = x1[9];
-            dest[160 + actual_write_pos] = x1[10];
-            dest[176 + actual_write_pos] = x1[11];
-            dest[192 + actual_write_pos] = x1[12];
-            dest[208 + actual_write_pos] = x1[13];
-            dest[224 + actual_write_pos] = x1[14];
-            dest[240 + actual_write_pos] = x1[15];
-
-            // V[16] is always 0.0:
-            dest[256 + actual_write_pos] = 0.0f;
-
-            // insert V[17-31] (== -new_v[15-1]) into actual v:
-            dest[272 + actual_write_pos] = -x1[15];
-            dest[288 + actual_write_pos] = -x1[14];
-            dest[304 + actual_write_pos] = -x1[13];
-            dest[320 + actual_write_pos] = -x1[12];
-            dest[336 + actual_write_pos] = -x1[11];
-            dest[352 + actual_write_pos] = -x1[10];
-            dest[368 + actual_write_pos] = -x1[9];
-            dest[384 + actual_write_pos] = -x1[8];
-            dest[400 + actual_write_pos] = -x1[7];
-            dest[416 + actual_write_pos] = -x1[6];
-            dest[432 + actual_write_pos] = -x1[5];
-            dest[448 + actual_write_pos] = -x1[4];
-            dest[464 + actual_write_pos] = -x1[3];
-            dest[480 + actual_write_pos] = -x1[2];
-            dest[496 + actual_write_pos] = -x1[1];
-
-            // insert V[32] (== -new_v[0]) into other v:
-        }
-
-        private void compute_pcm_samples0(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples0(ABuffer buffer) {
+            float[] vp = _ActualV;
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float pcm_sample;
-                float[] dp = d16[i];
-                pcm_sample =
-                    ((vp[0 + dvp]*dp[0]) + (vp[15 + dvp]*dp[1]) + (vp[14 + dvp]*dp[2]) + (vp[13 + dvp]*dp[3]) +
-                     (vp[12 + dvp]*dp[4]) + (vp[11 + dvp]*dp[5]) + (vp[10 + dvp]*dp[6]) + (vp[9 + dvp]*dp[7]) +
-                     (vp[8 + dvp]*dp[8]) + (vp[7 + dvp]*dp[9]) + (vp[6 + dvp]*dp[10]) + (vp[5 + dvp]*dp[11]) +
-                     (vp[4 + dvp]*dp[12]) + (vp[3 + dvp]*dp[13]) + (vp[2 + dvp]*dp[14]) + (vp[1 + dvp]*dp[15]))*
-                    scalefactor;
+            for (int i = 0; i < 32; i++) {
+                float pcSample;
+                float[] dp = _d16[i];
+                pcSample =
+                    (vp[0 + dvp] * dp[0] + vp[15 + dvp] * dp[1] + vp[14 + dvp] * dp[2] + vp[13 + dvp] * dp[3] +
+                     vp[12 + dvp] * dp[4] + vp[11 + dvp] * dp[5] + vp[10 + dvp] * dp[6] + vp[9 + dvp] * dp[7] +
+                     vp[8 + dvp] * dp[8] + vp[7 + dvp] * dp[9] + vp[6 + dvp] * dp[10] + vp[5 + dvp] * dp[11] +
+                     vp[4 + dvp] * dp[12] + vp[3 + dvp] * dp[13] + vp[2 + dvp] * dp[14] + vp[1 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples1(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples1(ABuffer buffer) {
+            float[] vp = _ActualV;
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[1 + dvp]*dp[0]) + (vp[0 + dvp]*dp[1]) + (vp[15 + dvp]*dp[2]) + (vp[14 + dvp]*dp[3]) +
-                     (vp[13 + dvp]*dp[4]) + (vp[12 + dvp]*dp[5]) + (vp[11 + dvp]*dp[6]) + (vp[10 + dvp]*dp[7]) +
-                     (vp[9 + dvp]*dp[8]) + (vp[8 + dvp]*dp[9]) + (vp[7 + dvp]*dp[10]) + (vp[6 + dvp]*dp[11]) +
-                     (vp[5 + dvp]*dp[12]) + (vp[4 + dvp]*dp[13]) + (vp[3 + dvp]*dp[14]) + (vp[2 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[1 + dvp] * dp[0] + vp[0 + dvp] * dp[1] + vp[15 + dvp] * dp[2] + vp[14 + dvp] * dp[3] +
+                     vp[13 + dvp] * dp[4] + vp[12 + dvp] * dp[5] + vp[11 + dvp] * dp[6] + vp[10 + dvp] * dp[7] +
+                     vp[9 + dvp] * dp[8] + vp[8 + dvp] * dp[9] + vp[7 + dvp] * dp[10] + vp[6 + dvp] * dp[11] +
+                     vp[5 + dvp] * dp[12] + vp[4 + dvp] * dp[13] + vp[3 + dvp] * dp[14] + vp[2 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples2(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples2(ABuffer buffer) {
+            float[] vp = _ActualV;
 
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[2 + dvp]*dp[0]) + (vp[1 + dvp]*dp[1]) + (vp[0 + dvp]*dp[2]) + (vp[15 + dvp]*dp[3]) +
-                     (vp[14 + dvp]*dp[4]) + (vp[13 + dvp]*dp[5]) + (vp[12 + dvp]*dp[6]) + (vp[11 + dvp]*dp[7]) +
-                     (vp[10 + dvp]*dp[8]) + (vp[9 + dvp]*dp[9]) + (vp[8 + dvp]*dp[10]) + (vp[7 + dvp]*dp[11]) +
-                     (vp[6 + dvp]*dp[12]) + (vp[5 + dvp]*dp[13]) + (vp[4 + dvp]*dp[14]) + (vp[3 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[2 + dvp] * dp[0] + vp[1 + dvp] * dp[1] + vp[0 + dvp] * dp[2] + vp[15 + dvp] * dp[3] +
+                     vp[14 + dvp] * dp[4] + vp[13 + dvp] * dp[5] + vp[12 + dvp] * dp[6] + vp[11 + dvp] * dp[7] +
+                     vp[10 + dvp] * dp[8] + vp[9 + dvp] * dp[9] + vp[8 + dvp] * dp[10] + vp[7 + dvp] * dp[11] +
+                     vp[6 + dvp] * dp[12] + vp[5 + dvp] * dp[13] + vp[4 + dvp] * dp[14] + vp[3 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
-
-                dvp += 16;
-            }
-            // for
-        }
-
-        private void compute_pcm_samples3(ABuffer buffer)
-        {
-            float[] vp = actual_v;
-
-            float[] tmpOut = _tmpOut;
-            int dvp = 0;
-
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample = ((vp[3 + dvp]*dp[0]) + (vp[2 + dvp]*dp[1]) + (vp[1 + dvp]*dp[2]) + (vp[0 + dvp]*dp[3]) +
-                                    (vp[15 + dvp]*dp[4]) + (vp[14 + dvp]*dp[5]) + (vp[13 + dvp]*dp[6]) + (vp[12 + dvp]*dp[7]) +
-                                    (vp[11 + dvp]*dp[8]) + (vp[10 + dvp]*dp[9]) + (vp[9 + dvp]*dp[10]) + (vp[8 + dvp]*dp[11]) +
-                                    (vp[7 + dvp]*dp[12]) + (vp[6 + dvp]*dp[13]) + (vp[5 + dvp]*dp[14]) + (vp[4 + dvp]*dp[15]))*
-                                   scalefactor;
-
-                tmpOut[i] = pcm_sample;
-
-                dvp += 16;
-            }
-        }
-
-        private void compute_pcm_samples4(ABuffer buffer)
-        {
-            float[] vp = actual_v;
-
-            float[] tmpOut = _tmpOut;
-            int dvp = 0;
-
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample = ((vp[4 + dvp]*dp[0]) + (vp[3 + dvp]*dp[1]) + (vp[2 + dvp]*dp[2]) + (vp[1 + dvp]*dp[3]) +
-                                    (vp[0 + dvp]*dp[4]) + (vp[15 + dvp]*dp[5]) + (vp[14 + dvp]*dp[6]) + (vp[13 + dvp]*dp[7]) +
-                                    (vp[12 + dvp]*dp[8]) + (vp[11 + dvp]*dp[9]) + (vp[10 + dvp]*dp[10]) + (vp[9 + dvp]*dp[11]) +
-                                    (vp[8 + dvp]*dp[12]) + (vp[7 + dvp]*dp[13]) + (vp[6 + dvp]*dp[14]) + (vp[5 + dvp]*dp[15]))*
-                                   scalefactor;
-
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples5(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples3(ABuffer buffer) {
+            float[] vp = _ActualV;
 
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample = ((vp[5 + dvp]*dp[0]) + (vp[4 + dvp]*dp[1]) + (vp[3 + dvp]*dp[2]) + (vp[2 + dvp]*dp[3]) +
-                                    (vp[1 + dvp]*dp[4]) + (vp[0 + dvp]*dp[5]) + (vp[15 + dvp]*dp[6]) + (vp[14 + dvp]*dp[7]) +
-                                    (vp[13 + dvp]*dp[8]) + (vp[12 + dvp]*dp[9]) + (vp[11 + dvp]*dp[10]) + (vp[10 + dvp]*dp[11]) +
-                                    (vp[9 + dvp]*dp[12]) + (vp[8 + dvp]*dp[13]) + (vp[7 + dvp]*dp[14]) + (vp[6 + dvp]*dp[15]))*
-                                   scalefactor;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample = (vp[3 + dvp] * dp[0] + vp[2 + dvp] * dp[1] + vp[1 + dvp] * dp[2] + vp[0 + dvp] * dp[3] +
+                                   vp[15 + dvp] * dp[4] + vp[14 + dvp] * dp[5] + vp[13 + dvp] * dp[6] + vp[12 + dvp] * dp[7] +
+                                   vp[11 + dvp] * dp[8] + vp[10 + dvp] * dp[9] + vp[9 + dvp] * dp[10] + vp[8 + dvp] * dp[11] +
+                                   vp[7 + dvp] * dp[12] + vp[6 + dvp] * dp[13] + vp[5 + dvp] * dp[14] + vp[4 + dvp] * dp[15]) *
+                                  _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
+
+                dvp += 16;
+            }
+        }
+
+        private void compute_pc_samples4(ABuffer buffer) {
+            float[] vp = _ActualV;
+
+            float[] tmpOut = _TmpOut;
+            int dvp = 0;
+
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample = (vp[4 + dvp] * dp[0] + vp[3 + dvp] * dp[1] + vp[2 + dvp] * dp[2] + vp[1 + dvp] * dp[3] +
+                                   vp[0 + dvp] * dp[4] + vp[15 + dvp] * dp[5] + vp[14 + dvp] * dp[6] + vp[13 + dvp] * dp[7] +
+                                   vp[12 + dvp] * dp[8] + vp[11 + dvp] * dp[9] + vp[10 + dvp] * dp[10] + vp[9 + dvp] * dp[11] +
+                                   vp[8 + dvp] * dp[12] + vp[7 + dvp] * dp[13] + vp[6 + dvp] * dp[14] + vp[5 + dvp] * dp[15]) *
+                                  _Scalefactor;
+
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples6(ABuffer buffer)
-        {
-            float[] vp = actual_v;
-            float[] tmpOut = _tmpOut;
+        private void compute_pc_samples5(ABuffer buffer) {
+            float[] vp = _ActualV;
+
+            float[] tmpOut = _TmpOut;
+            int dvp = 0;
+
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample = (vp[5 + dvp] * dp[0] + vp[4 + dvp] * dp[1] + vp[3 + dvp] * dp[2] + vp[2 + dvp] * dp[3] +
+                                   vp[1 + dvp] * dp[4] + vp[0 + dvp] * dp[5] + vp[15 + dvp] * dp[6] + vp[14 + dvp] * dp[7] +
+                                   vp[13 + dvp] * dp[8] + vp[12 + dvp] * dp[9] + vp[11 + dvp] * dp[10] + vp[10 + dvp] * dp[11] +
+                                   vp[9 + dvp] * dp[12] + vp[8 + dvp] * dp[13] + vp[7 + dvp] * dp[14] + vp[6 + dvp] * dp[15]) *
+                                  _Scalefactor;
+
+                tmpOut[i] = pcSample;
+
+                dvp += 16;
+            }
+            // for
+        }
+
+        private void compute_pc_samples6(ABuffer buffer) {
+            float[] vp = _ActualV;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample = ((vp[6 + dvp]*dp[0]) + (vp[5 + dvp]*dp[1]) + (vp[4 + dvp]*dp[2]) + (vp[3 + dvp]*dp[3]) +
-                                    (vp[2 + dvp]*dp[4]) + (vp[1 + dvp]*dp[5]) + (vp[0 + dvp]*dp[6]) + (vp[15 + dvp]*dp[7]) +
-                                    (vp[14 + dvp]*dp[8]) + (vp[13 + dvp]*dp[9]) + (vp[12 + dvp]*dp[10]) + (vp[11 + dvp]*dp[11]) +
-                                    (vp[10 + dvp]*dp[12]) + (vp[9 + dvp]*dp[13]) + (vp[8 + dvp]*dp[14]) + (vp[7 + dvp]*dp[15]))*
-                                   scalefactor;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample = (vp[6 + dvp] * dp[0] + vp[5 + dvp] * dp[1] + vp[4 + dvp] * dp[2] + vp[3 + dvp] * dp[3] +
+                                   vp[2 + dvp] * dp[4] + vp[1 + dvp] * dp[5] + vp[0 + dvp] * dp[6] + vp[15 + dvp] * dp[7] +
+                                   vp[14 + dvp] * dp[8] + vp[13 + dvp] * dp[9] + vp[12 + dvp] * dp[10] + vp[11 + dvp] * dp[11] +
+                                   vp[10 + dvp] * dp[12] + vp[9 + dvp] * dp[13] + vp[8 + dvp] * dp[14] + vp[7 + dvp] * dp[15]) *
+                                  _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples7(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples7(ABuffer buffer) {
+            float[] vp = _ActualV;
 
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[7 + dvp]*dp[0]) + (vp[6 + dvp]*dp[1]) + (vp[5 + dvp]*dp[2]) + (vp[4 + dvp]*dp[3]) +
-                     (vp[3 + dvp]*dp[4]) + (vp[2 + dvp]*dp[5]) + (vp[1 + dvp]*dp[6]) + (vp[0 + dvp]*dp[7]) +
-                     (vp[15 + dvp]*dp[8]) + (vp[14 + dvp]*dp[9]) + (vp[13 + dvp]*dp[10]) + (vp[12 + dvp]*dp[11]) +
-                     (vp[11 + dvp]*dp[12]) + (vp[10 + dvp]*dp[13]) + (vp[9 + dvp]*dp[14]) + (vp[8 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[7 + dvp] * dp[0] + vp[6 + dvp] * dp[1] + vp[5 + dvp] * dp[2] + vp[4 + dvp] * dp[3] +
+                     vp[3 + dvp] * dp[4] + vp[2 + dvp] * dp[5] + vp[1 + dvp] * dp[6] + vp[0 + dvp] * dp[7] +
+                     vp[15 + dvp] * dp[8] + vp[14 + dvp] * dp[9] + vp[13 + dvp] * dp[10] + vp[12 + dvp] * dp[11] +
+                     vp[11 + dvp] * dp[12] + vp[10 + dvp] * dp[13] + vp[9 + dvp] * dp[14] + vp[8 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples8(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples8(ABuffer buffer) {
+            float[] vp = _ActualV;
 
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[8 + dvp]*dp[0]) + (vp[7 + dvp]*dp[1]) + (vp[6 + dvp]*dp[2]) + (vp[5 + dvp]*dp[3]) +
-                     (vp[4 + dvp]*dp[4]) + (vp[3 + dvp]*dp[5]) + (vp[2 + dvp]*dp[6]) + (vp[1 + dvp]*dp[7]) +
-                     (vp[0 + dvp]*dp[8]) + (vp[15 + dvp]*dp[9]) + (vp[14 + dvp]*dp[10]) + (vp[13 + dvp]*dp[11]) +
-                     (vp[12 + dvp]*dp[12]) + (vp[11 + dvp]*dp[13]) + (vp[10 + dvp]*dp[14]) + (vp[9 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[8 + dvp] * dp[0] + vp[7 + dvp] * dp[1] + vp[6 + dvp] * dp[2] + vp[5 + dvp] * dp[3] +
+                     vp[4 + dvp] * dp[4] + vp[3 + dvp] * dp[5] + vp[2 + dvp] * dp[6] + vp[1 + dvp] * dp[7] +
+                     vp[0 + dvp] * dp[8] + vp[15 + dvp] * dp[9] + vp[14 + dvp] * dp[10] + vp[13 + dvp] * dp[11] +
+                     vp[12 + dvp] * dp[12] + vp[11 + dvp] * dp[13] + vp[10 + dvp] * dp[14] + vp[9 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples9(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples9(ABuffer buffer) {
+            float[] vp = _ActualV;
 
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[9 + dvp]*dp[0]) + (vp[8 + dvp]*dp[1]) + (vp[7 + dvp]*dp[2]) + (vp[6 + dvp]*dp[3]) +
-                     (vp[5 + dvp]*dp[4]) + (vp[4 + dvp]*dp[5]) + (vp[3 + dvp]*dp[6]) + (vp[2 + dvp]*dp[7]) +
-                     (vp[1 + dvp]*dp[8]) + (vp[0 + dvp]*dp[9]) + (vp[15 + dvp]*dp[10]) + (vp[14 + dvp]*dp[11]) +
-                     (vp[13 + dvp]*dp[12]) + (vp[12 + dvp]*dp[13]) + (vp[11 + dvp]*dp[14]) + (vp[10 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[9 + dvp] * dp[0] + vp[8 + dvp] * dp[1] + vp[7 + dvp] * dp[2] + vp[6 + dvp] * dp[3] +
+                     vp[5 + dvp] * dp[4] + vp[4 + dvp] * dp[5] + vp[3 + dvp] * dp[6] + vp[2 + dvp] * dp[7] +
+                     vp[1 + dvp] * dp[8] + vp[0 + dvp] * dp[9] + vp[15 + dvp] * dp[10] + vp[14 + dvp] * dp[11] +
+                     vp[13 + dvp] * dp[12] + vp[12 + dvp] * dp[13] + vp[11 + dvp] * dp[14] + vp[10 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples10(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples10(ABuffer buffer) {
+            float[] vp = _ActualV;
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[10 + dvp]*dp[0]) + (vp[9 + dvp]*dp[1]) + (vp[8 + dvp]*dp[2]) + (vp[7 + dvp]*dp[3]) +
-                     (vp[6 + dvp]*dp[4]) + (vp[5 + dvp]*dp[5]) + (vp[4 + dvp]*dp[6]) + (vp[3 + dvp]*dp[7]) +
-                     (vp[2 + dvp]*dp[8]) + (vp[1 + dvp]*dp[9]) + (vp[0 + dvp]*dp[10]) + (vp[15 + dvp]*dp[11]) +
-                     (vp[14 + dvp]*dp[12]) + (vp[13 + dvp]*dp[13]) + (vp[12 + dvp]*dp[14]) + (vp[11 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[10 + dvp] * dp[0] + vp[9 + dvp] * dp[1] + vp[8 + dvp] * dp[2] + vp[7 + dvp] * dp[3] +
+                     vp[6 + dvp] * dp[4] + vp[5 + dvp] * dp[5] + vp[4 + dvp] * dp[6] + vp[3 + dvp] * dp[7] +
+                     vp[2 + dvp] * dp[8] + vp[1 + dvp] * dp[9] + vp[0 + dvp] * dp[10] + vp[15 + dvp] * dp[11] +
+                     vp[14 + dvp] * dp[12] + vp[13 + dvp] * dp[13] + vp[12 + dvp] * dp[14] + vp[11 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples11(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples11(ABuffer buffer) {
+            float[] vp = _ActualV;
 
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[11 + dvp]*dp[0]) + (vp[10 + dvp]*dp[1]) + (vp[9 + dvp]*dp[2]) + (vp[8 + dvp]*dp[3]) +
-                     (vp[7 + dvp]*dp[4]) + (vp[6 + dvp]*dp[5]) + (vp[5 + dvp]*dp[6]) + (vp[4 + dvp]*dp[7]) +
-                     (vp[3 + dvp]*dp[8]) + (vp[2 + dvp]*dp[9]) + (vp[1 + dvp]*dp[10]) + (vp[0 + dvp]*dp[11]) +
-                     (vp[15 + dvp]*dp[12]) + (vp[14 + dvp]*dp[13]) + (vp[13 + dvp]*dp[14]) + (vp[12 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[11 + dvp] * dp[0] + vp[10 + dvp] * dp[1] + vp[9 + dvp] * dp[2] + vp[8 + dvp] * dp[3] +
+                     vp[7 + dvp] * dp[4] + vp[6 + dvp] * dp[5] + vp[5 + dvp] * dp[6] + vp[4 + dvp] * dp[7] +
+                     vp[3 + dvp] * dp[8] + vp[2 + dvp] * dp[9] + vp[1 + dvp] * dp[10] + vp[0 + dvp] * dp[11] +
+                     vp[15 + dvp] * dp[12] + vp[14 + dvp] * dp[13] + vp[13 + dvp] * dp[14] + vp[12 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples12(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples12(ABuffer buffer) {
+            float[] vp = _ActualV;
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[12 + dvp]*dp[0]) + (vp[11 + dvp]*dp[1]) + (vp[10 + dvp]*dp[2]) + (vp[9 + dvp]*dp[3]) +
-                     (vp[8 + dvp]*dp[4]) + (vp[7 + dvp]*dp[5]) + (vp[6 + dvp]*dp[6]) + (vp[5 + dvp]*dp[7]) +
-                     (vp[4 + dvp]*dp[8]) + (vp[3 + dvp]*dp[9]) + (vp[2 + dvp]*dp[10]) + (vp[1 + dvp]*dp[11]) +
-                     (vp[0 + dvp]*dp[12]) + (vp[15 + dvp]*dp[13]) + (vp[14 + dvp]*dp[14]) + (vp[13 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[12 + dvp] * dp[0] + vp[11 + dvp] * dp[1] + vp[10 + dvp] * dp[2] + vp[9 + dvp] * dp[3] +
+                     vp[8 + dvp] * dp[4] + vp[7 + dvp] * dp[5] + vp[6 + dvp] * dp[6] + vp[5 + dvp] * dp[7] +
+                     vp[4 + dvp] * dp[8] + vp[3 + dvp] * dp[9] + vp[2 + dvp] * dp[10] + vp[1 + dvp] * dp[11] +
+                     vp[0 + dvp] * dp[12] + vp[15 + dvp] * dp[13] + vp[14 + dvp] * dp[14] + vp[13 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples13(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples13(ABuffer buffer) {
+            float[] vp = _ActualV;
 
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[13 + dvp]*dp[0]) + (vp[12 + dvp]*dp[1]) + (vp[11 + dvp]*dp[2]) + (vp[10 + dvp]*dp[3]) +
-                     (vp[9 + dvp]*dp[4]) + (vp[8 + dvp]*dp[5]) + (vp[7 + dvp]*dp[6]) + (vp[6 + dvp]*dp[7]) +
-                     (vp[5 + dvp]*dp[8]) + (vp[4 + dvp]*dp[9]) + (vp[3 + dvp]*dp[10]) + (vp[2 + dvp]*dp[11]) +
-                     (vp[1 + dvp]*dp[12]) + (vp[0 + dvp]*dp[13]) + (vp[15 + dvp]*dp[14]) + (vp[14 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[13 + dvp] * dp[0] + vp[12 + dvp] * dp[1] + vp[11 + dvp] * dp[2] + vp[10 + dvp] * dp[3] +
+                     vp[9 + dvp] * dp[4] + vp[8 + dvp] * dp[5] + vp[7 + dvp] * dp[6] + vp[6 + dvp] * dp[7] +
+                     vp[5 + dvp] * dp[8] + vp[4 + dvp] * dp[9] + vp[3 + dvp] * dp[10] + vp[2 + dvp] * dp[11] +
+                     vp[1 + dvp] * dp[12] + vp[0 + dvp] * dp[13] + vp[15 + dvp] * dp[14] + vp[14 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples14(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void compute_pc_samples14(ABuffer buffer) {
+            float[] vp = _ActualV;
 
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float[] dp = d16[i];
-                float pcm_sample;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample;
 
-                pcm_sample =
-                    ((vp[14 + dvp]*dp[0]) + (vp[13 + dvp]*dp[1]) + (vp[12 + dvp]*dp[2]) + (vp[11 + dvp]*dp[3]) +
-                     (vp[10 + dvp]*dp[4]) + (vp[9 + dvp]*dp[5]) + (vp[8 + dvp]*dp[6]) + (vp[7 + dvp]*dp[7]) +
-                     (vp[6 + dvp]*dp[8]) + (vp[5 + dvp]*dp[9]) + (vp[4 + dvp]*dp[10]) + (vp[3 + dvp]*dp[11]) +
-                     (vp[2 + dvp]*dp[12]) + (vp[1 + dvp]*dp[13]) + (vp[0 + dvp]*dp[14]) + (vp[15 + dvp]*dp[15]))*
-                    scalefactor;
+                pcSample =
+                    (vp[14 + dvp] * dp[0] + vp[13 + dvp] * dp[1] + vp[12 + dvp] * dp[2] + vp[11 + dvp] * dp[3] +
+                     vp[10 + dvp] * dp[4] + vp[9 + dvp] * dp[5] + vp[8 + dvp] * dp[6] + vp[7 + dvp] * dp[7] +
+                     vp[6 + dvp] * dp[8] + vp[5 + dvp] * dp[9] + vp[4 + dvp] * dp[10] + vp[3 + dvp] * dp[11] +
+                     vp[2 + dvp] * dp[12] + vp[1 + dvp] * dp[13] + vp[0 + dvp] * dp[14] + vp[15 + dvp] * dp[15]) *
+                    _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
 
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples15(ABuffer buffer)
-        {
-            float[] vp = actual_v;
+        private void Compute_pc_samples15(ABuffer buffer) {
+            float[] vp = _ActualV;
 
             //int inc = v_inc;
-            float[] tmpOut = _tmpOut;
+            float[] tmpOut = _TmpOut;
             int dvp = 0;
 
             // fat chance of having this loop unroll
-            for (int i = 0; i < 32; i++)
-            {
-                float pcm_sample;
-                float[] dp = d16[i];
-                pcm_sample =
-                    ((vp[15 + dvp]*dp[0]) + (vp[14 + dvp]*dp[1]) + (vp[13 + dvp]*dp[2]) + (vp[12 + dvp]*dp[3]) +
-                     (vp[11 + dvp]*dp[4]) + (vp[10 + dvp]*dp[5]) + (vp[9 + dvp]*dp[6]) + (vp[8 + dvp]*dp[7]) +
-                     (vp[7 + dvp]*dp[8]) + (vp[6 + dvp]*dp[9]) + (vp[5 + dvp]*dp[10]) + (vp[4 + dvp]*dp[11]) +
-                     (vp[3 + dvp]*dp[12]) + (vp[2 + dvp]*dp[13]) + (vp[1 + dvp]*dp[14]) + (vp[0 + dvp]*dp[15]))*
-                    scalefactor;
+            for (int i = 0; i < 32; i++) {
+                float[] dp = _d16[i];
+                float pcSample = (vp[15 + dvp] * dp[0] + vp[14 + dvp] * dp[1] + vp[13 + dvp] * dp[2] + vp[12 + dvp] * dp[3] +
+                                  vp[11 + dvp] * dp[4] + vp[10 + dvp] * dp[5] + vp[9 + dvp] * dp[6] + vp[8 + dvp] * dp[7] +
+                                  vp[7 + dvp] * dp[8] + vp[6 + dvp] * dp[9] + vp[5 + dvp] * dp[10] + vp[4 + dvp] * dp[11] +
+                                  vp[3 + dvp] * dp[12] + vp[2 + dvp] * dp[13] + vp[1 + dvp] * dp[14] + vp[0 + dvp] * dp[15]) *
+                                 _Scalefactor;
 
-                tmpOut[i] = pcm_sample;
+                tmpOut[i] = pcSample;
                 dvp += 16;
             }
             // for
         }
 
-        private void compute_pcm_samples(ABuffer buffer)
-        {
-            switch (actual_write_pos)
-            {
+        private void compute_pc_samples(ABuffer buffer) {
+            switch (_ActualWritePos) {
                 case 0:
-                    compute_pcm_samples0(buffer);
+                    compute_pc_samples0(buffer);
                     break;
 
                 case 1:
-                    compute_pcm_samples1(buffer);
+                    compute_pc_samples1(buffer);
                     break;
 
                 case 2:
-                    compute_pcm_samples2(buffer);
+                    compute_pc_samples2(buffer);
                     break;
 
                 case 3:
-                    compute_pcm_samples3(buffer);
+                    compute_pc_samples3(buffer);
                     break;
 
                 case 4:
-                    compute_pcm_samples4(buffer);
+                    compute_pc_samples4(buffer);
                     break;
 
                 case 5:
-                    compute_pcm_samples5(buffer);
+                    compute_pc_samples5(buffer);
                     break;
 
                 case 6:
-                    compute_pcm_samples6(buffer);
+                    compute_pc_samples6(buffer);
                     break;
 
                 case 7:
-                    compute_pcm_samples7(buffer);
+                    compute_pc_samples7(buffer);
                     break;
 
                 case 8:
-                    compute_pcm_samples8(buffer);
+                    compute_pc_samples8(buffer);
                     break;
 
                 case 9:
-                    compute_pcm_samples9(buffer);
+                    compute_pc_samples9(buffer);
                     break;
 
                 case 10:
-                    compute_pcm_samples10(buffer);
+                    compute_pc_samples10(buffer);
                     break;
 
                 case 11:
-                    compute_pcm_samples11(buffer);
+                    compute_pc_samples11(buffer);
                     break;
 
                 case 12:
-                    compute_pcm_samples12(buffer);
+                    compute_pc_samples12(buffer);
                     break;
 
                 case 13:
-                    compute_pcm_samples13(buffer);
+                    compute_pc_samples13(buffer);
                     break;
 
                 case 14:
-                    compute_pcm_samples14(buffer);
+                    compute_pc_samples14(buffer);
                     break;
 
                 case 15:
-                    compute_pcm_samples15(buffer);
+                    Compute_pc_samples15(buffer);
                     break;
             }
 
-            if (buffer != null)
-            {
-                buffer.AppendSamples(m_ChannelIndex, _tmpOut);
-            }
+            buffer?.AppendSamples(_Channel, _TmpOut);
         }
 
         /// <summary>
-        ///     Calculate 32 PCM samples and put the into the Obuffer-object.
+        /// Calculate 32 PCM samples and put the into the Obuffer-object.
         /// </summary>
-        public void calculate_pcm_samples(ABuffer buffer)
-        {
-            compute_new_v();
-            compute_pcm_samples(buffer);
+        internal void calculate_pc_samples(ABuffer buffer) {
+            ComputeNewValues();
+            compute_pc_samples(buffer);
 
-            actual_write_pos = (actual_write_pos + 1) & 0xf;
-            actual_v = (actual_v == v1) ? v2 : v1;
+            _ActualWritePos = (_ActualWritePos + 1) & 0xf;
+            _ActualV = _ActualV == _V1 ? _V2 : _V1;
 
-            // initialize samples[]:	
+            // initialize samples[]:
             //for (register float *floatp = samples + 32; floatp > samples; )
             // *--floatp = 0.0f;  
 
             // MDM: this may not be necessary. The Layer III decoder always
             // outputs 32 subband samples, but I haven't checked layer I & II.
             for (int p = 0; p < 32; p++)
-                m_SubbandSamples[p] = 0.0f;
+                _Samples[p] = 0.0f;
         }
 
         /// <summary>
-        ///     Loads the data for the d[] from the resource SFd.ser.
+        /// Converts a 1D array into a number of smaller arrays. This is used
+        /// to achieve offset + constant indexing into an array. Each sub-array
+        /// represents a block of values of the original array.
         /// </summary>
-        /// <returns>
-        ///     the loaded values for d[].
-        /// </returns>
-        private static float[] load_d()
-        {
-            // As we can't use the Java serialized resource, we use the copy graciously provided to us below.
-            return null;
-        }
-
-        /// <summary>
-        ///     Converts a 1D array into a number of smaller arrays. This is used
-        ///     to achieve offset + constant indexing into an array. Each sub-array
-        ///     represents a block of values of the original array.
-        /// </summary>
-        /// <param name="array			The">
-        ///     array to split up into blocks.
+        /// <param name="array">
+        /// The array to split up into blocks.
         /// </param>
-        /// <param name="blockSize		The">
-        ///     size of the blocks to split the array
-        ///     into. This must be an exact divisor of
-        ///     the length of the array, or some data
-        ///     will be lost from the main array.
+        /// <param name="blockSize">
+        /// The size of the blocks to split the array
+        /// into. This must be an exact divisor of
+        /// the length of the array, or some data
+        /// will be lost from the main array.
         /// </param>
         /// <returns>
-        ///     An array of arrays in which each element in the returned
-        ///     array will be of length blockSize.
+        /// An array of arrays in which each element in the returned
+        /// array will be of length blockSize.
         /// </returns>
-        private static float[][] splitArray(float[] array, int blockSize)
-        {
-            int size = array.Length/blockSize;
+        private static float[][] SplitArray(float[] array, int blockSize) {
+            int size = array.Length / blockSize;
             float[][] split = new float[size][];
-            for (int i = 0; i < size; i++)
-            {
-                split[i] = subArray(array, i*blockSize, blockSize);
+            for (int i = 0; i < size; i++) {
+                split[i] = SubArray(array, i * blockSize, blockSize);
             }
             return split;
         }
 
-        private static float[] subArray(float[] array, int offs, int len)
-        {
-            if (offs + len > array.Length)
-            {
+        private static float[] SubArray(float[] array, int offs, int len) {
+            if (offs + len > array.Length) {
                 len = array.Length - offs;
             }
 
@@ -1461,8 +1121,7 @@ namespace MP3Sharp.Decoding
                 len = 0;
 
             float[] subarray = new float[len];
-            for (int i = 0; i < len; i++)
-            {
+            for (int i = 0; i < len; i++) {
                 subarray[i] = array[offs + i];
             }
 

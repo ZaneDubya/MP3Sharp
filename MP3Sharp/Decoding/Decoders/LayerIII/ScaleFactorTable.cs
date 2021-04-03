@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * ScaleFactorTable.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,36 +14,29 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decoding.Decoders.LayerIII
-{
-    internal class ScaleFactorTable
-    {
-        private LayerIIIDecoder enclosingInstance;
-        public int[] l;
-        public int[] s;
+namespace MP3Sharp.Decoding.Decoders.LayerIII {
+    public class ScaleFactorTable {
+        internal int[] L;
+        internal int[] S;
 
-        public ScaleFactorTable(LayerIIIDecoder enclosingInstance)
-        {
+        private LayerIIIDecoder _EnclosingInstance;
+
+        internal ScaleFactorTable(LayerIIIDecoder enclosingInstance) {
             InitBlock(enclosingInstance);
-            l = new int[5];
-            s = new int[3];
+            L = new int[5];
+            S = new int[3];
         }
 
-        public ScaleFactorTable(LayerIIIDecoder enclosingInstance, int[] thel, int[] thes)
-        {
+        internal ScaleFactorTable(LayerIIIDecoder enclosingInstance, int[] thel, int[] thes) {
             InitBlock(enclosingInstance);
-            l = thel;
-            s = thes;
+            L = thel;
+            S = thes;
         }
 
-        public LayerIIIDecoder Enclosing_Instance
-        {
-            get { return enclosingInstance; }
-        }
+        internal LayerIIIDecoder EnclosingInstance => _EnclosingInstance;
 
-        private void InitBlock(LayerIIIDecoder enclosingInstance)
-        {
-            this.enclosingInstance = enclosingInstance;
+        private void InitBlock(LayerIIIDecoder enclosingInstance) {
+            _EnclosingInstance = enclosingInstance;
         }
     }
 }

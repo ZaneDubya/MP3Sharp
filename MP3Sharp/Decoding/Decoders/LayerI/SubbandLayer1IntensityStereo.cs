@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * SubbandLayer1IntensityStereo.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,74 +14,44 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decoding.Decoders.LayerI
-{
+namespace MP3Sharp.Decoding.Decoders.LayerI {
     /// <summary>
-    ///     Class for layer I subbands in joint stereo mode.
+    /// public class for layer I subbands in joint stereo mode.
     /// </summary>
-    internal class SubbandLayer1IntensityStereo : SubbandLayer1
-    {
-        protected internal float channel2_scalefactor;
+    public class SubbandLayer1IntensityStereo : SubbandLayer1 {
+        protected float Channel2Scalefactor;
+
+        internal SubbandLayer1IntensityStereo(int subbandnumber)
+            : base(subbandnumber) { }
 
         /// <summary>
-        ///     Constructor
+        /// *
         /// </summary>
-        public SubbandLayer1IntensityStereo(int subbandnumber)
-            : base(subbandnumber)
-        {
-        }
-
-        /// <summary>
-        ///     *
-        /// </summary>
-        public override void ReadBitAllocation(Bitstream stream, Header header, Crc16 crc)
-        {
-            base.ReadBitAllocation(stream, header, crc);
-        }
-
-        /// <summary>
-        ///     *
-        /// </summary>
-        public override void ReadScaleFactor(Bitstream stream, Header header)
-        {
-            if (allocation != 0)
-            {
-                scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
-                channel2_scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
+        internal override void ReadScaleFactor(Bitstream stream, Header header) {
+            if (Allocation != 0) {
+                Scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
+                Channel2Scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
             }
         }
 
         /// <summary>
-        ///     *
+        /// *
         /// </summary>
-        public override bool ReadSampleData(Bitstream stream)
-        {
-            return base.ReadSampleData(stream);
-        }
-
-        /// <summary>
-        ///     *
-        /// </summary>
-        public override bool PutNextSample(int channels, SynthesisFilter filter1, SynthesisFilter filter2)
-        {
-            if (allocation != 0)
-            {
-                sample = sample * factor + offset; // requantization
-                if (channels == OutputChannels.BOTH_CHANNELS)
-                {
-                    float sample1 = sample * scalefactor, sample2 = sample * channel2_scalefactor;
-                    filter1.WriteSample(sample1, subbandnumber);
-                    filter2.WriteSample(sample2, subbandnumber);
+        internal override bool PutNextSample(int channels, SynthesisFilter filter1, SynthesisFilter filter2) {
+            if (Allocation != 0) {
+                Sample = Sample * Factor + Offset; // requantization
+                if (channels == OutputChannels.BOTH_CHANNELS) {
+                    float sample1 = Sample * Scalefactor, sample2 = Sample * Channel2Scalefactor;
+                    filter1.AddSample(sample1, Subbandnumber);
+                    filter2.AddSample(sample2, Subbandnumber);
                 }
-                else if (channels == OutputChannels.LEFT_CHANNEL)
-                {
-                    float sample1 = sample * scalefactor;
-                    filter1.WriteSample(sample1, subbandnumber);
+                else if (channels == OutputChannels.LEFT_CHANNEL) {
+                    float sample1 = Sample * Scalefactor;
+                    filter1.AddSample(sample1, Subbandnumber);
                 }
-                else
-                {
-                    float sample2 = sample * channel2_scalefactor;
-                    filter1.WriteSample(sample2, subbandnumber);
+                else {
+                    float sample2 = Sample * Channel2Scalefactor;
+                    filter1.AddSample(sample2, Subbandnumber);
                 }
             }
             return true;

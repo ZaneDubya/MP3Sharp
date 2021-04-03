@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * OutputChannels.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -16,128 +16,113 @@
 
 using System;
 
-namespace MP3Sharp.Decoding
-{
+namespace MP3Sharp.Decoding {
     /// <summary>
-    ///     A Type-safe representation of the the supported output channel
-    ///     constants. This class is immutable and, hence, is thread safe.
+    /// A Type-safe representation of the the supported output channel
+    /// constants. This class is immutable and, hence, is thread safe.
     /// </summary>
     /// <author>
-    ///     Mat McGowan
+    /// Mat McGowan
     /// </author>
-    internal class OutputChannels
-    {
+    public class OutputChannels {
         /// <summary>
-        ///     Flag to indicate output should include both channels.
+        /// Flag to indicate output should include both channels.
         /// </summary>
-        public static int BOTH_CHANNELS = 0;
-
-        /// <summary>
-        ///     Flag to indicate output should include the left channel only.
-        /// </summary>
-        public static int LEFT_CHANNEL = 1;
+        internal const int BOTH_CHANNELS = 0;
 
         /// <summary>
-        ///     Flag to indicate output should include the right channel only.
+        /// Flag to indicate output should include the left channel only.
         /// </summary>
-        public static int RIGHT_CHANNEL = 2;
+        internal const int LEFT_CHANNEL = 1;
 
         /// <summary>
-        ///     Flag to indicate output is mono.
+        /// Flag to indicate output should include the right channel only.
         /// </summary>
-        public static int DOWNMIX_CHANNELS = 3;
+        internal const int RIGHT_CHANNEL = 2;
 
-        public static readonly OutputChannels LEFT = new OutputChannels(LEFT_CHANNEL);
-        public static readonly OutputChannels RIGHT = new OutputChannels(RIGHT_CHANNEL);
-        public static readonly OutputChannels BOTH = new OutputChannels(BOTH_CHANNELS);
-        public static readonly OutputChannels DOWNMIX = new OutputChannels(DOWNMIX_CHANNELS);
-        private readonly int outputChannels;
+        /// <summary>
+        /// Flag to indicate output is mono.
+        /// </summary>
+        internal const int DOWNMIX_CHANNELS = 3;
 
-        private OutputChannels(int channels)
-        {
-            outputChannels = channels;
+        internal static readonly OutputChannels Left = new OutputChannels(LEFT_CHANNEL);
+        internal static readonly OutputChannels Right = new OutputChannels(RIGHT_CHANNEL);
+        internal static readonly OutputChannels Both = new OutputChannels(BOTH_CHANNELS);
+        internal static readonly OutputChannels DownMix = new OutputChannels(DOWNMIX_CHANNELS);
+        private readonly int _OutputChannels;
 
-            if (channels < 0 || channels > 3)
+        private OutputChannels(int channels) {
+            _OutputChannels = channels;
+
+            if (channels < 0 || channels > 3) {
                 throw new ArgumentException("channels");
+            }
         }
 
         /// <summary>
-        ///     Retrieves the code representing the desired output channels.
-        ///     Will be one of LEFT_CHANNEL, RIGHT_CHANNEL, BOTH_CHANNELS
-        ///     or DOWNMIX_CHANNELS.
+        /// Retrieves the code representing the desired output channels.
+        /// Will be one of LEFT_CHANNEL, RIGHT_CHANNEL, BOTH_CHANNELS
+        /// or DOWNMIX_CHANNELS.
         /// </summary>
         /// <returns>
-        ///     the channel code represented by this instance.
+        /// the channel code represented by this instance.
         /// </returns>
-        public virtual int ChannelsOutputCode
-        {
-            get { return outputChannels; }
-        }
+        internal virtual int ChannelsOutputCode => _OutputChannels;
 
         /// <summary>
-        ///     Retrieves the number of output channels represented
-        ///     by this channel output type.
+        /// Retrieves the number of output channels represented
+        /// by this channel output type.
         /// </summary>
         /// <returns>
-        ///     The number of output channels for this channel output
-        ///     type. This will be 2 for BOTH_CHANNELS only, and 1
-        ///     for all other types.
+        /// The number of output channels for this channel output
+        /// type. This will be 2 for BOTH_CHANNELS only, and 1
+        /// for all other types.
         /// </returns>
-        public virtual int ChannelCount
-        {
-            get
-            {
-                int count = (outputChannels == BOTH_CHANNELS) ? 2 : 1;
+        internal virtual int ChannelCount {
+            get {
+                int count = _OutputChannels == BOTH_CHANNELS ? 2 : 1;
                 return count;
             }
         }
 
         /// <summary>
-        ///     Creates an OutputChannels instance
-        ///     corresponding to the given channel code.
+        /// Creates an OutputChannels instance
+        /// corresponding to the given channel code.
         /// </summary>
         /// <param name="code">
-        ///     one of the OutputChannels channel code constants.
-        ///     @throws	IllegalArgumentException if code is not a valid
-        ///     channel code.
+        /// one of the OutputChannels channel code constants.
+        /// @throws IllegalArgumentException if code is not a valid
+        /// channel code.
         /// </param>
-        public static OutputChannels fromInt(int code)
-        {
-            switch (code)
-            {
-                case (int) OutputChannelsEnum.LEFT_CHANNEL:
-                    return LEFT;
+        internal static OutputChannels FromInt(int code) {
+            switch (code) {
+                case (int)OutputChannelsEnum.LeftChannel:
+                    return Left;
 
-                case (int) OutputChannelsEnum.RIGHT_CHANNEL:
-                    return RIGHT;
+                case (int)OutputChannelsEnum.RightChannel:
+                    return Right;
 
-                case (int) OutputChannelsEnum.BOTH_CHANNELS:
-                    return BOTH;
+                case (int)OutputChannelsEnum.BothChannels:
+                    return Both;
 
-                case (int) OutputChannelsEnum.DOWNMIX_CHANNELS:
-                    return DOWNMIX;
+                case (int)OutputChannelsEnum.DownmixChannels:
+                    return DownMix;
 
                 default:
                     throw new ArgumentException("Invalid channel code: " + code);
             }
         }
 
-        public override bool Equals(object o)
-        {
+        public override bool Equals(object obj) {
             bool equals = false;
 
-            if (o is OutputChannels)
-            {
-                OutputChannels oc = (OutputChannels) o;
-                equals = (oc.outputChannels == outputChannels);
+            if (obj is OutputChannels oc) {
+                equals = oc._OutputChannels == _OutputChannels;
             }
 
             return equals;
         }
 
-        public override int GetHashCode()
-        {
-            return outputChannels;
-        }
+        public override int GetHashCode() => _OutputChannels;
     }
 }

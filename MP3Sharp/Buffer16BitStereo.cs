@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * Buffer16BitStereo.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -17,163 +17,143 @@
 using System;
 using MP3Sharp.Decoding;
 
-namespace MP3Sharp
-{
+namespace MP3Sharp {
     /// <summary>
-    ///     Internal class used to queue samples that are being obtained from an Mp3 stream. 
-    ///     This class handles stereo 16-bit data! Switch it out if you want mono or something.
+    /// public class used to queue samples that are being obtained from an Mp3 stream. 
+    /// This class handles stereo 16-bit output, and can double 16-bit mono to stereo.
     /// </summary>
-    internal class Buffer16BitStereo : ABuffer
-    {
-        // This is stereo!
-        private static readonly int CHANNELS = 2;
+    public class Buffer16BitStereo : ABuffer {
+        internal bool DoubleMonoToStereo = false;
+
+        private const int OUTPUT_CHANNELS = 2;
+
         // Write offset used in append_bytes
-        private readonly byte[] m_Buffer = new byte[OBUFFERSIZE * 2]; // all channels interleaved
-        private readonly int[] m_Bufferp = new int[MAXCHANNELS]; // offset in each channel not same!
+        private readonly byte[] _Buffer = new byte[OBUFFERSIZE * 2]; // all channels interleaved
+        private readonly int[] _BufferChannelOffsets = new int[MAXCHANNELS]; // contains write offset for each channel.
+
         // end marker, one past end of array. Same as bufferp[0], but
         // without the array bounds check.
-        private int m_End;
-        // Read offset used to read from the stream, in bytes.
-        private int m_Offset;
+        private int _End;
 
-        public Buffer16BitStereo()
-        {
+        // Read offset used to read from the stream, in bytes.
+        private int _Offset;
+
+        internal Buffer16BitStereo() {
             // Initialize the buffer pointers
             ClearBuffer();
         }
 
         /// <summary>
-        ///     Gets the number of bytes remaining from the current position on the buffer.
+        /// Gets the number of bytes remaining from the current position on the buffer.
         /// </summary>
-        public int BytesLeft
-        {
-            get
-            {
-                return m_End - m_Offset;
-            }
-        }
+        internal int BytesLeft => _End - _Offset;
 
         /// <summary>
-        ///     Reads a sequence of bytes from the buffer and advances the position of the 
-        ///     buffer by the number of bytes read.
+        /// Reads a sequence of bytes from the buffer and advances the position of the 
+        /// buffer by the number of bytes read.
         /// </summary>
         /// <returns>
-        ///     The total number of bytes read in to the buffer. This can be less than the
-        ///     number of bytes requested if that many bytes are not currently available, or
-        ///     zero if th eend of the buffer has been reached.
+        /// The total number of bytes read in to the buffer. This can be less than the
+        /// number of bytes requested if that many bytes are not currently available, or
+        /// zero if th eend of the buffer has been reached.
         /// </returns>
-        public int Read(byte[] bufferOut, int offset, int count)
-        {
-            if (bufferOut == null)
-            {
-                throw new ArgumentNullException("bufferOut");
+        internal int Read(byte[] bufferOut, int offset, int count) {
+            if (bufferOut == null) {
+                throw new ArgumentNullException(nameof(bufferOut));
             }
-            if ((count + offset) > bufferOut.Length)
-            {
+            if ((count + offset) > bufferOut.Length) {
                 throw new ArgumentException("The sum of offset and count is larger than the buffer length");
             }
             int remaining = BytesLeft;
             int copySize;
-            if (count > remaining)
-            {
+            if (count > remaining) {
                 copySize = remaining;
             }
-            else
-            {
+            else {
                 // Copy an even number of sample frames
-                int remainder = count % (2 * CHANNELS);
+                int remainder = count % (2 * OUTPUT_CHANNELS);
                 copySize = count - remainder;
             }
-
-            Array.Copy(m_Buffer, m_Offset, bufferOut, offset, copySize);
-
-            m_Offset += copySize;
+            Array.Copy(_Buffer, _Offset, bufferOut, offset, copySize);
+            _Offset += copySize;
             return copySize;
         }
 
         /// <summary>
-        ///     Writes a single sample value to the buffer.
+        /// Writes a single sample value to the buffer.
         /// </summary>
         /// <param name="channel">The channel.</param>
         /// <param name="sampleValue">The sample value.</param>
-        public override void Append(int channel, short sampleValue)
-        {
-            m_Buffer[m_Bufferp[channel]] = (byte)(sampleValue & 0xff);
-            m_Buffer[m_Bufferp[channel] + 1] = (byte)(sampleValue >> 8);
-
-            m_Bufferp[channel] += CHANNELS * 2;
+        protected override void Append(int channel, short sampleValue) {
+            _Buffer[_BufferChannelOffsets[channel]] = (byte)(sampleValue & 0xff);
+            _Buffer[_BufferChannelOffsets[channel] + 1] = (byte)(sampleValue >> 8);
+            _BufferChannelOffsets[channel] += OUTPUT_CHANNELS * 2;
         }
 
         /// <summary>
-        ///     Writes 32 samples to the buffer.
+        /// Writes 32 samples to the buffer.
         /// </summary>
         /// <param name="channel">The channel.</param>
         /// <param name="samples">An array of sample values.</param>
         /// <remarks>
-        ///     The <paramref name="samples"/> parameter must have a length equal to
-        ///     or greater than 32.
+        /// The <paramref name="samples"/> parameter must have a length equal to
+        /// or greater than 32.
         /// </remarks>
-        public override void AppendSamples(int channel, float[] samples)
-        {
-            if (samples == null)
-            {
+        internal override void AppendSamples(int channel, float[] samples) {
+            if (samples == null) {
                 // samples is required.
-                throw new ArgumentNullException("samples");
+                throw new ArgumentNullException(nameof(samples));
             }
-            if (samples.Length < 32)
-            {
+            if (samples.Length < 32) {
                 throw new ArgumentException("samples must have 32 values");
             }
-            // Always, 32 samples are appended
-            int pos = m_Bufferp[channel];
-
-            for (int i = 0; i < 32; i++)
-            {
-                float fs = samples[i];
-                if (fs > 32767.0f) // can this happen?
-                    fs = 32767.0f;
-                else if (fs < -32767.0f)
-                    fs = -32767.0f;
-
-                int sample = (int)fs;
-                m_Buffer[pos] = (byte)(sample & 0xff);
-                m_Buffer[pos + 1] = (byte)(sample >> 8);
-
-                pos += CHANNELS * 2;
+            if (_BufferChannelOffsets == null || channel >= _BufferChannelOffsets.Length) {
+                throw new Exception("Song is closing...");
             }
-
-            m_Bufferp[channel] = pos;
+            int pos = _BufferChannelOffsets[channel];
+            // Always, 32 samples are appended
+            for (int i = 0; i < 32; i++) {
+                float fs = samples[i];
+                // clamp values
+                if (fs > 32767.0f) {
+                    fs = 32767.0f;
+                }
+                else if (fs < -32767.0f) {
+                    fs = -32767.0f;
+                }
+                int sample = (int)fs;
+                _Buffer[pos] = (byte)(sample & 0xff);
+                _Buffer[pos + 1] = (byte)(sample >> 8);
+                if (DoubleMonoToStereo) {
+                    _Buffer[pos + 2] = (byte)(sample & 0xff);
+                    _Buffer[pos + 3] = (byte)(sample >> 8);
+                }
+                pos += OUTPUT_CHANNELS * 2;
+            }
+            _BufferChannelOffsets[channel] = pos;
         }
 
         /// <summary>
-        ///     This implementation does not clear the buffer.
+        /// This implementation does not clear the buffer.
         /// </summary>
-        public override sealed void ClearBuffer()
-        {
-            m_Offset = 0;
-            m_End = 0;
-
-            for (int i = 0; i < CHANNELS; i++)
-                m_Bufferp[i] = i * 2; // two bytes per channel
+        internal sealed override void ClearBuffer() {
+            _Offset = 0;
+            _End = 0;
+            for (int i = 0; i < OUTPUT_CHANNELS; i++)
+                _BufferChannelOffsets[i] = i * 2; // two bytes per channel
         }
 
-        public override void SetStopFlag()
-        {
-        }
+        internal override void SetStopFlag() { }
 
-        public override void WriteBuffer(int val)
-        {
-            m_Offset = 0;
-
+        internal override void WriteBuffer(int val) {
+            _Offset = 0;
             // speed optimization - save end marker, and avoid
             // array access at read time. Can you believe this saves
             // like 1-2% of the cpu on a PIII? I guess allocating
             // that temporary "new int(0)" is expensive, too.
-            m_End = m_Bufferp[0];
+            _End = _BufferChannelOffsets[0];
         }
 
-        public override void Close()
-        {
-        }
+        internal override void Close() { }
     }
 }

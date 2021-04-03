@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * GranuleInfo.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,30 +14,24 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decoding.Decoders.LayerIII
-{
-    internal class GranuleInfo
-    {
-        public int BigValues;
-        public int BlockType;
-        public int Count1TableSelect;
-        public int GlobalGain;
-        public int MixedBlockFlag;
-        public int Part23Length;
-        public int Preflag;
-        public int Region0Count;
-        public int Region1Count;
-        public int ScaleFacCompress;
-        public int ScaleFacScale;
-        public int[] SubblockGain;
-        public int[] TableSelect;
-        public int WindowSwitchingFlag;
+namespace MP3Sharp.Decoding.Decoders.LayerIII {
+    public class GranuleInfo {
+        internal int BigValues;
+        internal int BlockType;
+        internal int Count1TableSelect;
+        internal int GlobalGain;
+        internal int MixedBlockFlag;
+        internal int Part23Length;
+        internal int Preflag;
+        internal int Region0Count;
+        internal int Region1Count;
+        internal int ScaleFacCompress;
+        internal int ScaleFacScale;
+        internal int[] SubblockGain;
+        internal int[] TableSelect;
+        internal int WindowSwitchingFlag;
 
-        /// <summary>
-        ///     Dummy Constructor
-        /// </summary>
-        public GranuleInfo()
-        {
+        internal GranuleInfo() {
             TableSelect = new int[3];
             SubblockGain = new int[3];
         }

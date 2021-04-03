@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * RandomAccessFileStream.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -17,18 +17,15 @@
 using System;
 using System.IO;
 
-namespace MP3Sharp.IO
-{
-    internal class RandomAccessFileStream
-    {
-        public static FileStream CreateRandomAccessFile(string fileName, string mode)
-        {
-            FileStream newFile = null;
+namespace MP3Sharp.IO {
+    public class RandomAccessFileStream {
+        internal static FileStream CreateRandomAccessFile(string fileName, string mode) {
+            FileStream newFile;
 
-            if (mode.CompareTo("rw") == 0)
+            if (string.Compare(mode, "rw", StringComparison.Ordinal) == 0)
                 newFile = new FileStream(fileName, FileMode.OpenOrCreate,
                     FileAccess.ReadWrite);
-            else if (mode.CompareTo("r") == 0)
+            else if (string.Compare(mode, "r", StringComparison.Ordinal) == 0)
                 newFile = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             else
                 throw new ArgumentException();

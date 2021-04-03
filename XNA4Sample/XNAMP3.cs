@@ -18,94 +18,72 @@ using System;
 using Microsoft.Xna.Framework.Audio;
 using MP3Sharp;
 
-namespace XNA4Sample
-{
-    class XNAMP3 : IDisposable
-    {
-        private MP3Stream m_Stream;
-        private DynamicSoundEffectInstance m_Instance;
+namespace XNA4Sample {
+    class XNAMP3 : IDisposable {
+        private MP3Stream _Stream;
+        private DynamicSoundEffectInstance _Instance;
 
         private const int NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK = 4096;
-        private readonly byte[] m_WaveBuffer = new byte[NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK];
+        private readonly byte[] _WaveBuffer = new byte[NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK];
 
-        private bool m_Repeat;
-        private bool m_Playing;
+        private bool _Repeat;
+        private bool _Playing;
 
-        public XNAMP3(string path)
-        {
-            m_Stream = new MP3Stream(path, NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK);
-            m_Instance = new DynamicSoundEffectInstance(m_Stream.Frequency, AudioChannels.Stereo);
+        public XNAMP3(string path) {
+            _Stream = new MP3Stream(path, NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK);
+            _Instance = new DynamicSoundEffectInstance(_Stream.Frequency, AudioChannels.Stereo);
         }
 
-        public void Dispose()
-        {
-            if (m_Playing)
-            {
+        public void Dispose() {
+            if (_Playing) {
                 Stop();
             }
-
-            m_Instance.Dispose();
-            m_Instance = null;
-
-            m_Stream.Close();
-            m_Stream = null;
+            _Instance.Dispose();
+            _Instance = null;
+            _Stream.Close();
+            _Stream = null;
         }
 
-        public void Play(bool repeat = false)
-        {
-            if (m_Playing)
-            {
+        public void Play(bool repeat = false) {
+            if (_Playing) {
                 Stop();
             }
-
-            m_Playing = true;
-            m_Repeat = repeat;
-            
+            _Playing = true;
+            _Repeat = repeat;
             SubmitBuffer(3);
-            m_Instance.BufferNeeded += instance_BufferNeeded;
-            m_Instance.Play();
+            _Instance.BufferNeeded += InstanceBufferNeeded;
+            _Instance.Play();
         }
 
-        public void Stop()
-        {
-            if (m_Playing)
-            {
-                m_Playing = false;
-
-                m_Instance.Stop();
-                m_Instance.BufferNeeded -= instance_BufferNeeded;
+        public void Stop() {
+            if (_Playing) {
+                _Playing = false;
+                _Instance.Stop();
+                _Instance.BufferNeeded -= InstanceBufferNeeded;
             }
         }
 
-        private void instance_BufferNeeded(object sender, EventArgs e)
-        {
+        private void InstanceBufferNeeded(object sender, EventArgs e) {
             SubmitBuffer();
         }
 
-        private void SubmitBuffer(int count = 1)
-        {
-            while (count > 0)
-            {
+        private void SubmitBuffer(int count = 1) {
+            while (count > 0) {
                 ReadFromStream();
-                m_Instance.SubmitBuffer(m_WaveBuffer);
+                _Instance.SubmitBuffer(_WaveBuffer);
                 count--;
             }
         }
 
-        private void ReadFromStream()
-        {
-            int bytesReturned = m_Stream.Read(m_WaveBuffer, 0, m_WaveBuffer.Length);
-            if (bytesReturned != NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK)
-            {
-                if (m_Repeat)
-                {
-                    m_Stream.Position = 0;
-                    m_Stream.Read(m_WaveBuffer, bytesReturned, m_WaveBuffer.Length - bytesReturned);
+        private void ReadFromStream() {
+            int bytesReturned = _Stream.Read(_WaveBuffer, 0, _WaveBuffer.Length);
+            if (bytesReturned != NUMBER_OF_PCM_BYTES_TO_READ_PER_CHUNK) {
+                if (_Repeat) {
+                    _Stream.Position = 0;
+                    _Stream.Read(_WaveBuffer, bytesReturned, _WaveBuffer.Length - bytesReturned);
                 }
-                else
-                {
-                    if (bytesReturned == 0)
-                    {
+                else {
+                    if (bytesReturned == 0) {
                         Stop();
                     }
                 }

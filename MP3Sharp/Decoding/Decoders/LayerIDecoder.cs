@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * LayerIDecoder.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -16,115 +16,101 @@
 
 using MP3Sharp.Decoding.Decoders.LayerI;
 
-namespace MP3Sharp.Decoding.Decoders
-{
+namespace MP3Sharp.Decoding.Decoders {
     /// <summary>
-    ///     Implements decoding of MPEG Audio Layer I frames.
+    /// Implements decoding of MPEG Audio Layer I frames.
     /// </summary>
-    internal class LayerIDecoder : IFrameDecoder
-    {
-        protected internal ABuffer buffer;
-        protected internal Crc16 crc;
-        protected internal SynthesisFilter filter1, filter2;
-        protected internal Header header;
-        protected internal int mode;
-        protected internal int num_subbands;
-        protected internal Bitstream stream;
-        protected internal ASubband[] subbands;
-        protected internal int which_channels;
+    public class LayerIDecoder : IFrameDecoder {
+        protected ABuffer Buffer;
+        protected readonly Crc16 CRC;
+        protected SynthesisFilter Filter1, Filter2;
+        protected Header Header;
+        protected int Mode;
+        protected int NuSubbands;
+        protected Bitstream Stream;
+        protected ASubband[] Subbands;
+
+        protected int WhichChannels;
         // new Crc16[1] to enable CRC checking.
 
-        public LayerIDecoder()
-        {
-            crc = new Crc16();
+        internal LayerIDecoder() {
+            CRC = new Crc16();
         }
 
-        public virtual void DecodeFrame()
-        {
-            num_subbands = header.number_of_subbands();
-            subbands = new ASubband[32];
-            mode = header.mode();
+        public virtual void DecodeFrame() {
+            NuSubbands = Header.NumberSubbands();
+            Subbands = new ASubband[32];
+            Mode = Header.Mode();
 
             CreateSubbands();
 
             ReadAllocation();
             ReadScaleFactorSelection();
 
-            if ((crc != null) || header.IsChecksumOK())
-            {
+            if (CRC != null || Header.IsChecksumOK()) {
                 ReadScaleFactors();
 
                 ReadSampleData();
             }
         }
 
-        public virtual void Create(Bitstream stream0, Header header0, SynthesisFilter filtera, SynthesisFilter filterb,
-            ABuffer buffer0, int whichCh0)
-        {
-            stream = stream0;
-            header = header0;
-            filter1 = filtera;
-            filter2 = filterb;
-            buffer = buffer0;
-            which_channels = whichCh0;
+        internal virtual void Create(Bitstream stream0, Header header0, SynthesisFilter filtera, SynthesisFilter filterb,
+            ABuffer buffer0, int whichCh0) {
+            Stream = stream0;
+            Header = header0;
+            Filter1 = filtera;
+            Filter2 = filterb;
+            Buffer = buffer0;
+            WhichChannels = whichCh0;
         }
 
-        protected internal virtual void CreateSubbands()
-        {
+        protected virtual void CreateSubbands() {
             int i;
-            if (mode == Header.SINGLE_CHANNEL)
-                for (i = 0; i < num_subbands; ++i)
-                    subbands[i] = new SubbandLayer1(i);
-            else if (mode == Header.JOINT_STEREO)
-            {
-                for (i = 0; i < header.intensity_stereo_bound(); ++i)
-                    subbands[i] = new SubbandLayer1Stereo(i);
-                for (; i < num_subbands; ++i)
-                    subbands[i] = new SubbandLayer1IntensityStereo(i);
+            if (Mode == Header.SINGLE_CHANNEL)
+                for (i = 0; i < NuSubbands; ++i)
+                    Subbands[i] = new SubbandLayer1(i);
+            else if (Mode == Header.JOINT_STEREO) {
+                for (i = 0; i < Header.IntensityStereoBound(); ++i)
+                    Subbands[i] = new SubbandLayer1Stereo(i);
+                for (; i < NuSubbands; ++i)
+                    Subbands[i] = new SubbandLayer1IntensityStereo(i);
             }
-            else
-            {
-                for (i = 0; i < num_subbands; ++i)
-                    subbands[i] = new SubbandLayer1Stereo(i);
+            else {
+                for (i = 0; i < NuSubbands; ++i)
+                    Subbands[i] = new SubbandLayer1Stereo(i);
             }
         }
 
-        protected internal virtual void ReadAllocation()
-        {
+        protected virtual void ReadAllocation() {
             // start to read audio data:
-            for (int i = 0; i < num_subbands; ++i)
-                subbands[i].ReadBitAllocation(stream, header, crc);
+            for (int i = 0; i < NuSubbands; ++i)
+                Subbands[i].ReadAllocation(Stream, Header, CRC);
         }
 
-        protected internal virtual void ReadScaleFactorSelection()
-        {
+        protected virtual void ReadScaleFactorSelection() {
             // scale factor selection not present for layer I. 
         }
 
-        protected internal virtual void ReadScaleFactors()
-        {
-            for (int i = 0; i < num_subbands; ++i)
-                subbands[i].ReadScaleFactor(stream, header);
+        protected virtual void ReadScaleFactors() {
+            for (int i = 0; i < NuSubbands; ++i)
+                Subbands[i].ReadScaleFactor(Stream, Header);
         }
 
-        protected internal virtual void ReadSampleData()
-        {
+        protected virtual void ReadSampleData() {
             bool readReady = false;
             bool writeReady = false;
-            int hdrMode = header.mode();
-            do
-            {
+            int hdrMode = Header.Mode();
+            do {
                 int i;
-                for (i = 0; i < num_subbands; ++i)
-                    readReady = subbands[i].ReadSampleData(stream);
-                do
-                {
-                    for (i = 0; i < num_subbands; ++i)
-                        writeReady = subbands[i].PutNextSample(which_channels, filter1, filter2);
+                for (i = 0; i < NuSubbands; ++i)
+                    readReady = Subbands[i].ReadSampleData(Stream);
+                do {
+                    for (i = 0; i < NuSubbands; ++i)
+                        writeReady = Subbands[i].PutNextSample(WhichChannels, Filter1, Filter2);
 
-                    filter1.calculate_pcm_samples(buffer);
-                    if ((which_channels == OutputChannels.BOTH_CHANNELS) && (hdrMode != Header.SINGLE_CHANNEL))
-                        filter2.calculate_pcm_samples(buffer);
+                    Filter1.calculate_pc_samples(Buffer);
+                    if (WhichChannels == OutputChannels.BOTH_CHANNELS && hdrMode != Header.SINGLE_CHANNEL)
+                        Filter2.calculate_pc_samples(Buffer);
                 } while (!writeReady);
             } while (!readReady);
         }

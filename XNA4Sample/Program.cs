@@ -17,24 +17,19 @@
 using System;
 using MP3Sharp;
 
-namespace XNA4Sample
-{
+namespace XNA4Sample {
 #if WINDOWS || XBOX
-    static class Program
-    {
+    static class Program {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main(string[] args)
-        {
-            using (BaseGame game = new BaseGame())
-            {
+        static void Main(string[] args) {
+            using (BaseGame game = new BaseGame()) {
                 game.Run();
             }
         }
 
-        static void ExampleReadEntireMP3File()
-        {
+        static void ExampleReadEntireMP3File() {
             MP3Stream stream = new MP3Stream("@sample.mp3");
 
             // Create the buffer
@@ -43,8 +38,7 @@ namespace XNA4Sample
 
             int bytesReturned = -1;
             int totalBytes = 0;
-            while (bytesReturned != 0)
-            {
+            while (bytesReturned != 0) {
                 bytesReturned = stream.Read(buffer, 0, buffer.Length);
                 totalBytes += bytesReturned;
             }

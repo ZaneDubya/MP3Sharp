@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * MP3SharpException.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,51 +14,37 @@
 //  *
 //  ***************************************************************************/
 
-using MP3Sharp.Support;
 using System;
 using System.IO;
 using System.Runtime.Serialization;
+using MP3Sharp.Support;
 
-namespace MP3Sharp
-{
+namespace MP3Sharp {
     /// <summary>
-    ///     MP3SharpException is the base class for all API-level
-    ///     exceptions thrown by MP3Sharp. To facilitate conversion and
-    ///     common handling of exceptions from other domains, the class
-    ///     can delegate some functionality to a contained Throwable instance.
+    /// MP3SharpException is the base class for all API-level
+    /// exceptions thrown by MP3Sharp. To facilitate conversion and
+    /// common handling of exceptions from other domains, the class
+    /// can delegate some functionality to a contained Throwable instance.
     /// </summary>
     [Serializable]
-    public class MP3SharpException : Exception
-    {
-        public MP3SharpException()
-        {
-        }
+    public class MP3SharpException : Exception {
+        internal MP3SharpException() { }
 
-        public MP3SharpException(string message) : base(message)
-        {
-        }
+        internal MP3SharpException(string message) : base(message) { }
 
-        public MP3SharpException(string message, Exception inner) : base(message, inner)
-        {
-        }
+        internal MP3SharpException(string message, Exception inner) : base(message, inner) { }
 
-        protected MP3SharpException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        protected MP3SharpException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public void PrintStackTrace()
-        {
+        internal void PrintStackTrace() {
             SupportClass.WriteStackTrace(this, Console.Error);
         }
 
-        public void PrintStackTrace(StreamWriter ps)
-        {
-            if (InnerException == null)
-            {
+        internal void PrintStackTrace(StreamWriter ps) {
+            if (InnerException == null) {
                 SupportClass.WriteStackTrace(this, ps);
             }
-            else
-            {
+            else {
                 SupportClass.WriteStackTrace(InnerException, Console.Error);
             }
         }

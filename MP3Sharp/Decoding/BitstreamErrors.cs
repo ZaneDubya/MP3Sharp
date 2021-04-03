@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * BitstreamErrors.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -13,22 +13,21 @@
 //  * Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
-namespace MP3Sharp.Decoding
-{
-    /// <summary>
-    ///     This struct describes all error codes that can be thrown
-    ///     in BistreamExceptions.
-    /// </summary>
-    internal struct BitstreamErrors
-    {
-        public static readonly int UNKNOWN_ERROR = BITSTREAM_ERROR + 0;
-        public static readonly int UNKNOWN_SAMPLE_RATE = BITSTREAM_ERROR + 1;
-        public static readonly int STREAM_ERROR = BITSTREAM_ERROR + 2;
-        public static readonly int UNEXPECTED_EOF = BITSTREAM_ERROR + 3;
-        public static readonly int STREAM_EOF = BITSTREAM_ERROR + 4;
-        public static readonly int BITSTREAM_LAST = 0x1ff;
 
-        public static readonly int BITSTREAM_ERROR = 0x100;
-        public static readonly int DECODER_ERROR = 0x200;
+namespace MP3Sharp.Decoding {
+    /// <summary>
+    /// This struct describes all error codes that can be thrown
+    /// in BistreamExceptions.
+    /// </summary>
+    internal struct BitstreamErrors {
+        internal const int UNKNOWN_ERROR = BITSTREAM_ERROR + 0;
+        internal const int UNKNOWN_SAMPLE_RATE = BITSTREAM_ERROR + 1;
+        internal const int STREA_ERROR = BITSTREAM_ERROR + 2;
+        internal const int UNEXPECTED_EOF = BITSTREAM_ERROR + 3;
+        internal const int STREA_EOF = BITSTREAM_ERROR + 4;
+        internal const int BITSTREA_LAST = 0x1ff;
+
+        internal const int BITSTREAM_ERROR = 0x100;
+        internal const int DECODER_ERROR = 0x200;
     }
 }

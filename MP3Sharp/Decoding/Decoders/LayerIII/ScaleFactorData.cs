@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * ScaleFactorData.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,23 +14,16 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decoding.Decoders.LayerIII
-{
-    internal class ScaleFactorData
-    {
-        public int[] l; /* [cb] */
-        public int[][] s; /* [window][cb] */
+namespace MP3Sharp.Decoding.Decoders.LayerIII {
+    public class ScaleFactorData {
+        internal int[] L; /* [cb] */
+        internal int[][] S; /* [window][cb] */
 
-        /// <summary>
-        ///     Dummy Constructor
-        /// </summary>
-        public ScaleFactorData()
-        {
-            l = new int[23];
-            s = new int[3][];
-            for (int i = 0; i < 3; i++)
-            {
-                s[i] = new int[13];
+        internal ScaleFactorData() {
+            L = new int[23];
+            S = new int[3][];
+            for (int i = 0; i < 3; i++) {
+                S[i] = new int[13];
             }
         }
     }

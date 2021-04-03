@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * WaveFileBuffer.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -18,85 +18,73 @@ using System;
 using System.IO;
 using MP3Sharp.Decoding;
 
-namespace MP3Sharp.IO
-{
+namespace MP3Sharp.IO {
     /// <summary> Implements an Obuffer by writing the data to a file in RIFF WAVE format.</summary>
-    internal class WaveFileBuffer : ABuffer
-    {
-        private readonly short[] m_Buffer;
-        private readonly short[] m_Bufferp;
-        private readonly int m_Channels;
-        private readonly WaveFile m_OutWave;
+    public class WaveFileBuffer : ABuffer {
+        private readonly short[] _Buffer;
+        private readonly short[] _Bufferp;
+        private readonly int _Channels;
+        private readonly WaveFile _OutWave;
 
-        public WaveFileBuffer(int numberOfChannels, int freq, string fileName)
-        {
+        internal WaveFileBuffer(int numberOfChannels, int freq, string fileName) {
             if (fileName == null)
                 throw new NullReferenceException("FileName");
 
-            m_Buffer = new short[OBUFFERSIZE];
-            m_Bufferp = new short[MAXCHANNELS];
-            m_Channels = numberOfChannels;
+            _Buffer = new short[OBUFFERSIZE];
+            _Bufferp = new short[MAXCHANNELS];
+            _Channels = numberOfChannels;
 
             for (int i = 0; i < numberOfChannels; ++i)
-                m_Bufferp[i] = (short) i;
+                _Bufferp[i] = (short)i;
 
-            m_OutWave = new WaveFile();
+            _OutWave = new WaveFile();
 
-            int rc = m_OutWave.OpenForWrite(fileName, null, freq, 16, (short) m_Channels);
+            int rc = _OutWave.OpenForWrite(fileName, null, freq, 16, (short)_Channels);
         }
 
-        public WaveFileBuffer(int numberOfChannels, int freq, Stream stream)
-        {
-            m_Buffer = new short[OBUFFERSIZE];
-            m_Bufferp = new short[MAXCHANNELS];
-            m_Channels = numberOfChannels;
+        internal WaveFileBuffer(int numberOfChannels, int freq, Stream stream) {
+            _Buffer = new short[OBUFFERSIZE];
+            _Bufferp = new short[MAXCHANNELS];
+            _Channels = numberOfChannels;
 
             for (int i = 0; i < numberOfChannels; ++i)
-                m_Bufferp[i] = (short) i;
+                _Bufferp[i] = (short)i;
 
-            m_OutWave = new WaveFile();
+            _OutWave = new WaveFile();
 
-            int rc = m_OutWave.OpenForWrite(null, stream, freq, 16, (short) m_Channels);
+            int rc = _OutWave.OpenForWrite(null, stream, freq, 16, (short)_Channels);
         }
 
         /// <summary>
-        ///     Takes a 16 Bit PCM sample.
+        /// Takes a 16 Bit PCM sample.
         /// </summary>
-        public override void Append(int channel, short valueRenamed)
-        {
-            m_Buffer[m_Bufferp[channel]] = valueRenamed;
-            m_Bufferp[channel] = (short) (m_Bufferp[channel] + m_Channels);
+        protected override void Append(int channel, short valueRenamed) {
+            _Buffer[_Bufferp[channel]] = valueRenamed;
+            _Bufferp[channel] = (short)(_Bufferp[channel] + _Channels);
         }
 
-        public override void WriteBuffer(int val)
-        {
-            int rc = m_OutWave.WriteData(m_Buffer, m_Bufferp[0]);
-            for (int i = 0; i < m_Channels; ++i)
-                m_Bufferp[i] = (short) i;
+        internal override void WriteBuffer(int val) {
+            int rc = _OutWave.WriteData(_Buffer, _Bufferp[0]);
+            for (int i = 0; i < _Channels; ++i)
+                _Bufferp[i] = (short)i;
         }
 
-        public void close(bool justWriteLengthBytes)
-        {
-            m_OutWave.Close(justWriteLengthBytes);
+        internal void Close(bool justWriteLengthBytes) {
+            _OutWave.Close(justWriteLengthBytes);
         }
 
-        public override void Close()
-        {
-            m_OutWave.Close();
+        internal override void Close() {
+            _OutWave.Close();
         }
 
         /// <summary>
-        ///     *
+        /// *
         /// </summary>
-        public override void ClearBuffer()
-        {
-        }
+        internal override void ClearBuffer() { }
 
         /// <summary>
-        ///     *
+        /// *
         /// </summary>
-        public override void SetStopFlag()
-        {
-        }
+        internal override void SetStopFlag() { }
     }
 }
