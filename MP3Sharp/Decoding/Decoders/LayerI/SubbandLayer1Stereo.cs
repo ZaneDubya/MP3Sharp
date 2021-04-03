@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * SubbandLayer1Stereo.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,90 +14,77 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decoding.Decoders.LayerI
-{
+namespace MP3Sharp.Decoding.Decoders.LayerI {
     /// <summary>
-    ///     Class for layer I subbands in stereo mode.
+    /// public class for layer I subbands in stereo mode.
     /// </summary>
-    internal class SubbandLayer1Stereo : SubbandLayer1
-    {
-        protected internal int channel2_allocation;
-        protected internal float channel2_factor, channel2_offset;
-        protected internal float channel2_sample;
-        protected internal int channel2_samplelength;
-        protected internal float channel2_scalefactor;
+    public class SubbandLayer1Stereo : SubbandLayer1 {
+        protected int Channel2Allocation;
+        protected float Channel2Factor, Channel2Offset;
+        protected float Channel2Sample;
+        protected int Channel2Samplelength;
+        protected float Channel2Scalefactor;
+
+        internal SubbandLayer1Stereo(int subbandnumber)
+            : base(subbandnumber) { }
 
         /// <summary>
-        ///     Constructor
+        /// *
         /// </summary>
-        public SubbandLayer1Stereo(int subbandnumber)
-            : base(subbandnumber)
-        {
-        }
-
-        /// <summary>
-        ///     *
-        /// </summary>
-        public override void ReadBitAllocation(Bitstream stream, Header header, Crc16 crc)
-        {
-            allocation = stream.GetBitsFromBuffer(4);
-            channel2_allocation = stream.GetBitsFromBuffer(4);
-            if (crc != null)
-            {
-                crc.add_bits(allocation, 4);
-                crc.add_bits(channel2_allocation, 4);
+        internal override void ReadAllocation(Bitstream stream, Header header, Crc16 crc) {
+            Allocation = stream.GetBitsFromBuffer(4);
+            if (Allocation > 14) {
+                return;
             }
-            if (allocation != 0)
-            {
-                samplelength = allocation + 1;
-                factor = TableFactor[allocation];
-                offset = TableOffset[allocation];
+            Channel2Allocation = stream.GetBitsFromBuffer(4);
+            if (crc != null) {
+                crc.AddBits(Allocation, 4);
+                crc.AddBits(Channel2Allocation, 4);
             }
-            if (channel2_allocation != 0)
-            {
-                channel2_samplelength = channel2_allocation + 1;
-                channel2_factor = TableFactor[channel2_allocation];
-                channel2_offset = TableOffset[channel2_allocation];
+            if (Allocation != 0) {
+                Samplelength = Allocation + 1;
+                Factor = TableFactor[Allocation];
+                Offset = TableOffset[Allocation];
+            }
+            if (Channel2Allocation != 0) {
+                Channel2Samplelength = Channel2Allocation + 1;
+                Channel2Factor = TableFactor[Channel2Allocation];
+                Channel2Offset = TableOffset[Channel2Allocation];
             }
         }
 
         /// <summary>
-        ///     *
+        /// *
         /// </summary>
-        public override void ReadScaleFactor(Bitstream stream, Header header)
-        {
-            if (allocation != 0)
-                scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
-            if (channel2_allocation != 0)
-                channel2_scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
+        internal override void ReadScaleFactor(Bitstream stream, Header header) {
+            if (Allocation != 0)
+                Scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
+            if (Channel2Allocation != 0)
+                Channel2Scalefactor = ScaleFactors[stream.GetBitsFromBuffer(6)];
         }
 
         /// <summary>
-        ///     *
+        /// *
         /// </summary>
-        public override bool ReadSampleData(Bitstream stream)
-        {
+        internal override bool ReadSampleData(Bitstream stream) {
             bool returnvalue = base.ReadSampleData(stream);
-            if (channel2_allocation != 0)
-            {
-                channel2_sample = stream.GetBitsFromBuffer(channel2_samplelength);
+            if (Channel2Allocation != 0) {
+                Channel2Sample = stream.GetBitsFromBuffer(Channel2Samplelength);
             }
-            return (returnvalue);
+            return returnvalue;
         }
 
         /// <summary>
-        ///     *
+        /// *
         /// </summary>
-        public override bool PutNextSample(int channels, SynthesisFilter filter1, SynthesisFilter filter2)
-        {
+        internal override bool PutNextSample(int channels, SynthesisFilter filter1, SynthesisFilter filter2) {
             base.PutNextSample(channels, filter1, filter2);
-            if ((channel2_allocation != 0) && (channels != OutputChannels.LEFT_CHANNEL))
-            {
-                float sample2 = (channel2_sample * channel2_factor + channel2_offset) * channel2_scalefactor;
+            if (Channel2Allocation != 0 && channels != OutputChannels.LEFT_CHANNEL) {
+                float sample2 = (Channel2Sample * Channel2Factor + Channel2Offset) * Channel2Scalefactor;
                 if (channels == OutputChannels.BOTH_CHANNELS)
-                    filter2.WriteSample(sample2, subbandnumber);
+                    filter2.AddSample(sample2, Subbandnumber);
                 else
-                    filter1.WriteSample(sample2, subbandnumber);
+                    filter1.AddSample(sample2, Subbandnumber);
             }
             return true;
         }

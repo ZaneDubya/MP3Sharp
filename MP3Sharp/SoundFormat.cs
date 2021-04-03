@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * SoundFormat.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -13,20 +13,19 @@
 //  * Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
-namespace MP3Sharp
-{
+
+namespace MP3Sharp {
     /// <summary>
-    ///     Describes sound formats that can be produced by the Mp3Stream class.
+    /// Describes sound formats that can be produced by the Mp3Stream class.
     /// </summary>
-    public enum SoundFormat
-    {
+    public enum SoundFormat {
         /// <summary>
-        ///     PCM encoded, 16-bit Mono sound format.
+        /// PCM encoded, 16-bit Mono sound format.
         /// </summary>
         Pcm16BitMono,
 
         /// <summary>
-        ///     PCM encoded, 16-bit Stereo sound format.
+        /// PCM encoded, 16-bit Stereo sound format.
         /// </summary>
         Pcm16BitStereo
     }

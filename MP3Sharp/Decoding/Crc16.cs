@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * Crc16.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -16,53 +16,44 @@
 
 using MP3Sharp.Support;
 
-namespace MP3Sharp.Decoding
-{
+namespace MP3Sharp.Decoding {
     /// <summary>
-    ///     16-Bit CRC checksum
+    /// 16-Bit CRC checksum
     /// </summary>
-    internal sealed class Crc16
-    {
+    public sealed class Crc16 {
         private static readonly short Polynomial;
-        private short m_Crc;
+        private short _CRC;
 
-        static Crc16()
-        {
-            Polynomial = (short) SupportClass.Identity(0x8005);
+        static Crc16() {
+            Polynomial = (short)SupportClass.Identity(0x8005);
+        }
+
+        internal Crc16() {
+            _CRC = (short)SupportClass.Identity(0xFFFF);
         }
 
         /// <summary>
-        ///     Dummy Constructor
+        /// Feed a bitstring to the crc calculation (length between 0 and 32, not inclusive).
         /// </summary>
-        public Crc16()
-        {
-            m_Crc = (short) SupportClass.Identity(0xFFFF);
-        }
-
-        /// <summary>
-        ///     Feed a bitstring to the crc calculation (length between 0 and 32, not inclusive).
-        /// </summary>
-        public void add_bits(int bitstring, int length)
-        {
+        internal void AddBits(int bitstring, int length) {
             int bitmask = 1 << (length - 1);
             do
-                if (((m_Crc & 0x8000) == 0) ^ ((bitstring & bitmask) == 0))
-                {
-                    m_Crc <<= 1;
-                    m_Crc ^= Polynomial;
+                if (((_CRC & 0x8000) == 0) ^ ((bitstring & bitmask) == 0)) {
+                    _CRC <<= 1;
+                    _CRC ^= Polynomial;
                 }
                 else
-                    m_Crc <<= 1; while ((bitmask = SupportClass.URShift(bitmask, 1)) != 0);
+                    _CRC <<= 1;
+            while ((bitmask = SupportClass.URShift(bitmask, 1)) != 0);
         }
 
         /// <summary>
-        ///     Return the calculated checksum.
-        ///     Erase it for next calls to add_bits().
+        /// Return the calculated checksum.
+        /// Erase it for next calls to add_bits().
         /// </summary>
-        public short Checksum()
-        {
-            short sum = m_Crc;
-            m_Crc = (short) SupportClass.Identity(0xFFFF);
+        internal short Checksum() {
+            short sum = _CRC;
+            _CRC = (short)SupportClass.Identity(0xFFFF);
             return sum;
         }
     }

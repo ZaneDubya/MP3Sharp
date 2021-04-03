@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * IFrameDecoder.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -13,19 +13,18 @@
 //  * Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
-namespace MP3Sharp.Decoding.Decoders
-{
+
+namespace MP3Sharp.Decoding.Decoders {
     /// <summary>
-    ///     Implementations of FrameDecoder are responsible for decoding
-    ///     an MPEG audio frame.
+    /// Implementations of FrameDecoder are responsible for decoding
+    /// an MPEG audio frame.
     /// </summary>
     //REVIEW: the interface currently is too thin. There should be
     // methods to specify the output buffer, the synthesis filters and
     // possibly other objects used by the decoder. 
-    internal interface IFrameDecoder
-    {
+    public interface IFrameDecoder {
         /// <summary>
-        ///     Decodes one frame of MPEG audio.
+        /// Decodes one frame of MPEG audio.
         /// </summary>
         void DecodeFrame();
     }

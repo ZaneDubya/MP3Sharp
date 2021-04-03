@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * Layer3SideInfo.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,19 +14,13 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decoding.Decoders.LayerIII
-{
-    internal class Layer3SideInfo
-    {
-        public ChannelData[] Channels;
-        public int MainDataBegin;
-        public int PrivateBits;
+namespace MP3Sharp.Decoding.Decoders.LayerIII {
+    public class Layer3SideInfo {
+        internal ChannelData[] Channels;
+        internal int MainDataBegin;
+        internal int PrivateBits;
 
-        /// <summary>
-        ///     Dummy Constructor
-        /// </summary>
-        public Layer3SideInfo()
-        {
+        internal Layer3SideInfo() {
             Channels = new ChannelData[2];
             Channels[0] = new ChannelData();
             Channels[1] = new ChannelData();

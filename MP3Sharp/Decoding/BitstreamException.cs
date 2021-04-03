@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * BitstreamException.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -17,71 +17,57 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace MP3Sharp.Decoding
-{
+namespace MP3Sharp.Decoding {
     /// <summary>
-    ///     Instances of BitstreamException are thrown
-    ///     when operations on a Bitstream fail.
-    ///     <p>
-    ///     The exception provides details of the exception condition
-    ///     in two ways:
-    ///     <ol>
-    ///         <li>
-    ///             as an error-code describing the nature of the error
-    ///         </li>
-    ///         <br></br>
-    ///         <li>
-    ///             as the Throwable instance, if any, that was thrown
-    ///             indicating that an exceptional condition has occurred.
-    ///         </li>
-    ///     </ol>
-    ///     </p>
+    /// Instances of BitstreamException are thrown
+    /// when operations on a Bitstream fail.
+    /// <p>
+    /// The exception provides details of the exception condition
+    /// in two ways:
+    /// <ol>
+    ///     <li>
+    ///         as an error-code describing the nature of the error
+    ///     </li>
+    ///     <br></br>
+    ///     <li>
+    ///         as the Throwable instance, if any, that was thrown
+    ///         indicating that an exceptional condition has occurred.
+    ///     </li>
+    /// </ol>
+    /// </p>
     /// </summary>
     [Serializable]
-    public class BitstreamException : MP3SharpException
-    {
-        private int m_Errorcode;
+    public class BitstreamException : MP3SharpException {
+        private int _ErrorCode;
 
-        public BitstreamException(string message, Exception inner) : base(message, inner)
-        {
+        internal BitstreamException(string message, Exception inner) : base(message, inner) {
             InitBlock();
         }
 
-        public BitstreamException(int errorcode, Exception inner) : this(GetErrorString(errorcode), inner)
-        {
+        internal BitstreamException(int errorcode, Exception inner) : this(GetErrorString(errorcode), inner) {
             InitBlock();
-            m_Errorcode = errorcode;
+            _ErrorCode = errorcode;
         }
 
-        protected BitstreamException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            m_Errorcode = info.GetInt32("ErrorCode");
+        protected BitstreamException(SerializationInfo info, StreamingContext context) : base(info, context) {
+            _ErrorCode = info.GetInt32("ErrorCode");
         }
 
-        public virtual int ErrorCode
-        {
-            get { return m_Errorcode; }
-        }
+        internal virtual int ErrorCode => _ErrorCode;
 
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-            {
-                throw new ArgumentNullException("info");
+        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+            if (info == null) {
+                throw new ArgumentNullException(nameof(info));
             }
 
-            info.AddValue("ErrorCode", m_Errorcode);
+            info.AddValue("ErrorCode", _ErrorCode);
             base.GetObjectData(info, context);
         }
 
-        private void InitBlock()
-        {
-            m_Errorcode = BitstreamErrors.UNKNOWN_ERROR;
+        private void InitBlock() {
+            _ErrorCode = BitstreamErrors.UNKNOWN_ERROR;
         }
 
-        public static string GetErrorString(int errorcode)
-        {
-            return "Bitstream errorcode " + Convert.ToString(errorcode, 16);
-        }
+        internal static string GetErrorString(int errorcode) => "Bitstream errorcode " + Convert.ToString(errorcode, 16);
     }
 }

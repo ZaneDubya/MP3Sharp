@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * ChannelData.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,18 +14,12 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decoding.Decoders.LayerIII
-{
-    internal class ChannelData
-    {
-        public GranuleInfo[] Granules;
-        public int[] ScaleFactorBits;
+namespace MP3Sharp.Decoding.Decoders.LayerIII {
+    public class ChannelData {
+        internal GranuleInfo[] Granules;
+        internal int[] ScaleFactorBits;
 
-        /// <summary>
-        ///     Dummy Constructor
-        /// </summary>
-        public ChannelData()
-        {
+        internal ChannelData() {
             ScaleFactorBits = new int[4];
             Granules = new GranuleInfo[2];
             Granules[0] = new GranuleInfo();

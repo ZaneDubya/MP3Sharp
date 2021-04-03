@@ -1,6 +1,6 @@
 ﻿// /***************************************************************************
 //  * SBI.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -14,23 +14,19 @@
 //  *
 //  ***************************************************************************/
 
-namespace MP3Sharp.Decoding.Decoders.LayerIII
-{
-    internal class SBI
-    {
-        public int[] l;
-        public int[] s;
+namespace MP3Sharp.Decoding.Decoders.LayerIII {
+    public class SBI {
+        internal int[] L;
+        internal int[] S;
 
-        public SBI()
-        {
-            l = new int[23];
-            s = new int[14];
+        internal SBI() {
+            L = new int[23];
+            S = new int[14];
         }
 
-        public SBI(int[] thel, int[] thes)
-        {
-            l = thel;
-            s = thes;
+        internal SBI(int[] thel, int[] thes) {
+            L = thel;
+            S = thes;
         }
     }
 }

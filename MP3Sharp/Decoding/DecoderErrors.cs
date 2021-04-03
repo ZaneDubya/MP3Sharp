@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * DecoderErrors.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -13,15 +13,14 @@
 //  * Lesser General Public License for more details.
 //  *
 //  ***************************************************************************/
-namespace MP3Sharp.Decoding
-{
+
+namespace MP3Sharp.Decoding {
     /// <summary>
-    ///     This interface provides constants describing the error
-    ///     codes used by the Decoder to indicate errors.
+    /// This interface provides constants describing the error
+    /// codes used by the Decoder to indicate errors.
     /// </summary>
-    internal struct DecoderErrors
-    {
-        public static readonly int UNKNOWN_ERROR = BitstreamErrors.DECODER_ERROR + 0;
-        public static readonly int UNSUPPORTED_LAYER = BitstreamErrors.DECODER_ERROR + 1;
+    internal struct DecoderErrors {
+        internal const int UNKNOWN_ERROR = BitstreamErrors.DECODER_ERROR + 0;
+        internal const int UNSUPPORTED_LAYER = BitstreamErrors.DECODER_ERROR + 1;
     }
 }

@@ -1,6 +1,6 @@
 // /***************************************************************************
 //  * Decoder.cs
-//  * Copyright (c) 2015 the authors.
+//  * Copyright (c) 2015, 2021 The Authors.
 //  * 
 //  * All rights reserved. This program and the accompanying materials
 //  * are made available under the terms of the GNU Lesser General Public License
@@ -17,292 +17,226 @@
 using System;
 using MP3Sharp.Decoding.Decoders;
 
-namespace MP3Sharp.Decoding
-{
+namespace MP3Sharp.Decoding {
     /// <summary>
-    ///     Encapsulates the details of decoding an MPEG audio frame.
+    /// Encapsulates the details of decoding an MPEG audio frame.
     /// </summary>
-    internal class Decoder
-    {
-        private static readonly Params DEFAULT_PARAMS = new Params();
-        private readonly Params params_Renamed;
-        private Equalizer m_Equalizer;
+    public class Decoder {
+        private static readonly Params DecoderDefaultParams = new Params();
+        private Equalizer _Equalizer;
 
-        private SynthesisFilter m_LeftChannelFilter;
-        private SynthesisFilter m_RightChannelFilter;
+        private SynthesisFilter _LeftChannelFilter;
+        private SynthesisFilter _RightChannelFilter;
 
-        private bool m_IsInitialized;
-        private LayerIDecoder m_L1Decoder;
-        private LayerIIDecoder m_L2Decoder;
-        private LayerIIIDecoder m_L3Decoder;
+        private bool _IsInitialized;
+        private LayerIDecoder _L1Decoder;
+        private LayerIIDecoder _L2Decoder;
+        private LayerIIIDecoder _L3Decoder;
 
-        private ABuffer m_Output;
+        private ABuffer _Output;
 
-        private int m_OutputChannels;
-        private int m_OutputFrequency;
+        private int _OutputChannels;
+        private int _OutputFrequency;
 
         /// <summary>
-        ///     Creates a new Decoder instance with default parameters.
+        /// Creates a new Decoder instance with default parameters.
         /// </summary>
-        public Decoder() : this(null)
-        {
+        internal Decoder() : this(null) {
             InitBlock();
         }
 
         /// <summary>
-        ///     Creates a new Decoder instance with custom parameters.
+        /// Creates a new Decoder instance with custom parameters.
         /// </summary>
-        public Decoder(Params params0)
-        {
+        internal Decoder(Params params0) {
             InitBlock();
-            if (params0 == null)
-                params0 = DEFAULT_PARAMS;
-
-            params_Renamed = params0;
-
-            Equalizer eq = params_Renamed.InitialEqualizerSettings;
-            if (eq != null)
-            {
-                m_Equalizer.FromEqualizer = eq;
+            if (params0 == null) {
+                params0 = DecoderDefaultParams;
+            }
+            Equalizer eq = params0.InitialEqualizerSettings;
+            if (eq != null) {
+                _Equalizer.FromEqualizer = eq;
             }
         }
 
-        public static Params DefaultParams
-        {
-            get { return (Params) DEFAULT_PARAMS.Clone(); // MemberwiseClone();
-            }
-        }
+        internal static Params DefaultParams => (Params)DecoderDefaultParams.Clone();
 
-        public virtual Equalizer Equalizer
-        {
-            set
-            {
-                if (value == null)
-                    value = Equalizer.PASS_THRU_EQ;
+        internal virtual Equalizer Equalizer {
+            set {
+                if (value == null) {
+                    value = Equalizer.PassThruEq;
+                }
+                _Equalizer.FromEqualizer = value;
+                float[] factors = _Equalizer.BandFactors;
+                if (_LeftChannelFilter != null)
+                    _LeftChannelFilter.Eq = factors;
 
-                m_Equalizer.FromEqualizer = value;
-
-                float[] factors = m_Equalizer.BandFactors;
-                if (m_LeftChannelFilter != null)
-                    m_LeftChannelFilter.EQ = factors;
-
-                if (m_RightChannelFilter != null)
-                    m_RightChannelFilter.EQ = factors;
+                if (_RightChannelFilter != null)
+                    _RightChannelFilter.Eq = factors;
             }
         }
 
         /// <summary>
-        ///     Changes the output buffer. This will take effect the next time
-        ///     decodeFrame() is called.
+        /// Changes the output buffer. This will take effect the next time
+        /// decodeFrame() is called.
         /// </summary>
-        public virtual ABuffer OutputBuffer
-        {
-            set { m_Output = value; }
+        internal virtual ABuffer OutputBuffer {
+            set => _Output = value;
         }
 
         /// <summary>
-        ///     Retrieves the sample frequency of the PCM samples output
-        ///     by this decoder. This typically corresponds to the sample
-        ///     rate encoded in the MPEG audio stream.
+        /// Retrieves the sample frequency of the PCM samples output
+        /// by this decoder. This typically corresponds to the sample
+        /// rate encoded in the MPEG audio stream.
         /// </summary>
-        public virtual int OutputFrequency
-        {
-            get { return m_OutputFrequency; }
+        internal virtual int OutputFrequency => _OutputFrequency;
+
+        /// <summary>
+        /// Retrieves the number of channels of PCM samples output by
+        /// this decoder. This usually corresponds to the number of
+        /// channels in the MPEG audio stream.
+        /// </summary>
+        internal virtual int OutputChannels => _OutputChannels;
+
+        /// <summary>
+        /// Retrieves the maximum number of samples that will be written to
+        /// the output buffer when one frame is decoded. This can be used to
+        /// help calculate the size of other buffers whose size is based upon
+        /// the number of samples written to the output buffer. NB: this is
+        /// an upper bound and fewer samples may actually be written, depending
+        /// upon the sample rate and number of channels.
+        /// </summary>
+        internal virtual int OutputBlockSize => ABuffer.OBUFFERSIZE;
+
+        private void InitBlock() {
+            _Equalizer = new Equalizer();
         }
 
         /// <summary>
-        ///     Retrieves the number of channels of PCM samples output by
-        ///     this decoder. This usually corresponds to the number of
-        ///     channels in the MPEG audio stream.
-        /// </summary>
-        public virtual int OutputChannels
-        {
-            get { return m_OutputChannels; }
-        }
-
-        /// <summary>
-        ///     Retrieves the maximum number of samples that will be written to
-        ///     the output buffer when one frame is decoded. This can be used to
-        ///     help calculate the size of other buffers whose size is based upon
-        ///     the number of samples written to the output buffer. NB: this is
-        ///     an upper bound and fewer samples may actually be written, depending
-        ///     upon the sample rate and number of channels.
-        /// </summary>
-        public virtual int OutputBlockSize
-        {
-            get { return ABuffer.OBUFFERSIZE; }
-        }
-
-        private void InitBlock()
-        {
-            m_Equalizer = new Equalizer();
-        }
-
-        /// <summary>
-        ///     Decodes one frame from an MPEG audio bitstream.
+        /// Decodes one frame from an MPEG audio bitstream.
         /// </summary>
         /// <param name="header">
-        ///     Header describing the frame to decode.
+        /// Header describing the frame to decode.
         /// </param>
         /// <param name="stream">
-        ///     Bistream that provides the bits for the body of the frame.
+        /// Bistream that provides the bits for the body of the frame.
         /// </param>
         /// <returns>
-        ///     A SampleBuffer containing the decoded samples.
+        /// A SampleBuffer containing the decoded samples.
         /// </returns>
-        public virtual ABuffer DecodeFrame(Header header, Bitstream stream)
-        {
-            if (!m_IsInitialized)
-            {
+        internal virtual ABuffer DecodeFrame(Header header, Bitstream stream) {
+            if (!_IsInitialized) {
                 Initialize(header);
             }
-
-            int layer = header.layer();
-
-            m_Output.ClearBuffer();
-
+            int layer = header.Layer();
+            _Output.ClearBuffer();
             IFrameDecoder decoder = RetrieveDecoder(header, stream, layer);
-
             decoder.DecodeFrame();
-
-            m_Output.WriteBuffer(1);
-
-            return m_Output;
+            _Output.WriteBuffer(1);
+            return _Output;
         }
 
-        protected internal virtual DecoderException NewDecoderException(int errorcode)
-        {
-            return new DecoderException(errorcode, null);
-        }
+        protected virtual DecoderException NewDecoderException(int errorcode) => new DecoderException(errorcode, null);
 
-        protected internal virtual DecoderException NewDecoderException(int errorcode, Exception throwable)
-        {
-            return new DecoderException(errorcode, throwable);
-        }
+        protected virtual DecoderException NewDecoderException(int errorcode, Exception throwable) => new DecoderException(errorcode, throwable);
 
-        protected internal virtual IFrameDecoder RetrieveDecoder(Header header, Bitstream stream, int layer)
-        {
+        protected virtual IFrameDecoder RetrieveDecoder(Header header, Bitstream stream, int layer) {
             IFrameDecoder decoder = null;
 
             // REVIEW: allow channel output selection type
             // (LEFT, RIGHT, BOTH, DOWNMIX)
-            switch (layer)
-            {
+            switch (layer) {
                 case 3:
-                    if (m_L3Decoder == null)
-                    {
-                        m_L3Decoder = new LayerIIIDecoder(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
-                            (int) OutputChannelsEnum.BOTH_CHANNELS);
+                    if (_L3Decoder == null) {
+                        _L3Decoder = new LayerIIIDecoder(stream, header, _LeftChannelFilter, _RightChannelFilter, _Output,
+                            (int)OutputChannelsEnum.BothChannels);
                     }
 
-                    decoder = m_L3Decoder;
+                    decoder = _L3Decoder;
                     break;
 
                 case 2:
-                    if (m_L2Decoder == null)
-                    {
-                        m_L2Decoder = new LayerIIDecoder();
-                        m_L2Decoder.Create(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
-                            (int) OutputChannelsEnum.BOTH_CHANNELS);
+                    if (_L2Decoder == null) {
+                        _L2Decoder = new LayerIIDecoder();
+                        _L2Decoder.Create(stream, header, _LeftChannelFilter, _RightChannelFilter, _Output,
+                            (int)OutputChannelsEnum.BothChannels);
                     }
-                    decoder = m_L2Decoder;
+                    decoder = _L2Decoder;
                     break;
 
                 case 1:
-                    if (m_L1Decoder == null)
-                    {
-                        m_L1Decoder = new LayerIDecoder();
-                        m_L1Decoder.Create(stream, header, m_LeftChannelFilter, m_RightChannelFilter, m_Output,
-                            (int) OutputChannelsEnum.BOTH_CHANNELS);
+                    if (_L1Decoder == null) {
+                        _L1Decoder = new LayerIDecoder();
+                        _L1Decoder.Create(stream, header, _LeftChannelFilter, _RightChannelFilter, _Output,
+                            (int)OutputChannelsEnum.BothChannels);
                     }
-                    decoder = m_L1Decoder;
+                    decoder = _L1Decoder;
                     break;
             }
 
-            if (decoder == null)
-            {
+            if (decoder == null) {
                 throw NewDecoderException(DecoderErrors.UNSUPPORTED_LAYER, null);
             }
 
             return decoder;
         }
 
-        private void Initialize(Header header)
-        {
+        private void Initialize(Header header) {
             // REVIEW: allow customizable scale factor
-            float scalefactor = 32700.0f;
-
-            int mode = header.mode();
-            int layer = header.layer();
-            int channels = mode == Header.SINGLE_CHANNEL ? 1 : 2;
+            const float scalefactor = 32700.0f;
+            int channels = header.Mode() == Header.SINGLE_CHANNEL ? 1 : 2;
 
             // set up output buffer if not set up by client.
-            if (m_Output == null)
-                m_Output = new SampleBuffer(header.frequency(), channels);
+            if (_Output == null)
+                _Output = new SampleBuffer(header.Frequency(), channels);
 
-            float[] factors = m_Equalizer.BandFactors;
-            //Console.WriteLine("NOT CREATING SYNTHESIS FILTERS");
-            m_LeftChannelFilter = new SynthesisFilter(0, scalefactor, factors);
-
-            // REVIEW: allow mono output for stereo
+            float[] factors = _Equalizer.BandFactors;
+            _LeftChannelFilter = new SynthesisFilter(0, scalefactor, factors);
             if (channels == 2)
-                m_RightChannelFilter = new SynthesisFilter(1, scalefactor, factors);
+                _RightChannelFilter = new SynthesisFilter(1, scalefactor, factors);
 
-            m_OutputChannels = channels;
-            m_OutputFrequency = header.frequency();
+            _OutputChannels = channels;
+            _OutputFrequency = header.Frequency();
 
-            m_IsInitialized = true;
+            _IsInitialized = true;
         }
 
         /// <summary>
-        ///     The Params class presents the customizable
-        ///     aspects of the decoder. Instances of this class are not thread safe.
+        /// The Params class presents the customizable
+        /// aspects of the decoder. Instances of this class are not thread safe.
         /// </summary>
-        internal class Params : ICloneable
-        {
-            private Equalizer m_Equalizer;
-            private OutputChannels m_OutputChannels;
+        public class Params : ICloneable {
+            private OutputChannels _OutputChannels;
 
-            public virtual OutputChannels OutputChannels
-            {
-                get { return m_OutputChannels; }
+            internal virtual OutputChannels OutputChannels {
+                get => _OutputChannels;
 
-                set
-                {
-                    if (value == null)
-                        throw new NullReferenceException("out");
-
-                    m_OutputChannels = value;
-                }
+                set => _OutputChannels = value ?? throw new NullReferenceException("out");
             }
 
             /// <summary>
-            ///     Retrieves the equalizer settings that the decoder's equalizer
-            ///     will be initialized from.
-            ///     The Equalizer instance returned
-            ///     cannot be changed in real time to affect the
-            ///     decoder output as it is used only to initialize the decoders
-            ///     EQ settings. To affect the decoder's output in realtime,
-            ///     use the Equalizer returned from the getEqualizer() method on
-            ///     the decoder.
+            /// Retrieves the equalizer settings that the decoder's equalizer
+            /// will be initialized from.
+            /// The Equalizer instance returned
+            /// cannot be changed in real time to affect the
+            /// decoder output as it is used only to initialize the decoders
+            /// EQ settings. To affect the decoder's output in realtime,
+            /// use the Equalizer returned from the getEqualizer() method on
+            /// the decoder.
             /// </summary>
             /// <returns>
-            ///     The Equalizer used to initialize the
-            ///     EQ settings of the decoder.
+            /// The Equalizer used to initialize the
+            /// EQ settings of the decoder.
             /// </returns>
-            public virtual Equalizer InitialEqualizerSettings
-            {
-                get { return m_Equalizer; }
-            }
+            private readonly Equalizer _Equalizer = null;
 
-            public object Clone()
-            {
-                try
-                {
+            internal virtual Equalizer InitialEqualizerSettings => _Equalizer;
+
+            public object Clone() {
+                try {
                     return MemberwiseClone();
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     throw new ApplicationException(this + ": " + ex);
                 }
             }
