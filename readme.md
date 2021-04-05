@@ -29,7 +29,3 @@ MP3Sharp is licensed under the [LGPL Version 3](https://github.com/ZaneDubya/MP3
 
 ## CREDITS
 MP3Sharp is a port of JavaLayer, a MP3 decoder written by [JavaZoom](http://www.javazoom.net) and released under the LGPL. JavaLayer was initially ported to C# by [Robert Burke](http://www.robburke.net/), in what he modestly describes as a 'half day project'. [tekHedd](http://www.byteheaven.com/) added some significant speed optimizations. I've spent a few weeks of evenings cleaning up the code and reducing redundancies throughout. The sample MP3 file used in this project is by [BenSound](http://www.bensound.com), and is included under the terms of the Creative Commons - Attribution - No Derivative Works license.
-
-## FUTURE IMPROVEMENT
-* Many of the variables throughout the ported code are poorly named. I've done my best to clean them up, but don't know enough about the MP3 specification to suggest better names for most of them. 
-* There is a large amount of dead code and variables that are assigned but never used, and thus significant area for improvement of decoding (using these variables properly) or optimization (removing them altogether).
