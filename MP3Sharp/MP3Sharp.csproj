@@ -81,9 +81,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Buffer16BitStereo.cs" />
     <Compile Include="Decoding\ABuffer.cs" />
     <Compile Include="Decoding\BitReserve.cs" />
