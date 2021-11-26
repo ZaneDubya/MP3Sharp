@@ -202,9 +202,8 @@ namespace MP3Sharp.Decoding {
         // be removed.
         internal int ReadBits(int n) => GetBitsFromBuffer(n);
 
-        internal int ReadCheckedBits(int n) =>
-            // REVIEW: implement CRC check.
-            GetBitsFromBuffer(n);
+        // REVIEW: implement CRC check.
+        internal int ReadCheckedBits(int n) => GetBitsFromBuffer(n);
 
         internal BitstreamException NewBitstreamException(int errorcode) => new BitstreamException(errorcode, null);
 
@@ -218,34 +217,30 @@ namespace MP3Sharp.Decoding {
         /// </summary>
         internal int SyncHeader(sbyte syncmode) {
             bool sync = false;
-            int headerstring;
-
-            // read additinal 2 bytes
+            // read additional 2 bytes
             int bytesRead = ReadBytes(_SyncBuffer, 0, 3);
-
-            if (bytesRead != 3)
+            if (bytesRead != 3) {
                 throw NewBitstreamException(BitstreamErrors.STREA_EOF, null);
-            headerstring = ((_SyncBuffer[0] << 16) & 0x00FF0000) | ((_SyncBuffer[1] << 8) & 0x0000FF00) |
+            }
+
+            int headerstring = ((_SyncBuffer[0] << 16) & 0x00FF0000) | ((_SyncBuffer[1] << 8) & 0x0000FF00) |
                            ((_SyncBuffer[2] << 0) & 0x000000FF);
 
             do {
                 headerstring <<= 8;
-                if (ReadBytes(_SyncBuffer, 3, 1) != 1)
+                if (ReadBytes(_SyncBuffer, 3, 1) != 1) {
                     throw NewBitstreamException(BitstreamErrors.STREA_EOF, null);
+                }
                 headerstring |= _SyncBuffer[3] & 0x000000FF;
-
-                if (CheckAndSkipId3Tag(headerstring))
-                {
+                if (CheckAndSkipId3Tag(headerstring)) {
                     bytesRead = ReadBytes(_SyncBuffer, 0, 3);
-
-                    if (bytesRead != 3)
+                    if (bytesRead != 3) {
                         throw NewBitstreamException(BitstreamErrors.STREA_EOF, null);
+                    }
                     headerstring = ((_SyncBuffer[0] << 16) & 0x00FF0000) | ((_SyncBuffer[1] << 8) & 0x0000FF00) |
                                    ((_SyncBuffer[2] << 0) & 0x000000FF);
-
                     continue;
                 }
-
                 sync = IsSyncMark(headerstring, syncmode, _SyncWord);
             } while (!sync);
 
@@ -258,12 +253,10 @@ namespace MP3Sharp.Decoding {
         /// frame sync inside tags, scence decoder don't care about tags, we just
         /// skip all tags.
         /// </summary>
-        internal bool CheckAndSkipId3Tag(int headerstring)
-        {
+        internal bool CheckAndSkipId3Tag(int headerstring) {
             bool id3 = (headerstring & 0xFFFFFF00) == 0x49443300;
 
-            if (id3)
-            {
+            if (id3) {
                 sbyte[] id3_header = new sbyte[6];
 
                 if (ReadBytes(id3_header, 0, 6) != 6)
