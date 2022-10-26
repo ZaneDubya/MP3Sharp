@@ -86,7 +86,7 @@ namespace MP3Sharp {
         /// <summary>
         /// Gets the chunk size.
         /// </summary>
-        internal int ChunkSize => BACK_STREAM_BYTE_COUNT_REP;
+        public int ChunkSize => BACK_STREAM_BYTE_COUNT_REP;
 
         /// <summary>
         /// Gets a value indicating whether the current stream supports reading.
@@ -135,12 +135,12 @@ namespace MP3Sharp {
         /// Gets the number of channels available in the audio being decoded. Updated every call to Read() or DecodeFrames(),
         /// to reflect the most recent header information from the MP3 Stream.
         /// </summary>
-        internal short ChannelCount => _ChannelCountRep;
+        public short ChannelCount => _ChannelCountRep;
 
         /// <summary>
         /// Gets the PCM output format of this stream.
         /// </summary>
-        internal SoundFormat Format => FormatRep;
+        public SoundFormat Format => FormatRep;
 
         /// <summary>
         /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
