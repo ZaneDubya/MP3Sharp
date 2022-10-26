@@ -38,30 +38,30 @@ namespace MP3Sharp.Decoding {
             _CircularByteBuffer = new CircularByteBuffer(_BackBufferSize);
         }
 
-        internal int Read(sbyte[] toRead, int offset, int length) {
+        internal int Read(sbyte[] readBuffer, int offset, int length) {
             // Read 
-            int currentByte = 0;
+            int index = 0;
             bool canReadStream = true;
-            while (currentByte < length && canReadStream) {
+            while (index < length && canReadStream) {
                 if (_NumForwardBytesInBuffer > 0) {
-                    // from mem
+                    // from memory
                     _NumForwardBytesInBuffer--;
-                    toRead[offset + currentByte] = (sbyte)_CircularByteBuffer[_NumForwardBytesInBuffer];
-                    currentByte++;
+                    readBuffer[offset + index] = (sbyte)_CircularByteBuffer[_NumForwardBytesInBuffer];
+                    index++;
                 }
                 else {
                     // from stream
-                    int newBytes = length - currentByte;
-                    int numRead = _Stream.Read(_TemporaryBuffer, 0, newBytes);
-                    canReadStream = numRead >= newBytes;
-                    for (int i = 0; i < numRead; i++) {
+                    int countBytesToRead = length - index > _TemporaryBuffer.Length ? _TemporaryBuffer.Length : length - index;
+                    int countBytesRead = _Stream.Read(_TemporaryBuffer, 0, countBytesToRead);
+                    canReadStream = countBytesRead >= countBytesToRead;
+                    for (int i = 0; i < countBytesRead; i++) {
                         _CircularByteBuffer.Push(_TemporaryBuffer[i]);
-                        toRead[offset + currentByte + i] = (sbyte)_TemporaryBuffer[i];
+                        readBuffer[offset + index + i] = (sbyte)_TemporaryBuffer[i];
                     }
-                    currentByte += numRead;
+                    index += countBytesRead;
                 }
             }
-            return currentByte;
+            return index;
         }
 
         internal void UnRead(int length) {
