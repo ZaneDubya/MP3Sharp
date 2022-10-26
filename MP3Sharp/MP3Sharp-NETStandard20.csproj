@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>MP3Sharp</RootNamespace>
+    <AssemblyName>MP3Sharp</AssemblyName>
+    <Title>MP3Sharp</Title>
+    <Product>MP3Sharp</Product>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+</Project>
