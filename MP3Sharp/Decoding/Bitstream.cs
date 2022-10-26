@@ -128,7 +128,7 @@ namespace MP3Sharp.Decoding {
                 result = ReadNextFrame();
             }
             catch (BitstreamException ex) {
-                if (ex.ErrorCode != BitstreamErrors.STREA_EOF) {
+                if (ex.ErrorCode != BitstreamErrors.STREAM_EOF) {
                     // wrap original exception so stack trace is maintained.
                     throw NewBitstreamException(ex.ErrorCode, ex);
                 }
@@ -220,7 +220,7 @@ namespace MP3Sharp.Decoding {
             // read additional 2 bytes
             int bytesRead = ReadBytes(_SyncBuffer, 0, 3);
             if (bytesRead != 3) {
-                throw NewBitstreamException(BitstreamErrors.STREA_EOF, null);
+                throw NewBitstreamException(BitstreamErrors.STREAM_EOF, null);
             }
 
             int headerstring = ((_SyncBuffer[0] << 16) & 0x00FF0000) | ((_SyncBuffer[1] << 8) & 0x0000FF00) |
@@ -229,13 +229,13 @@ namespace MP3Sharp.Decoding {
             do {
                 headerstring <<= 8;
                 if (ReadBytes(_SyncBuffer, 3, 1) != 1) {
-                    throw NewBitstreamException(BitstreamErrors.STREA_EOF, null);
+                    throw NewBitstreamException(BitstreamErrors.STREAM_EOF, null);
                 }
                 headerstring |= _SyncBuffer[3] & 0x000000FF;
                 if (CheckAndSkipId3Tag(headerstring)) {
                     bytesRead = ReadBytes(_SyncBuffer, 0, 3);
                     if (bytesRead != 3) {
-                        throw NewBitstreamException(BitstreamErrors.STREA_EOF, null);
+                        throw NewBitstreamException(BitstreamErrors.STREAM_EOF, null);
                     }
                     headerstring = ((_SyncBuffer[0] << 16) & 0x00FF0000) | ((_SyncBuffer[1] << 8) & 0x0000FF00) |
                                    ((_SyncBuffer[2] << 0) & 0x000000FF);
@@ -259,9 +259,9 @@ namespace MP3Sharp.Decoding {
             if (id3) {
                 sbyte[] id3_header = new sbyte[6];
 
-                if (ReadBytes(id3_header, 0, 6) != 6)
-                    throw NewBitstreamException(BitstreamErrors.STREA_EOF, null);
-
+                if (ReadBytes(id3_header, 0, 6) != 6) {
+                    throw NewBitstreamException(BitstreamErrors.STREAM_EOF, null);
+                }
                 // id3 header uses 4 bytes to store the size of all tags,
                 // but only the low 7 bits of each byte is used, to avoid
                 // mp3 frame sync.
@@ -273,10 +273,10 @@ namespace MP3Sharp.Decoding {
 
                 sbyte[] id3_tag = new sbyte[id3_tag_size];
 
-                if (ReadBytes(id3_tag, 0, id3_tag_size) != id3_tag_size)
-                    throw NewBitstreamException(BitstreamErrors.STREA_EOF, null);
+                if (ReadBytes(id3_tag, 0, id3_tag_size) != id3_tag_size) {
+                    throw NewBitstreamException(BitstreamErrors.STREAM_EOF, null);
+                }
             }
-
             return id3;
         }
 

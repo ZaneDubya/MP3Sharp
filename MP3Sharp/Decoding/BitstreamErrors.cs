@@ -24,8 +24,8 @@ namespace MP3Sharp.Decoding {
         internal const int UNKNOWN_SAMPLE_RATE = BITSTREAM_ERROR + 1;
         internal const int STREA_ERROR = BITSTREAM_ERROR + 2;
         internal const int UNEXPECTED_EOF = BITSTREAM_ERROR + 3;
-        internal const int STREA_EOF = BITSTREAM_ERROR + 4;
-        internal const int BITSTREA_LAST = 0x1ff;
+        internal const int STREAM_EOF = BITSTREAM_ERROR + 4;
+        internal const int BITSTREAM_LAST = 0x1ff;
 
         internal const int BITSTREAM_ERROR = 0x100;
         internal const int DECODER_ERROR = 0x200;

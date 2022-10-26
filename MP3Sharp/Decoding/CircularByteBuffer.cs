@@ -19,13 +19,13 @@ using System;
 namespace MP3Sharp.Decoding {
     [Serializable]
     internal class CircularByteBuffer {
-        private byte[] _DataArray;
+        private byte[] _Buffer;
         private int _Index;
         private int _Length;
         private int _NumValid;
 
         internal CircularByteBuffer(int size) {
-            _DataArray = new byte[size];
+            _Buffer = new byte[size];
             _Length = size;
         }
 
@@ -37,9 +37,9 @@ namespace MP3Sharp.Decoding {
                 _Length = cdb._Length;
                 _NumValid = cdb._NumValid;
                 _Index = cdb._Index;
-                _DataArray = new byte[_Length];
+                _Buffer = new byte[_Length];
                 for (int c = 0; c < _Length; c++) {
-                    _DataArray[c] = cdb._DataArray[c];
+                    _Buffer[c] = cdb._Buffer[c];
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace MP3Sharp.Decoding {
                 for (int i = 0; i < minLength; i++) {
                     newDataArray[i] = InternalGet(i - _Length + 1);
                 }
-                _DataArray = newDataArray;
+                _Buffer = newDataArray;
                 _Index = minLength - 1;
                 _Length = value;
             }
@@ -97,7 +97,7 @@ namespace MP3Sharp.Decoding {
             byte ret;
             lock (this) {
                 ret = InternalGet(_Length);
-                _DataArray[_Index] = newValue;
+                _Buffer[_Index] = newValue;
                 _NumValid++;
                 if (_NumValid > _Length) _NumValid = _Length;
                 _Index++;
@@ -133,7 +133,7 @@ namespace MP3Sharp.Decoding {
             for (; ind >= _Length; ind -= _Length) { }
             for (; ind < 0; ind += _Length) { }
             // Set value
-            return _DataArray[ind];
+            return _Buffer[ind];
         }
 
         private void InternalSet(int offset, byte valueToSet) {
@@ -144,7 +144,7 @@ namespace MP3Sharp.Decoding {
 
             for (; ind < 0; ind += _Length) { }
             // Set value
-            _DataArray[ind] = valueToSet;
+            _Buffer[ind] = valueToSet;
         }
 
         /// <summary>
@@ -163,8 +163,8 @@ namespace MP3Sharp.Decoding {
 
         public override string ToString() {
             string ret = "";
-            for (int i = 0; i < _DataArray.Length; i++) {
-                ret += _DataArray[i] + " ";
+            for (int i = 0; i < _Buffer.Length; i++) {
+                ret += _Buffer[i] + " ";
             }
             ret += "\n index = " + _Index + " numValid = " + NumValid;
             return ret;
