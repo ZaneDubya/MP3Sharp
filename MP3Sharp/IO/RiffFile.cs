@@ -19,28 +19,28 @@ using MP3Sharp.Support;
 
 namespace MP3Sharp.IO {
     /// <summary>
-    /// public class to manage RIFF files
+    /// RIFF (Resource Interchange File Format) is a container file format that is commonly used to store multimedia
+    /// data such as audio, video, and images. 
     /// </summary>
     public class RiffFile {
-        protected const int DDC_SUCCESS = 0; // The operation succeded
-        protected const int DDC_FAILURE = 1; // The operation failed for unspecified reasons
-        protected const int DDC_OUT_OF_MEMORY = 2; // Operation failed due to running out of memory
-        protected const int DDC_FILE_ERROR = 3; // Operation encountered file I/O error
-        protected const int DDC_INVALID_CALL = 4; // Operation was called with invalid parameters
-        protected const int DDC_USER_ABORT = 5; // Operation was aborted by the user
-        protected const int DDC_INVALID_FILE = 6; // File format does not match
-        protected const int RF_UNKNOWN = 0; // undefined type (can use to mean "N/A" or "not open")
-        protected const int RF_WRITE = 1; // open for write
-        protected const int RF_READ = 2; // open for read
+        public const int DDC_SUCCESS = 0; // The operation succeded
+        public const int DDC_FAILURE = 1; // The operation failed for unspecified reasons
+        public const int DDC_OUT_OF_MEMORY = 2; // Operation failed due to running out of memory
+        public const int DDC_FILE_ERROR = 3; // Operation encountered file I/O error
+        public const int DDC_INVALID_CALL = 4; // Operation was called with invalid parameters
+        public const int DDC_USER_ABORT = 5; // Operation was aborted by the user
+        public const int DDC_INVALID_FILE = 6; // File format does not match
+        public const int RF_UNKNOWN = 0; // undefined type (can use to mean "N/A" or "not open")
+        public const int RF_WRITE = 1; // open for write
+        public const int RF_READ = 2; // open for read
         private readonly RiffChunkHeader _RiffHeader; // header for whole file
-        protected int Fmode; // current file I/O mode
+        public int Fmode; // current file I/O mode
         private Stream _File; // I/O stream to use
 
         internal RiffFile() {
             _File = null;
             Fmode = RF_UNKNOWN;
             _RiffHeader = new RiffChunkHeader(this);
-
             _RiffHeader.CkId = FourCC("RIFF");
             _RiffHeader.CkSize = 0;
         }
@@ -107,10 +107,10 @@ namespace MP3Sharp.IO {
                                 sbyte[] br = new sbyte[8];
                                 SupportClass.ReadInput(_File, ref br, 0, 8);
                                 Fmode = RF_READ;
-                                _RiffHeader.CkId = ((br[0] << 24) & (int)SupportClass.Identity(0xFF000000)) |
+                                _RiffHeader.CkId = ((br[0] << 24) & unchecked((int)0xFF000000)) |
                                                    ((br[1] << 16) & 0x00FF0000) | ((br[2] << 8) & 0x0000FF00) |
                                                    (br[3] & 0x000000FF);
-                                _RiffHeader.CkSize = ((br[4] << 24) & (int)SupportClass.Identity(0xFF000000)) |
+                                _RiffHeader.CkSize = ((br[4] << 24) & unchecked((int)0xFF000000)) |
                                                      ((br[5] << 16) & 0x00FF0000) | ((br[6] << 8) & 0x0000FF00) |
                                                      (br[7] & 0x000000FF);
                             }
@@ -192,10 +192,10 @@ namespace MP3Sharp.IO {
                                 sbyte[] br = new sbyte[8];
                                 SupportClass.ReadInput(_File, ref br, 0, 8);
                                 Fmode = RF_READ;
-                                _RiffHeader.CkId = ((br[0] << 24) & (int)SupportClass.Identity(0xFF000000)) |
+                                _RiffHeader.CkId = ((br[0] << 24) & unchecked((int)0xFF000000)) |
                                                    ((br[1] << 16) & 0x00FF0000) | ((br[2] << 8) & 0x0000FF00) |
                                                    (br[3] & 0x000000FF);
-                                _RiffHeader.CkSize = ((br[4] << 24) & (int)SupportClass.Identity(0xFF000000)) |
+                                _RiffHeader.CkSize = ((br[4] << 24) & unchecked((int)0xFF000000)) |
                                                      ((br[5] << 16) & 0x00FF0000) | ((br[6] << 8) & 0x0000FF00) |
                                                      (br[7] & 0x000000FF);
                             }
@@ -478,8 +478,10 @@ namespace MP3Sharp.IO {
         internal static int FourCC(string chunkName) {
             sbyte[] p = {0x20, 0x20, 0x20, 0x20};
             SupportClass.GetSBytesFromString(chunkName, 0, 4, ref p, 0);
-            int ret = (((p[0] << 24) & (int)SupportClass.Identity(0xFF000000)) | ((p[1] << 16) & 0x00FF0000) |
-                       ((p[2] << 8) & 0x0000FF00) | (p[3] & 0x000000FF));
+            int ret = (((p[0] << 24) & unchecked((int)0xFF000000)) | 
+                ((p[1] << 16) & 0x00FF0000) |
+                ((p[2] << 8) & 0x0000FF00) | 
+                (p[3] & 0x000000FF));
             return ret;
         }
 

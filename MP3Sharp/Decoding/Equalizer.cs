@@ -18,13 +18,9 @@ using System;
 
 namespace MP3Sharp.Decoding {
     /// <summary>
-    /// The Equalizer class can be used to specify
-    /// equalization settings for the MPEG audio decoder.
-    /// The equalizer consists of 32 band-pass filters.
-    /// Each band of the equalizer can take on a fractional value between
-    /// -1.0 and +1.0.
-    /// At -1.0, the input signal is attenuated by 6dB, at +1.0 the signal is
-    /// amplified by 6dB.
+    /// The Equalizer class can be used to specify equalization settings for the MPEG audio decoder.
+    /// The equalizer consists of 32 band-pass filters. Each band of the equalizer can take on a fractional value
+    /// between -1.0 and +1.0. At -1.0, the input signal is attenuated by 6dB, at +1.0 the signal is amplified by 6dB.
     /// </summary>
     public class Equalizer {
         private const int BANDS = 32;
@@ -44,11 +40,6 @@ namespace MP3Sharp.Decoding {
         internal Equalizer() {
             InitBlock();
         }
-
-        //    private Equalizer(float b1, float b2, float b3, float b4, float b5,
-        //                     float b6, float b7, float b8, float b9, float b10, float b11,
-        //                     float b12, float b13, float b14, float b15, float b16,
-        //                     float b17, float b18, float b19, float b20);
 
         internal Equalizer(float[] settings) {
             InitBlock();
@@ -71,7 +62,6 @@ namespace MP3Sharp.Decoding {
             }
         }
 
-        //UPGRADE_TODO: Method 'setFrom' was converted to a set modifier. This name conflicts with another property. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1137"'
         /// <summary>
         /// Sets the bands of this equalizer to the value the bands of
         /// another equalizer. Bands that are not present in both equalizers are ignored.
@@ -84,7 +74,6 @@ namespace MP3Sharp.Decoding {
             }
         }
 
-        //UPGRADE_TODO: Method 'setFrom' was converted to a set modifier. This name conflicts with another property. 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="jlca1137"'
         internal EQFunction FromEQFunction {
             set {
                 Reset();
@@ -102,14 +91,11 @@ namespace MP3Sharp.Decoding {
         internal virtual int BandCount => _Settings.Length;
 
         /// <summary>
-        /// Retrieves an array of floats whose values represent a
-        /// scaling factor that can be applied to linear samples
-        /// in each band to provide the equalization represented by
-        /// this instance.
+        /// Retrieves an array of floats whose values represent a scaling factor that can be applied to linear samples
+        /// in each band to provide the equalization represented by this instance.
         /// </summary>
         /// <returns>
-        /// an array of factors that can be applied to the
-        /// subbands.
+        /// An array of factors that can be applied to the subbands.
         /// </returns>
         internal virtual float[] BandFactors {
             get {

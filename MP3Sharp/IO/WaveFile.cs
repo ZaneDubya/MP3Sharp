@@ -19,7 +19,8 @@ using MP3Sharp.Support;
 
 namespace MP3Sharp.IO {
     /// <summary>
-    /// public class allowing WaveFormat Access
+    /// Wave files contain a set of digital audio samples. For the purpose of MP3Sharp, wave files are stored in
+    /// RIFF file format, specifically in a WAV file. 
     /// </summary>
     public class WaveFile : RiffFile {
         internal const int MAX_WAVE_CHANNELS = 2;
@@ -59,10 +60,7 @@ namespace MP3Sharp.IO {
                 Open(filename, RF_WRITE);
 
             if (retcode == DDC_SUCCESS) {
-                sbyte[] theWave = {
-                    (sbyte)SupportClass.Identity('W'), (sbyte)SupportClass.Identity('A'),
-                    (sbyte)SupportClass.Identity('V'), (sbyte)SupportClass.Identity('E')
-                };
+                sbyte[] theWave = { (sbyte)'W', (sbyte)'A', (sbyte)'V', (sbyte)'E' };
                 retcode = Write(theWave, 4);
 
                 if (retcode == DDC_SUCCESS) {

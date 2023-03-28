@@ -18,66 +18,34 @@ using System;
 using System.IO;
 
 namespace MP3Sharp.Support {
+    /// <summary>
+    /// Various helper methods.
+    /// </summary>
     public class SupportClass {
-        internal static int URShift(int number, int bits) {
-            if (number >= 0)
-                return number >> bits;
-            return (number >> bits) + (2 << ~bits);
+        internal static int URShift(int value, int bits) {
+            if (value >= 0) {
+                return value >> bits;
+            }
+            return (value >> bits) + (2 << ~bits);
         }
 
-        internal static int URShift(int number, long bits) {
-            return URShift(number, (int)bits);
+        internal static int URShift(int value, long bits) {
+            return URShift(value, (int)bits);
         }
 
-        internal static long URShift(long number, int bits) {
-            if (number >= 0)
-                return number >> bits;
-            return (number >> bits) + (2L << ~bits);
+        internal static long URShift(long value, int bits) {
+            if (value >= 0)
+                return value >> bits;
+            return (value >> bits) + (2L << ~bits);
         }
 
-        internal static long URShift(long number, long bits) {
-            return URShift(number, (int)bits);
+        internal static long URShift(long value, long bits) {
+            return URShift(value, (int)bits);
         }
 
         internal static void WriteStackTrace(Exception throwable, TextWriter stream) {
             stream.Write(throwable.StackTrace);
             stream.Flush();
-        }
-
-        /// <summary>
-        /// This method is used as a dummy method to simulate VJ++ behavior
-        /// </summary>
-        /// <param name="literal">The literal to return</param>
-        /// <returns>The received value</returns>
-        internal static long Identity(long literal) {
-            return literal;
-        }
-
-        /// <summary>
-        /// This method is used as a dummy method to simulate VJ++ behavior
-        /// </summary>
-        /// <param name="literal">The literal to return</param>
-        /// <returns>The received value</returns>
-        internal static ulong Identity(ulong literal) {
-            return literal;
-        }
-
-        /// <summary>
-        /// This method is used as a dummy method to simulate VJ++ behavior
-        /// </summary>
-        /// <param name="literal">The literal to return</param>
-        /// <returns>The received value</returns>
-        internal static float Identity(float literal) {
-            return literal;
-        }
-
-        /// <summary>
-        /// This method is used as a dummy method to simulate VJ++ behavior
-        /// </summary>
-        /// <param name="literal">The literal to return</param>
-        /// <returns>The received value</returns>
-        internal static double Identity(double literal) {
-            return literal;
         }
 
         /// <summary>

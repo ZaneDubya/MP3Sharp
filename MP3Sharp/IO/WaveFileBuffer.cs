@@ -19,7 +19,9 @@ using System.IO;
 using MP3Sharp.Decoding;
 
 namespace MP3Sharp.IO {
-    /// <summary> Implements an Obuffer by writing the data to a file in RIFF WAVE format.</summary>
+    /// <summary> 
+    /// The WaveFileBuffer writes the decoded PCM data to a Wave file.
+    /// </summary>
     public class WaveFileBuffer : ABuffer {
         private readonly short[] _Buffer;
         private readonly short[] _Bufferp;
@@ -27,8 +29,9 @@ namespace MP3Sharp.IO {
         private readonly WaveFile _OutWave;
 
         internal WaveFileBuffer(int numberOfChannels, int freq, string fileName) {
-            if (fileName == null)
-                throw new NullReferenceException("FileName");
+            if (fileName == null) { 
+                throw new ArgumentNullException(nameof(fileName));
+            }
 
             _Buffer = new short[OBUFFERSIZE];
             _Bufferp = new short[MAXCHANNELS];
@@ -38,8 +41,10 @@ namespace MP3Sharp.IO {
                 _Bufferp[i] = (short)i;
 
             _OutWave = new WaveFile();
-
-            int rc = _OutWave.OpenForWrite(fileName, null, freq, 16, (short)_Channels);
+            int success = _OutWave.OpenForWrite(fileName, null, freq, 16, (short)_Channels);
+            if (success != RiffFile.DDC_SUCCESS) {
+                throw new Exception($"WaveFileBuffer could not open file '{fileName}': error code {success}.");
+            }
         }
 
         internal WaveFileBuffer(int numberOfChannels, int freq, Stream stream) {
@@ -52,7 +57,10 @@ namespace MP3Sharp.IO {
 
             _OutWave = new WaveFile();
 
-            int rc = _OutWave.OpenForWrite(null, stream, freq, 16, (short)_Channels);
+            int success = _OutWave.OpenForWrite(null, stream, freq, 16, (short)_Channels);
+            if (success != RiffFile.DDC_SUCCESS) {
+                throw new Exception($"WaveFileBuffer could not open stream: error code {success}.");
+            }
         }
 
         /// <summary>

@@ -25,11 +25,11 @@ namespace MP3Sharp.Decoding {
         private short _CRC;
 
         static Crc16() {
-            Polynomial = (short)SupportClass.Identity(0x8005);
+            Polynomial = unchecked((short)0x8005);
         }
 
         internal Crc16() {
-            _CRC = (short)SupportClass.Identity(0xFFFF);
+            _CRC = unchecked((short)0xFFFF);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace MP3Sharp.Decoding {
         /// </summary>
         internal short Checksum() {
             short sum = _CRC;
-            _CRC = (short)SupportClass.Identity(0xFFFF);
+            _CRC = unchecked((short)0xFFFF);
             return sum;
         }
     }

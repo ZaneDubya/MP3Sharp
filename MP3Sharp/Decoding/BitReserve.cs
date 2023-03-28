@@ -16,12 +16,10 @@
 
 namespace MP3Sharp.Decoding {
     /// <summary>
-    /// Implementation of Bit Reservoir for Layer III.
-    /// The implementation stores single bits as a word in the buffer. If
-    /// a bit is set, the corresponding word in the buffer will be non-zero.
-    /// If a bit is clear, the corresponding word is zero. Although this
-    /// may seem waseful, this can be a factor of two quicker than
-    /// packing 8 bits to a byte and extracting.
+    /// Implementation of Bit Reservoir for Layer III. The implementation stores single bits as a word in the buffer.
+    /// If a bit is set, the corresponding word in the buffer will be non-zero. If a bit is clear, the corresponding
+    /// word is zero. Although this may seem waseful, this can be a factor of two quicker than packing 8 bits to a
+    /// byte and extracting.
     /// </summary>
 
     // REVIEW: there is no range checking, so buffer underflow or overflow

@@ -172,7 +172,7 @@ namespace MP3Sharp.Decoding {
         /// </summary>
         internal bool IsSyncCurrentPosition(int syncmode) {
             int read = ReadBytes(_SyncBuffer, 0, 4);
-            int headerstring = ((_SyncBuffer[0] << 24) & (int)SupportClass.Identity(0xFF000000)) |
+            int headerstring = ((_SyncBuffer[0] << 24) & unchecked((int)0xFF000000)) |
                                ((_SyncBuffer[1] << 16) & 0x00FF0000) | ((_SyncBuffer[2] << 8) & 0x0000FF00) |
                                ((_SyncBuffer[3] << 0) & 0x000000FF);
 
@@ -341,8 +341,11 @@ namespace MP3Sharp.Decoding {
                     b2 = byteread[k + 2];
                 if (k + 3 < bytesize)
                     b3 = byteread[k + 3];
-                _FrameBuffer[b++] = ((b0 << 24) & (int)SupportClass.Identity(0xFF000000)) | ((b1 << 16) & 0x00FF0000) |
-                                    ((b2 << 8) & 0x0000FF00) | (b3 & 0x000000FF);
+                _FrameBuffer[b++] = 
+                    ((b0 << 24) & unchecked((int)0xFF000000)) | 
+                    ((b1 << 16) & 0x00FF0000) |
+                    ((b2 << 8) & 0x0000FF00) | 
+                    (b3 & 0x000000FF);
             }
 
             _WordPointer = 0;
@@ -371,8 +374,8 @@ namespace MP3Sharp.Decoding {
             }
             int right = _FrameBuffer[_WordPointer] & 0x0000FFFF;
             _WordPointer++;
-            int left = _FrameBuffer[_WordPointer] & (int)SupportClass.Identity(0xFFFF0000);
-            returnvalue = ((right << 16) & (int)SupportClass.Identity(0xFFFF0000)) | (SupportClass.URShift(left, 16) & 0x0000FFFF);
+            int left = _FrameBuffer[_WordPointer] & unchecked((int)0xFFFF0000);
+            returnvalue = ((right << 16) & unchecked((int)0xFFFF0000)) | (SupportClass.URShift(left, 16) & 0x0000FFFF);
             returnvalue = SupportClass.URShift(returnvalue, 48 - sum);
             returnvalue &= _Bitmask[countBits];
             _BitIndex = sum - 32;

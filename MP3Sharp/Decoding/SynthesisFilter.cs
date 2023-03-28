@@ -18,15 +18,13 @@ using System;
 
 namespace MP3Sharp.Decoding {
     /// <summary>
-    /// A class for the synthesis filter bank.
-    /// This class does a fast downsampling from 32, 44.1 or 48 kHz to 8 kHz, if ULAW is defined.
+    /// The synthesis filter bank. If ULVAW is defined, this class downsamples from 32, 44.1 or 48 kHz to 8 kHz.
     /// Frequencies above 4 kHz are removed by ignoring higher subbands.
     /// </summary>
     public class SynthesisFilter {
         private const double MY_PI = 3.14159265358979323846;
 
-        // Note: These values are not in the same order
-        // as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
+        // Note: These values are not in the same order as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
         private static readonly float Cos164 = (float)(1.0 / (2.0 * Math.Cos(MY_PI / 64.0)));
         private static readonly float Cos364 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 3.0 / 64.0)));
         private static readonly float Cos564 = (float)(1.0 / (2.0 * Math.Cos(MY_PI * 5.0 / 64.0)));

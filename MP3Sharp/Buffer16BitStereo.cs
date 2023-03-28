@@ -19,7 +19,7 @@ using MP3Sharp.Decoding;
 
 namespace MP3Sharp {
     /// <summary>
-    /// public class used to queue samples that are being obtained from an Mp3 stream. 
+    /// Public class used to queue samples that are being obtained from an MP3 stream. 
     /// This class handles stereo 16-bit output, and can double 16-bit mono to stereo.
     /// </summary>
     public class Buffer16BitStereo : ABuffer {
