@@ -15,7 +15,6 @@
 //  ***************************************************************************/
 
 using System.IO;
-using MP3Sharp.Support;
 
 namespace MP3Sharp.IO {
     /// <summary>
