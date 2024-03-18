@@ -807,7 +807,7 @@ namespace MP3Sharp.Decoding {
             return error;
         }
 
-        internal static void Initialize() {
+        public static void Initialize() {
             if (HuffmanTable != null)
                 return;
 
